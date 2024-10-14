@@ -11,7 +11,7 @@ class LanguageController extends Controller
     {
         // Validasi input
         $request->validate([
-            'language' => 'required|string|in:EN,ID',
+            'language' => 'required|string|in:en,id',
         ]);
 
         // Simpan pilihan bahasa di session
