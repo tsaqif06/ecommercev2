@@ -1,3 +1,6 @@
+<div id="backdrop"
+    style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1001;">
+</div>
 <header class="header shop">
     <!-- Topbar -->
     <div class="topbar bg-dark fixed-top" style="background-color: #121212; z-index: 9999">
@@ -9,8 +12,24 @@
             </div>
         </div>
     </div>
-    <div class="navbar bg-white fixed-top" style="margin-top: 56px;">
-        <div class="container d-flex justify-content-between align-items-center">
+    <div class="navbar bg-transparent fixed-top" style="margin-top: 56px;">
+        <div id="searchContainer"
+            style="position: absolute; display: none; z-index: 1000; background: white; width: 100%; height: 60px;">
+            <input type="text" id="searchInput" placeholder="Search our products..." class="form-control"
+                style="width: 50%; height: 60px; position: absolute; top: 0; left: 50%; transform: translateX(-50%); padding-right: 50px; border-radius: 30px; padding-left: 20px; box-sizing: border-box;"
+                autofocus />
+            <span class="search-icon"
+                style="position: absolute; top: 50%; right: 27%; transform: translateY(-50%); cursor: pointer; z-index: 1001;">
+                <img src="https://cdn-icons-png.flaticon.com/512/622/622669.png" alt="search icon"
+                    style="width: 24px; height: 24px;">
+            </span>
+            <div id="suggestions" class="suggestions mt-2"
+                style="display: none; position: absolute; top: 100%; left: 25%; width: 50%; background: white; border: 1px solid #ccc; border-radius: 5px; box-shadow: 0px 4px 8px rgba(0,0,0,0.1);">
+                <!-- Suggestion items will be appended here -->
+            </div>
+        </div>
+
+        <div class="container-fluid d-flex justify-content-between align-items-center">
             <button class="sidebar-toggle d-md-none">
                 <i class="fas fa-bars"></i>
             </button>
@@ -81,9 +100,11 @@
                                                 alt="Language" width="24" class="mr-2 mt-1">
                                         </div>
                                         <select class="custom-select w-100" id="langSelect" width="100%">
-                                            <option value="en" {{ session('applocale') == 'en' ? 'selected' : '' }}>
+                                            <option value="en"
+                                                {{ session('applocale') == 'en' ? 'selected' : '' }}>
                                                 English</option>
-                                            <option value="id" {{ session('applocale') == 'id' ? 'selected' : '' }}>
+                                            <option value="id"
+                                                {{ session('applocale') == 'id' ? 'selected' : '' }}>
                                                 Bahasa Indonesia</option>
                                         </select>
                                     </div>
@@ -109,17 +130,17 @@
                         </div>
                     </div>
 
-                    <div class="text-dark text-p-default ml-3" data-toggle="modal" data-target="#sortModal">
-                        <i class="fas fa-sort"></i> <!-- Ikon search -->
+                    <div class="text-dark text-p-default mx-3" data-toggle="modal" data-target="#sortModal">
+                        <i class="fa-solid fa-arrow-up-wide-short" style="font-size: 20px"></i>
                     </div>
 
-                    <div class="text-dark text-p-default ml-3">
-                        <i class="fas fa-search"></i> <!-- Ikon search -->
+                    <div class="text-dark text-p-default mx-3 searchToggle">
+                        <i class="fas fa-search" style="font-size: 20px"></i> <!-- Ikon search -->
                     </div>
 
                     <!-- Tombol untuk profil -->
-                    <a href="/profile" class="text-dark text-p-default ml-3">
-                        <i class="fas fa-user"></i> <!-- Ikon profile -->
+                    <a href="/profile" class="text-dark text-p-default mx-3">
+                        <i class="fas fa-user" style="font-size: 20px"></i> <!-- Ikon profile -->
                     </a>
                 </div>
 
@@ -127,67 +148,8 @@
         </div>
     </div>
 
-    <div class="modal fade" id="sortModal" tabindex="-1" role="dialog" aria-labelledby="sortModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content bg-base-100 shadow-xl" style="width: 480px;">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="sortModalLabel">Urutkan produk berdasarkan</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="p-modal__main scrollbar-hidden p-4">
-                        <div class="pt-2">
-                            <div class="p-row flex basis-auto grow shrink gap-1 flex-wrap mb-4">
-                                <div class="p-col basis-auto grow-0 shrink-0">
-                                    <button type="button" class="p-btn btn text-p-default relative btn-secondary btn-filled btn-sm no-animation">
-                                        <span class="flex items-center gap-x-2">
-                                            <i class="fas fa-th"></i> <!-- Ikon untuk semua -->
-                                            Semua
-                                        </span>
-                                    </button>
-                                </div>
-                                <div class="p-col basis-auto grow-0 shrink-0">
-                                    <button type="button" class="p-btn btn text-p-default relative btn-secondary btn-outline btn-sm no-animation">
-                                        <span class="flex items-center gap-x-2">Tersedia</span>
-                                    </button>
-                                </div>
-                            </div>
-                            <button type="button" class="p-btn btn text-p-default relative btn-primary btn-ghost text-primary btn-block no-animation icon-right justify-start pl-2 text-left">
-                                <span class="flex items-center gap-x-2">Unggulan</span>
-                            </button>
-                            <button type="button" class="p-btn btn text-p-default relative btn-primary btn-ghost text-primary btn-block no-animation icon-right justify-start pl-2 text-left">
-                                <span class="flex items-center gap-x-2">Terbaru</span>
-                            </button>
-                            <button type="button" class="p-btn btn text-p-default relative btn-primary btn-ghost text-primary btn-block no-animation icon-right justify-start pl-2 text-left">
-                                <span class="flex items-center gap-x-2">Terlama</span>
-                            </button>
-                            <button type="button" class="p-btn btn text-p-default relative btn-primary btn-ghost text-primary btn-block no-animation icon-right justify-start pl-2 text-left">
-                                <span class="flex items-center gap-x-2">Terpopuler</span>
-                            </button>
-                            <button type="button" class="p-btn btn text-p-default relative btn-primary btn-ghost text-primary btn-block no-animation icon-right justify-start pl-2 text-left">
-                                <span class="flex items-center gap-x-2">Harga Terendah</span>
-                            </button>
-                            <button type="button" class="p-btn btn text-p-default relative btn-primary btn-ghost text-primary btn-block no-animation icon-right justify-start pl-2 text-left">
-                                <span class="flex items-center gap-x-2">Harga Tertinggi</span>
-                            </button>
-                            <button type="button" class="p-btn btn text-p-default relative btn-primary btn-ghost text-primary btn-block no-animation icon-right justify-start pl-2 text-left">
-                                <span class="flex items-center gap-x-2">Nama Produk (A-Z)</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
     <!-- End Topbar -->
-    <div class="middle-inner mt-5">
+    <div class="middle-inner mt-5 d-none">
         <div class="container">
             <div class="row">
                 <div class="col-lg-2 col-md-2 col-12">
@@ -375,22 +337,111 @@
     <!--/ End Header Inner -->
 </header>
 
-<!-- Search Modal -->
-<div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+<div class="modal fade" id="sortModal" tabindex="-1" aria-labelledby="sortModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content container-fluid rounded" style="width: 500px; height: 400px">
+            <div class="modal-body">
+                <h5 class="modal-title mt-2" id="sortModalLabel">Sort Products By</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <!-- Tombol atas -->
+                <div class="d-flex mb-3">
+                    <button type="button" class="btn btn-outline-custom rounded">All</button>
+                    <button type="button" class="btn btn-outline-custom rounded">Available</button>
+                </div>
+
+                <!-- Tombol pilihan di bawah -->
+                <button type="button" class="btn btn-sort">Featured</button>
+                <button type="button" class="btn btn-sort">Recent</button>
+                <button type="button" class="btn btn-sort">Oldest</button>
+                <button type="button" class="btn btn-sort">Most Popular</button>
+                <button type="button" class="btn btn-sort">Lowest Price</button>
+                <button type="button" class="btn btn-sort">Highest Price</button>
+                <button type="button" class="btn btn-sort">Product Name (A-Z)</button>
+            </div>
+        </div>
+    </div>
+</div>
+{{--  
+<div class="modal fade" id="sortModal" tabindex="-1" role="dialog" aria-labelledby="sortModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content bg-base-100 shadow-xl" style="max-width: 480px; width: 100%;">
             <div class="modal-header">
-                <h5 class="modal-title" id="searchModalLabel">Search</h5>
+                <h5 class="modal-title" id="sortModalLabel">Urutkan produk berdasarkan</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <input type="text" class="form-control" placeholder="Type to search...">
+                <div class="p-modal__main scrollbar-hidden p-4">
+                    <div class="pt-2">
+                        <div class="p-row flex basis-auto grow shrink gap-1 flex-wrap mb-4">
+                            <div class="p-col basis-auto grow-0 shrink-0">
+                                <button type="button"
+                                    class="p-btn btn text-p-default relative btn-secondary btn-filled btn-sm no-animation">
+                                    <span class="flex items-center gap-x-2">
+                                        <i class="fas fa-th"></i> <!-- Ikon untuk semua -->
+                                        Semua
+                                    </span>
+                                </button>
+                            </div>
+                            <div class="p-col basis-auto grow-0 shrink-0">
+                                <button type="button"
+                                    class="p-btn btn text-p-default relative btn-secondary btn-outline btn-sm no-animation">
+                                    <span class="flex items-center gap-x-2">Tersedia</span>
+                                </button>
+                            </div>
+                        </div>
+                        <button type="button"
+                            class="p-btn btn text-p-default relative btn-primary btn-ghost text-primary btn-block no-animation icon-right justify-start pl-2 text-left">
+                            <span class="flex items-center gap-x-2">Unggulan</span>
+                        </button>
+                        <button type="button"
+                            class="p-btn btn text-p-default relative btn-primary btn-ghost text-primary btn-block no-animation icon-right justify-start pl-2 text-left">
+                            <span class="flex items-center gap-x-2">Terbaru</span>
+                        </button>
+                        <button type="button"
+                            class="p-btn btn text-p-default relative btn-primary btn-ghost text-primary btn-block no-animation icon-right justify-start pl-2 text-left">
+                            <span class="flex items-center gap-x-2">Terlama</span>
+                        </button>
+                        <button type="button"
+                            class="p-btn btn text-p-default relative btn-primary btn-ghost text-primary btn-block no-animation icon-right justify-start pl-2 text-left">
+                            <span class="flex items-center gap-x-2">Terpopuler</span>
+                        </button>
+                        <button type="button"
+                            class="p-btn btn text-p-default relative btn-primary btn-ghost text-primary btn-block no-animation icon-right justify-start pl-2 text-left">
+                            <span class="flex items-center gap-x-2">Harga Terendah</span>
+                        </button>
+                        <button type="button"
+                            class="p-btn btn text-p-default relative btn-primary btn-ghost text-primary btn-block no-animation icon-right justify-start pl-2 text-left">
+                            <span class="flex items-center gap-x-2">Harga Tertinggi</span>
+                        </button>
+                        <button type="button"
+                            class="p-btn btn text-p-default relative btn-primary btn-ghost text-primary btn-block no-animation icon-right justify-start pl-2 text-left">
+                            <span class="flex items-center gap-x-2">Nama Produk (A-Z)</span>
+                        </button>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Search</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>  --}}
+
+<!-- Search Modal -->
+<div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            {{--  <div class="modal-header">
+                <h5 class="modal-title" id="searchModalLabel">Search</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>  --}}
+            <div class="modal-body">
+                <input type="text" class="form-control" placeholder="Type to search...">
             </div>
         </div>
     </div>
@@ -399,6 +450,14 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
+            $(window).scroll(function() {
+                if ($(this).scrollTop() > 0) {
+                    $('.navbar').removeClass('bg-transparent').addClass('bg-white');
+                } else {
+                    $('.navbar').removeClass('bg-white').addClass('bg-transparent');
+                }
+            });
+
             // Prevent dropdown from closing when clicking inside it, excluding the select elements
             $('#deliver-to').on('change', function() {
                 let flagCode = $('#deliver-to').val();
@@ -467,5 +526,83 @@
             e.preventDefault();
             $(this).next('.dropdown-menu').toggleClass('show');
         });
+
+        $('[data-toggle="modal"][data-target="#searchModal"]').on('click', function() {
+            $('#searchModal').modal('show');
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            // Toggle the search container and backdrop
+            $('.searchToggle').on('click', function() {
+                $('#searchContainer').toggle();
+                $('#backdrop').toggle(); // Show/hide the backdrop
+                $('#searchInput').focus(); // Focus on the search input
+            });
+        
+            // Hide search and backdrop when clicking outside the search area
+            $('#backdrop').on('click', function() {
+                $('#searchContainer').hide();
+                $('#backdrop').hide();
+            });
+        
+            // Sample product suggestions for demonstration
+            var suggestions = [
+                { name: "HECATE - GOSA LEATHER JACKET (SYNTH)", price: "Rp 1,000,000" },
+                { name: "HECATE - GOSA GENUINE LEATHER JACKET", price: "Rp 2,599,000" },
+                { name: "HECATE - DISTRESSED ROGUE HOODIE FADED", price: "Rp 895,000" },
+                { name: "HECATE - PHRASE FLANNEL | KEMEJA UNISEX", price: "Rp 500,000" },
+                { name: "HECATE - GIVEN TSHIRT | KAOS UNISEX", price: "Rp 300,000" }
+            ];
+        
+            // Show suggestions as the user types
+            $('#searchInput').on('input', function() {
+                var input = $(this).val();
+                var suggestionsBox = $('#suggestions');
+                suggestionsBox.empty(); // Clear previous suggestions
+        
+                // Show suggestions if input is not empty
+                if (input.length > 0) {
+                    var matches = suggestions.filter(function(suggestion) {
+                        return suggestion.name.toLowerCase().includes(input.toLowerCase());
+                    });
+        
+                    // Add a "Products" header
+                    suggestionsBox.append('<div class="suggestion-header" style="padding: 10px; font-weight: bold;">Products</div>');
+        
+                    if (matches.length > 0) {
+                        // Add a "Results found" count
+                        suggestionsBox.append('<div class="suggestion-footer" style="padding: 10px; font-style: italic;">' + matches.length + ' Results Found</div>');
+        
+                        // Show matched suggestions with names and prices
+                        $.each(matches, function(index, suggestion) {
+                            var suggestionItem = $('<div class="suggestion-item"></div>')
+                                .html('<strong>' + suggestion.name + '</strong><br><span>' + suggestion.price + '</span>')
+                                .css({
+                                    padding: '10px',
+                                    cursor: 'pointer',
+                                    borderBottom: '1px solid #ddd'
+                                });
+        
+                            suggestionItem.on('click', function() {
+                                $('#searchInput').val(suggestion.name);
+                                suggestionsBox.hide(); // Hide suggestions after selection
+                            });
+        
+                            suggestionsBox.append(suggestionItem);
+                        });
+                    } else {
+                        // Show "0 Results Found" and "Ups, sorry no results for 'input'"
+                        suggestionsBox.append('<div class="no-results" style="padding: 10px; color: gray;">0 Results Found</div>');
+                        suggestionsBox.append('<div class="no-results-message" style="padding: 10px; color: gray;">Ups, sorry no results for “' + input + '”</div>');
+                    }
+        
+                    suggestionsBox.show();
+                } else {
+                    suggestionsBox.hide(); // Hide if input is empty
+                }
+            });
+        });        
     </script>
 @endpush

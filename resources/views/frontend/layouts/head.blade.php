@@ -180,5 +180,70 @@
         display: flex;
         flex-grow: 1;
     }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .modal-title {
+        {{--  transform: translateX(-600%);    --}}
+    }
+
+    /* Custom styles for buttons */
+    .btn-outline-custom {
+        background-color: #fff;
+        color: red;
+        border-color: red;
+        margin-right: 5px;
+        /* Spasi antara tombol */
+    }
+
+    .btn-outline-custom:hover {
+        background-color: red;
+        color: white;
+    }
+
+    .btn-sort {
+        width: 100%;
+        border-radius: 1rem;
+        text-align: left;
+        background-color: white;
+        color: black;
+        border: 0;
+        font-size: 12px;
+        padding-left: 8px;
+    }
+
+    .btn-sort:hover {
+        background-color: #d4c0c0;
+        color: black;
+        /* Warna latar belakang saat hover */
+    }
+
+    .active-sort {
+        background-color: #e7f3fe;
+        /* Warna latar belakang untuk tombol aktif */
+        color: black;
+        /* Warna teks untuk tombol aktif */
+        border-color: #007bff;
+        /* Border untuk tombol aktif */
+    }
+
+    .rounded {
+        border-radius: 1rem !important;
+        /* Menetapkan border radius untuk kelas rounded */
+    }
+
+    .suggestion-item {
+        padding: 8px;
+        cursor: pointer;
+    }
+
+    .suggestion-item:hover {
+        background-color: #f0f0f0;
+        /* Highlight on hover */
+    }
 </style>
 @stack('styles')

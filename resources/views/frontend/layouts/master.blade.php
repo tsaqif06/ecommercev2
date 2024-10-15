@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() ?? 'en' }}">
+<html lang="{{ app()->getLocale() ?: 'en' }}">
 
 <head>
     @include('frontend.layouts.head')
@@ -29,7 +29,7 @@
             <nav class="col-md-3 col-lg-2 sidebar bg-light">
                 <!-- Sidebar -->
                 <div class="sidebar fixed-left">
-                    <div class="ml-4" data-toggle="modal" data-target="#searchModal">
+                    <div class="ml-4 searchToggle">
                         <i class="fas fa-search" style="font-size: 25px; color: #121212"></i>
                     </div>
                     <div class="sidebar-menu">
