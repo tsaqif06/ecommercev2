@@ -216,10 +216,21 @@
         padding-left: 8px;
     }
 
-    .btn-sort:hover {
-        background-color: #d4c0c0;
+    .btn-sidebar {
+        width: 100%;
+        border-radius: 1rem;
+        text-align: left;
+        background-color: white;
         color: black;
-        /* Warna latar belakang saat hover */
+        border: 0;
+        font-size: 12px;
+        padding: 8px 12px 5px 12px;
+        margin-top: 12px;
+    }
+
+    .btn-sort:hover,
+    .btn-sidebar:hover {
+        background-color: #d4c0c0;
     }
 
     .active-sort {

@@ -32,8 +32,9 @@
                     <div class="ml-4 searchToggle">
                         <i class="fas fa-search" style="font-size: 25px; color: #121212"></i>
                     </div>
-                    <div class="sidebar-menu">
-                        <!-- Add other menu items here -->
+                    <div class="ml-4 sidebar-menu">
+                        <a href="{{ route('cart') }}" class="btn btn-sidebar"
+                            style="font-size: 14px; font-weight: bold; color: #121212">Product</a>
                     </div>
 
                     <!-- Dropdown for Mobile, hidden on desktop -->
