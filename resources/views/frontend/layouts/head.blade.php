@@ -117,12 +117,27 @@
 
     .sidebar-close {
         display: none;
-        /* Sembunyikan tombol close di desktop */
+    }
+
+    .dropdown-sidebar {
+        display: none !important;
+    }
+
+    .dropdown-navbar {
+        display: flex !important;
     }
 
     @media (max-width: 768px) {
         .sidebar-close {
             display: block;
+        }
+
+        .dropdown-sidebar {
+            display: flex !important;
+        }
+
+        .dropdown-navbar {
+            display: none !important;
         }
     }
 
