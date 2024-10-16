@@ -86,16 +86,44 @@
         top: 0;
         left: 0;
         height: 100%;
-        width: 260px;
+        width: 400px;
         background-color: #fff;
         color: #121212;
         transition: transform 0.3s ease-in-out;
-        z-index: 1000;
-        padding-top: 120px;
+        transform: translateX(-100%);
+        padding-top: 20px;
+        z-index: 9999;
+        /* Sembunyikan sidebar */
     }
 
-    .sidebar-content {
-        padding: 1rem;
+    .sidebar.active {
+        transform: translateX(0);
+        /* Tampilkan sidebar saat aktif */
+    }
+
+    @media (min-width: 768px) {
+        .sidebar {
+            transform: translateX(0);
+            padding-top: 120px;
+            z-index: 1000;
+            /* Tampilkan sidebar di desktop */
+        }
+
+        .sidebar-toggle {
+            display: none;
+            /* Sembunyikan hamburger di desktop */
+        }
+    }
+
+    .sidebar-close {
+        display: none;
+        /* Sembunyikan tombol close di desktop */
+    }
+
+    @media (max-width: 768px) {
+        .sidebar-close {
+            display: block;
+        }
     }
 
     .sidebar-item {
@@ -112,18 +140,6 @@
 
     .sidebar-item a:hover {
         background-color: #495057;
-    }
-
-    .sidebar-toggle {
-        position: fixed;
-        top: 10px;
-        left: 10px;
-        background-color: #343a40;
-        color: #121212;
-        border: none;
-        padding: 10px;
-        border-radius: 5px;
-        z-index: 1100;
     }
 
     .sidebar.hidden {
@@ -147,16 +163,6 @@
     .dropdown-menu.show {
         display: block;
         transform: translateY(0);
-    }
-
-    @media (min-width: 768px) {
-        .sidebar {
-            transform: translateX(0);
-        }
-
-        .sidebar-toggle {
-            display: none;
-        }
     }
 
     .dropdown-divider {
@@ -185,10 +191,6 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-    }
-
-    .modal-title {
-        {{--  transform: translateX(-600%);    --}}
     }
 
     /* Custom styles for buttons */
@@ -255,6 +257,24 @@
     .suggestion-item:hover {
         background-color: #f0f0f0;
         /* Highlight on hover */
+    }
+
+    .dropdown-sidebar {
+        border: 1px solid red;
+        border-radius: 50px;
+        padding: 6px 16px;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    .dropdown-sidebar:hover {
+        background-color: red;
+        color: white !important;
+    }
+
+    .dropdown-sidebar:hover a {
+        color: white !important;
+        /* Menjamin warna putih saat hover */
     }
 </style>
 @stack('styles')

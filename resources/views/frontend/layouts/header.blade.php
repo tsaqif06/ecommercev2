@@ -31,11 +31,10 @@
 
 
         <div class="container-fluid d-flex justify-content-between align-items-center">
-            <button class="sidebar-toggle d-md-none">
-                <i class="fas fa-bars"></i>
-            </button>
             <!-- Logo -->
             <div class="col-auto">
+                <i class="fas fa-bars sidebar-toggle mr-3 mt-2"
+                    style="color: #121212; font-size: 26px; cursor: pointer;"></i>
                 <img src="storage/logo.webp" class="flex-0-0 object-contain"
                     style="max-width:100%; height:44px; width:auto;" alt="Logo of Hecates.official">
             </div>
@@ -145,7 +144,6 @@
                         <i class="fas fa-user" style="font-size: 20px"></i> <!-- Ikon profile -->
                     </a>
                 </div>
-
             </div>
         </div>
     </div>
@@ -466,11 +464,6 @@
                 }
             });
 
-            // Sidebar toggle
-            $('.sidebar-toggle').on('click', function() {
-                $('.sidebar').toggleClass('active');
-            });
-
             // Toggle dropdown
             $('.dropdown-toggle').on('click', function(e) {
                 e.preventDefault();
@@ -480,6 +473,31 @@
             // Modal for search
             $('[data-toggle="modal"][data-target="#searchModal"]').on('click', function() {
                 $('#searchModal').modal('show');
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            // Sidebar toggle for mobile
+            $('.sidebar-toggle').on('click', function() {
+                $('.sidebar').toggleClass('active');
+                $('.sidebar-close').toggle($('.sidebar').hasClass(
+                'active')); // Tampilkan atau sembunyikan tombol close
+            });
+
+            // Close sidebar when clicking the close icon
+            $('.sidebar-close').on('click', function() {
+                $('.sidebar').removeClass('active');
+                $(this).hide(); // Sembunyikan tombol close saat sidebar ditutup
+            });
+
+            // Close sidebar when clicking outside on mobile
+            $(document).on('click', function(event) {
+                if (!$(event.target).closest('.sidebar, .sidebar-toggle').length) {
+                    $('.sidebar').removeClass('active');
+                    $('.sidebar-close').hide(); // Sembunyikan tombol close saat sidebar ditutup
+                }
             });
         });
     </script>
