@@ -5,7 +5,7 @@
     @include('frontend.layouts.head')
 </head>
 
-<body class="js">
+<body class="js" style="overflow-x: hidden; padding: 0;">
 
     <!-- Preloader -->
     <div class="preloader">
@@ -23,7 +23,7 @@
     @include('frontend.layouts.header')
     <!--/ End Header -->
 
-    <div class="container-fluid">
+    <div class="container-fluid p-0">
         <div class="row">
             <!-- Sidebar -->
             <nav class="col-md-3 col-lg-2 sidebar bg-light">
@@ -87,8 +87,8 @@
                                     <label class="form-label" style="font-size: 15px;">Deliver to</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <img src="storage/flags/id.svg" id="flagSvgDropdownSidebar"
-                                                alt="Indonesia" width="24" class="mr-2 mt-1">
+                                            <img src="storage/flags/id.svg" id="flagSvgDropdownSidebar" alt="Indonesia"
+                                                width="24" class="mr-2 mt-1">
                                         </div>
                                         <select class="custom-select w-100" id="deliver-tosidebar" width="100%">
                                             <option value="id">Indonesia</option>
@@ -144,7 +144,6 @@
         <main class="col-12 offset-md-2 col-md-9 col-lg-10 px-md-4">
             @yield('main-content')
         </main>
-    </div>
     </div>
 
     @include('frontend.layouts.footer')

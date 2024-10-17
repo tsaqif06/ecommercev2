@@ -56,6 +56,14 @@
         font-style: normal;
     }
 
+    html,
+    body {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+    }
+
+
     .dropdown-toggle::after {
         display: none !important;
     }
@@ -106,6 +114,7 @@
             transform: translateX(0);
             padding-top: 120px;
             z-index: 1000;
+            width: 260px;
             /* Tampilkan sidebar di desktop */
         }
 
@@ -220,6 +229,19 @@
     .btn-outline-custom:hover {
         background-color: red;
         color: white;
+    }
+
+    .btn-custom {
+        background-color: red;
+        color: #fff;
+        cursor: pointer;
+        border: 0;
+        /* Spasi antara tombol */
+    }
+
+    .btn-custom:hover {
+        background-color: red;
+        color: #fff;
     }
 
     .btn-sort {
