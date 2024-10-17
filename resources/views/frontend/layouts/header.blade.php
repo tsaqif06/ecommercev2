@@ -150,6 +150,26 @@
         </div>
     </div>
 
+    <div class="notification-wrapper">
+        <div class="notification success-notification" style="display: none;">
+            <div>
+                <i class="fa-solid fa-check"></i>
+            </div>
+            <div class="message">
+                Setting changes were successfully saved
+            </div>
+        </div>
+        <div class="notification error-notification" style="display: none;">
+            <div>
+                <i class="fa-solid fa-xmark"></i>
+            </div>
+            <div class="message">
+                Failed to save changes. Please try again
+            </div>
+        </div>
+    </div>
+
+
     <!-- End Topbar -->
     <div class="middle-inner mt-5 d-none">
         <div class="container">
@@ -380,6 +400,7 @@
                 "SGD": '(S$)',
                 "MYR": '(RM)',
             };
+
             updateDisplayFromLocalStorage();
 
             // Function to update display based on settings
@@ -437,7 +458,7 @@
             });
 
             $('#deliver-tosidebar').on('change', function() {
-                let flagCode = $('#deliver-to').val();
+                let flagCode = $('#deliver-tosidebar').val();
                 $('#flagSvgDropdownSidebar').attr('src', `storage/flags/${flagCode}.svg`);
             });
 
@@ -447,6 +468,8 @@
                 let language = $('#langSelect').val();
                 let currency = $('#currencySelect').val();
 
+                const previousLanguage = localStorage.getItem('language') || 'en';
+
                 localStorage.setItem('flagCode', flagCode);
                 localStorage.setItem('language', language);
                 localStorage.setItem('currency', currency);
@@ -454,22 +477,26 @@
                 // Update display with the saved values directly from localStorage
                 updateDisplayFromLocalStorage();
 
-                // AJAX request to update language on the server
-                $.ajax({
-                    url: '/set-language',
-                    method: 'POST',
-                    data: {
-                        language: language,
-                        _token: '{{ csrf_token() }}'
-                    },
-                    success: function(response) {
-                        console.log('Bahasa diubah ke: ' + language);
-                        location.reload();
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Gagal mengubah bahasa:', error);
-                    }
-                });
+                if (language !== previousLanguage) {
+                    $.ajax({
+                        url: '/set-language',
+                        method: 'POST',
+                        data: {
+                            language: language,
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            console.log('Bahasa diubah ke: ' + language);
+                            location.reload();
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Gagal mengubah bahasa:', error);
+                            showToast('error');
+                        }
+                    });
+                } else {
+                    showToast('success');
+                }
             });
 
             $('#saveSettingBtnSidebar').on('click', function() {
@@ -477,6 +504,9 @@
                 let language = $('#langSelectSidebar').val();
                 let currency = $('#currencySelectSidebar').val();
 
+                const previousLanguage = localStorage.getItem('language') || 'en';
+
+
                 localStorage.setItem('flagCode', flagCode);
                 localStorage.setItem('language', language);
                 localStorage.setItem('currency', currency);
@@ -484,23 +514,40 @@
                 // Update display with the saved values directly from localStorage
                 updateDisplayFromLocalStorage();
 
-                // AJAX request to update language on the server
-                $.ajax({
-                    url: '/set-language',
-                    method: 'POST',
-                    data: {
-                        language: language,
-                        _token: '{{ csrf_token() }}'
-                    },
-                    success: function(response) {
-                        console.log('Bahasa diubah ke: ' + language);
-                        location.reload();
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Gagal mengubah bahasa:', error);
-                    }
-                });
+                if (language !== previousLanguage) {
+                    $.ajax({
+                        url: '/set-language',
+                        method: 'POST',
+                        data: {
+                            language: language,
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            console.log('Bahasa diubah ke: ' + language);
+                            location.reload();
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Gagal mengubah bahasa:', error);
+                            showToast('error');
+                        }
+                    });
+                } else {
+                    showToast('success');
+                }
             });
+
+            function showToast(type) {
+                const notification = type === 'success' ? $('.success-notification') : $('.error-notification');
+
+                // Tampilkan notifikasi
+                notification.css('display', 'flex');
+
+                // Sembunyikan notifikasi setelah 3 detik
+                setTimeout(function() {
+                    notification.css('display', 'none');
+                }, 3000);
+            }
+
 
             // Event for closing dropdown when clicking outside
             $(document).on('click', function(event) {
