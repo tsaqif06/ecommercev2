@@ -508,6 +508,25 @@
             updateDisplayFromLocalStorage();
             updateTotalPrices();
 
+            $('#status-filterorder').on('change', function() {
+                var status = $(this).val();
+
+                $.ajax({
+                    url: '{{ route('user.order.indeex') }}',
+                    type: 'GET',
+                    data: {
+                        status: status
+                    },
+                    success: function(data) {
+                        $('#orders-list').html(data);
+                        updateTotalPrices();
+                    },
+                    error: function(xhr) {
+                        console.error(xhr);
+                    }
+                });
+            });
+
             // Function to update display based on settings
             function updateDisplayFromLocalStorage() {
                 const savedFlagCode = localStorage.getItem('flagCode') || 'id';

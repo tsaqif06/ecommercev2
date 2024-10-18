@@ -30,7 +30,7 @@
                     My Orders ({{ count($orders) }})
                 </h2>
                 <form id="order-filter-form" method="GET" action="{{ route('user.order.indeex') }}" class="form-inline">
-                    <select name="status" class="form-control mr-2" id="status-filter">
+                    <select name="status" class="form-control mr-2" id="status-filterorder">
                         <option value="">ALL STATUS</option>
                         <option value="unpaid" {{ request('status') == 'unpaid' ? 'selected' : '' }}>UNPAID</option>
                         <option value="paid" {{ request('status') == 'paid' ? 'selected' : '' }}>PAID</option>
@@ -89,24 +89,6 @@
                         "previous": "Previous"
                     }
                 }
-            });
-
-            $('#status-filter').on('change', function() {
-                var status = $(this).val();
-
-                $.ajax({
-                    url: '{{ route('user.order.indeex') }}',
-                    type: 'GET',
-                    data: {
-                        status: status
-                    },
-                    success: function(data) {
-                        $('#orders-list').html(data);
-                    },
-                    error: function(xhr) {
-                        console.error(xhr);
-                    }
-                });
             });
         });
     </script>
