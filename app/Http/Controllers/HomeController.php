@@ -56,13 +56,13 @@ class HomeController extends Controller
     }
 
     // Order
-    public function orderIndex()
+    public function orderIndexold()
     {
         $orders = Order::orderBy('id', 'DESC')->where('user_id', auth()->user()->id)->paginate(perPage: 10);
         return view('user.order.index')->with('orders', $orders);
     }
 
-    public function orderIndeex(Request $request)
+    public function orderIndex(Request $request)
     {
         $status = $request->query('status');
 
@@ -82,7 +82,7 @@ class HomeController extends Controller
             return view('user.order.order_list', compact('orders'));
         }
 
-        return view('user.order.indextest', compact('orders'));
+        return view('user.order.index', compact('orders'));
     }
 
 

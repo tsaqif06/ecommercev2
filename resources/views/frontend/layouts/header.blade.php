@@ -35,7 +35,7 @@
             <div class="col-auto">
                 <i class="fas fa-bars sidebar-toggle mr-3 mt-2"
                     style="color: #121212; font-size: 26px; cursor: pointer;"></i>
-                <img src="storage/logo.webp" class="flex-0-0 object-contain"
+                <img src="{{ asset('storage/logo.webp') }}" class="flex-0-0 object-contain"
                     style="max-width:100%; height:44px; width:auto;" alt="Logo of Hecates.official">
             </div>
 
@@ -45,8 +45,8 @@
                     <div class="dropdown-navbar">
                         <a class="text-dark dropdown-toggle d-flex align-items-center" href="#"
                             id="dropdownSettings" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <img class="mr-1 h-4" src="storage/flags/id.svg" id="flagSvgNavbar" alt="Indonesia"
-                                style="width: 24px;">
+                            <img class="mr-1 h-4" src="{{ asset('storage/flags/id.svg') }}" id="flagSvgNavbar"
+                                alt="Indonesia" style="width: 24px;">
                             <span class="mr-2 font-weight-bold" id="deliver-to-navbar">Indonesia</span>
                             <div class="p-divider mx-2"
                                 style="width: 1px; height: 20px; background-color: var(--p-border-color);"></div>
@@ -81,8 +81,8 @@
                                         <label class="form-label" style="font-size: 15px;">Deliver to</label>
                                         <div class="input-group">
                                             <div class="input-group-prepend">
-                                                <img src="storage/flags/id.svg" id="flagSvgDropdown" alt="Indonesia"
-                                                    width="24" class="mr-2 mt-1">
+                                                <img src="{{ asset('storage/flags/id.svg') }}" id="flagSvgDropdown"
+                                                    alt="Indonesia" width="24" class="mr-2 mt-1">
                                             </div>
                                             <select class="custom-select w-100" id="deliver-to" width="100%">
                                                 <option value="id">Indonesia</option>
@@ -505,6 +505,8 @@
                 "MYR": 4.18 // Misalnya 1 USD = 4.18 MYR
             };
 
+            const assetUrl = "{{ asset('storage/flags') }}";
+
             updateDisplayFromLocalStorage();
             updateTotalPrices();
 
@@ -512,7 +514,7 @@
                 var status = $(this).val();
 
                 $.ajax({
-                    url: '{{ route('user.order.indeex') }}',
+                    url: '{{ route('user.order.index') }}',
                     type: 'GET',
                     data: {
                         status: status
@@ -534,8 +536,8 @@
                 const savedCurrency = localStorage.getItem('currency') || 'IDR';
 
                 // Update display with values from localStorage
-                $('#flagSvgNavbar').attr('src', `storage/flags/${savedFlagCode}.svg`);
-                $('#flagSvgDropdown').attr('src', `storage/flags/${savedFlagCode}.svg`);
+                $('#flagSvgNavbar').attr('src', `${assetUrl}/${savedFlagCode}.svg`);
+                $('#flagSvgDropdown').attr('src', `${assetUrl}/${savedFlagCode}.svg`);
                 $('#deliver-to-navbar').text(flagCountry[savedFlagCode]);
                 $('#selectedLang').text(savedLanguage.toLowerCase());
                 $('#currencyType').text(savedCurrency);
@@ -550,8 +552,8 @@
                 $('#currencySelect').niceSelect('update');
 
 
-                $('#flagSvgSidebar').attr('src', `storage/flags/${savedFlagCode}.svg`);
-                $('#flagSvgDropdownSidebar').attr('src', `storage/flags/${savedFlagCode}.svg`);
+                $('#flagSvgSidebar').attr('src', `${assetUrl}/${savedFlagCode}.svg`);
+                $('#flagSvgDropdownSidebar').attr('src', `${assetUrl}/${savedFlagCode}.svg`);
                 $('#deliver-to-navbarsidebar').text(flagCountry[savedFlagCode]);
                 $('#selectedLangSidebar').text(savedLanguage.toLowerCase());
                 $('#currencyTypeSidebar').text(savedCurrency);
@@ -612,12 +614,12 @@
             // Update flag image in dropdown when changing deliver-to option
             $('#deliver-to').on('change', function() {
                 let flagCode = $('#deliver-to').val();
-                $('#flagSvgDropdown').attr('src', `storage/flags/${flagCode}.svg`);
+                $('#flagSvgDropdown').attr('src', `${assetUrl}/${flagCode}.svg`);
             });
 
             $('#deliver-tosidebar').on('change', function() {
                 let flagCode = $('#deliver-tosidebar').val();
-                $('#flagSvgDropdownSidebar').attr('src', `storage/flags/${flagCode}.svg`);
+                $('#flagSvgDropdownSidebar').attr('src', `${assetUrl}/${flagCode}.svg`);
             });
 
             // Save settings when the Save button is clicked
