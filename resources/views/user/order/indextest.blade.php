@@ -18,117 +18,96 @@
                             </div>
                     </div>
                 </div>
-
-                <!-- Orders Section -->
-                <div class="card mt-2">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between">
-                            <h2 class="card-title">My Orders (0)</h2>
-                            <select class="form-control w-25 float-right mb-3">
-                                <option>ALL STATUS</option>
-                                <option>NOT PAID</option>
-                                <option>PAID</option>
-                                <option>PACKAGED</option>
-                                <option>SENT</option>
-                                <option>DONE</option>
-                                <option>CANCELLED</option>
-                            </select>
-                        </div>
-
-                        <p class="card-text">YOULL BE ABLE TO CHECK YOUR ORDERS AND THEIR PROGRESS FROM THIS LIST.</p>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Orders Section -->
+    <div class="card mt-2" style="width: 100%;">
+        <div class="card-body">
+            <div class="d-flex justify-content-between">
+                <h2 class="card-title">
+                    My Orders ({{ count($orders) }})
+                </h2>
+                <form id="order-filter-form" method="GET" action="{{ route('user.order.indeex') }}" class="form-inline">
+                    <select name="status" class="form-control mr-2" id="status-filter">
+                        <option value="">ALL STATUS</option>
+                        <option value="unpaid" {{ request('status') == 'unpaid' ? 'selected' : '' }}>UNPAID</option>
+                        <option value="paid" {{ request('status') == 'paid' ? 'selected' : '' }}>PAID</option>
+                        <option value="unconfirmed" {{ request('status') == 'unconfirmed' ? 'selected' : '' }}>UNCONFIRMED
+                        </option>
+                        <option value="confirmed" {{ request('status') == 'confirmed' ? 'selected' : '' }}>CONFIRMED
+                        </option>
+                    </select>
+                </form>
+            </div>
 
-    <script>
-        $(document).ready(function() {
-            $('#footer').addClass('d-none'); // Menyembunyikan footer
-        });
-    </script>
+            <div id="orders-list">
+                @include('user.order.order_list', ['orders' => $orders])
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('styles')
-    {{--  <style>
-        .login-section {
-            background-color: white;
-            padding: 20px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    <link href="{{ asset('backend/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
+    <style>
+        div.dataTables_wrapper div.dataTables_paginate {
+            display: none;
         }
+    </style>
+@endpush
 
-        .login-section h2 {
-            font-size: 18px;
-            margin-bottom: 15px;
-            text-align: center;
-        }
+@push('scripts')
+    <!-- Page level plugins -->
+    <script src="{{ asset('backend/vendor/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('backend/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 
-        .login-section p {
-            font-size: 14px;
-            margin: 5px 0;
-        }
+    <!-- Page level custom scripts -->
+    <script src="{{ asset('backend/js/demo/datatables-demo.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            $('#footer').addClass('d-none'); // Menyembunyikan footer
 
-        .button {
-            display: inline-block;
-            padding: 10px 20px;
-            margin: 10px 5px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            text-transform: uppercase;
-            width: calc(50% - 10px);
-            transition: background-color 0.3s;
-        }
+            // Inisialisasi DataTables
+            $('#orders-table').DataTable({
+                "paging": true,
+                "ordering": true,
+                "info": true,
+                "searching": true,
+                "order": [
+                    [0, 'desc']
+                ],
+                "language": {
+                    "search": "Search Orders:",
+                    "lengthMenu": "Show _MENU_ entries",
+                    "info": "Showing _START_ to _END_ of _TOTAL_ orders",
+                    "paginate": {
+                        "next": "Next",
+                        "previous": "Previous"
+                    }
+                }
+            });
 
-        .button-signup {
-            background-color: white;
-            color: #333;
-            border: 1px solid #ccc;
-        }
+            $('#status-filter').on('change', function() {
+                var status = $(this).val();
 
-        .button-signup:hover {
-            background-color: #f0f0f0;
-        }
-
-        .button-login {
-            background-color: #8b0000;
-            color: white;
-        }
-
-        .button-login:hover {
-            background-color: #a50000;
-        }
-
-        /* Orders section styles */
-        .orders-section {
-            background-color: white;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .orders-section h2 {
-            font-size: 18px;
-            margin-bottom: 15px;
-        }
-
-        .status-select {
-            float: right;
-            padding: 5px;
-            border-radius: 3px;
-            border: 1px solid #ccc;
-            font-size: 14px;
-        }
-
-        .orders-section p {
-            font-size: 14px;
-            margin-top: 20px;
-            color: #666;
-        }
-    </style>  --}}
+                $.ajax({
+                    url: '{{ route('user.order.indeex') }}',
+                    type: 'GET',
+                    data: {
+                        status: status
+                    },
+                    success: function(data) {
+                        $('#orders-list').html(data);
+                    },
+                    error: function(xhr) {
+                        console.error(xhr);
+                    }
+                });
+            });
+        });
+    </script>
 @endpush

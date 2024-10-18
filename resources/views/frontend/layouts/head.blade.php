@@ -374,6 +374,9 @@
         border-radius: 50%;
         font-size: 10px;
         font-weight: bold;
+        height: 20px;
+        width: 20px;
+        text-align: center;
     }
 
     @media (min-width: 992px) {
