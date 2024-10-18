@@ -132,9 +132,106 @@
                         </div>
                     </div>
 
-                    <div class="text-dark text-p-default mx-3" data-toggle="modal" data-target="#sortModal"
+                    {{--  <div class="text-dark text-p-default mx-3" data-toggle="modal" data-target="#sortModal"
                         style="cursor: pointer">
                         <i class="fa-solid fa-arrow-up-wide-short" style="font-size: 20px"></i>
+                    </div>  --}}
+
+                    {{--  <div class="sinlge-bar shopping mx-3">
+                        @php
+                            $total_prod = 0;
+                            $total_amount = 0;
+                        @endphp
+                        @if (session('wishlist'))
+                            @foreach (session('wishlist') as $wishlist_items)
+                                @php
+                                    $total_prod += $wishlist_items['quantity'];
+                                    $total_amount += $wishlist_items['amount'];
+                                @endphp
+                            @endforeach
+                        @endif
+                        <a href="{{ route('wishlist') }}" class="single-icon">
+                            <i class="fa fa-heart-o" style="font-size: 20px"></i>
+                            <span class="total-count">{{ Helper::wishlistCount() }}</span>
+                        </a>
+                        <!-- Wishlist Dropdown -->
+                        @auth
+                            <div class="shopping-item">
+                                <div class="dropdown-cart-header">
+                                    <span>{{ count(Helper::getAllProductFromWishlist()) }} Items</span>
+                                    <a href="{{ route('wishlist') }}">View Wishlist</a>
+                                </div>
+                                <ul class="shopping-list">
+                                    @foreach (Helper::getAllProductFromWishlist() as $data)
+                                        @php
+                                            $photo = explode(',', $data->product['photo']);
+                                        @endphp
+                                        <li>
+                                            <a href="{{ route('wishlist-delete', $data->id) }}" class="remove"
+                                                title="Remove this item"><i class="fa fa-remove"></i></a>
+                                            <a class="cart-img" href="#"><img src="{{ $photo[0] }}"
+                                                    alt="{{ $photo[0] }}"></a>
+                                            <h4><a href="{{ route('product-detail', $data->product['slug']) }}"
+                                                    target="_blank">{{ $data->product['title'] }}</a></h4>
+                                            <p class="quantity">{{ $data->quantity }} x - <span
+                                                    class="amount">${{ number_format($data->price, 2) }}</span></p>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                                <div class="bottom">
+                                    <div class="total">
+                                        <span>Total</span>
+                                        <span
+                                            class="total-amount">${{ number_format(Helper::totalWishlistPrice(), 2) }}</span>
+                                    </div>
+                                    <a href="{{ route('cart') }}" class="btn animate">Cart</a>
+                                </div>
+                            </div>
+                        @endauth
+                        <!--/ End Wishlist Dropdown -->
+                    </div>  --}}
+
+                    <!-- Cart Section -->
+                    <div class="sinlge-bar shopping mx-3">
+                        <a href="{{ route('cart') }}" class="single-icon">
+                            <i class="ti-bag" style="font-size: 20px"></i>
+                            <span class="total-count">{{ Helper::cartCount() }}</span>
+                        </a>
+                        <!-- Cart Dropdown -->
+                        @auth
+                            <div class="shopping-item">
+                                <div class="dropdown-cart-header">
+                                    <span>{{ count(Helper::getAllProductFromCart()) }} Items</span>
+                                    <a href="{{ route('cart') }}">View Cart</a>
+                                </div>
+                                <ul class="shopping-list">
+                                    @foreach (Helper::getAllProductFromCart() as $data)
+                                        @php
+                                            $photo = explode(',', $data->product['photo']);
+                                        @endphp
+                                        <li>
+                                            <a href="{{ route('cart-delete', $data->id) }}" class="remove"
+                                                title="Remove this item"><i class="fa fa-remove"></i></a>
+                                            <a class="cart-img" href="#"><img src="{{ $photo[0] }}"
+                                                    alt="{{ $photo[0] }}"></a>
+                                            <h4><a href="{{ route('product-detail', $data->product['slug']) }}"
+                                                    target="_blank">{{ $data->product['title'] }}</a></h4>
+                                            <p class="quantity">{{ $data->quantity }} x - <span
+                                                    class="amount">${{ number_format($data->price, 2) }}</span></p>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                                <div class="bottom">
+                                    <div class="total">
+                                        <span>Total</span>
+                                        <span
+                                            class="total-amount">${{ number_format(Helper::totalCartPrice(), 2) }}</span>
+                                    </div>
+                                    <a href="{{ route('checkout') }}" class="btn animate">Checkout</a>
+                                </div>
+                            </div>
+                        @endauth
+                        <!--/ End Cart Dropdown -->
                     </div>
 
                     <div class="text-dark text-p-default mx-3 searchToggle" style="cursor: pointer">
@@ -401,7 +498,15 @@
                 "MYR": '(RM)',
             };
 
+            const exchangeRates = {
+                "USD": 1,
+                "IDR": 15000, // Misalnya 1 USD = 15,000 IDR
+                "SGD": 1.37, // Misalnya 1 USD = 1.37 SGD
+                "MYR": 4.18 // Misalnya 1 USD = 4.18 MYR
+            };
+
             updateDisplayFromLocalStorage();
+            updateTotalPrices();
 
             // Function to update display based on settings
             function updateDisplayFromLocalStorage() {
@@ -426,7 +531,6 @@
                 $('#currencySelect').niceSelect('update');
 
 
-
                 $('#flagSvgSidebar').attr('src', `storage/flags/${savedFlagCode}.svg`);
                 $('#flagSvgDropdownSidebar').attr('src', `storage/flags/${savedFlagCode}.svg`);
                 $('#deliver-to-navbarsidebar').text(flagCountry[savedFlagCode]);
@@ -441,6 +545,41 @@
                 $('#deliver-tosidebar').niceSelect('update');
                 $('#langSelectSidebar').niceSelect('update');
                 $('#currencySelectSidebar').niceSelect('update');
+            }
+
+            // Fungsi untuk mengonversi mata uang
+            function convertCurrency(amount, fromCurrency, toCurrency) {
+                if (fromCurrency === toCurrency) {
+                    return amount;
+                }
+                let usdAmount = amount / exchangeRates[fromCurrency];
+                return usdAmount * exchangeRates[toCurrency];
+            }
+
+            function updateTotalPrices() {
+                const selectedCurrency = localStorage.getItem('currency') || 'USD';
+
+
+                $('.currency_convert').each(function() {
+                    let originalAmount = parseFloat($(this).text().replace(/[$,]/g, ''));
+                    console.log(originalAmount)
+                    let convertedAmount = convertCurrency(originalAmount, 'USD',
+                        selectedCurrency);
+
+                    {{--  $(this).prev('.currency-label').text(`Total (${selectedCurrency})`);  --}}
+
+                    const currencySymbol = {
+                        "USD": "$",
+                        "IDR": "Rp",
+                        "SGD": "S$",
+                        "MYR": "RM"
+                    };
+
+                    // Memperbarui nilai total
+                    $(this).text(
+                        `${currencySymbol[selectedCurrency]} ${convertedAmount.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`
+                    );
+                });
             }
 
             $(window).scroll(function() {
@@ -469,6 +608,7 @@
                 let currency = $('#currencySelect').val();
 
                 const previousLanguage = localStorage.getItem('language') || 'en';
+                const previousCurrency = localStorage.getItem('currency') || 'idr';
 
                 localStorage.setItem('flagCode', flagCode);
                 localStorage.setItem('language', language);
@@ -476,8 +616,11 @@
 
                 // Update display with the saved values directly from localStorage
                 updateDisplayFromLocalStorage();
+                updateTotalPrices();
 
-                if (language !== previousLanguage) {
+                if (currency !== previousCurrency) {
+                    location.reload();
+                } else if (language !== previousLanguage) {
                     $.ajax({
                         url: '/set-language',
                         method: 'POST',
@@ -513,6 +656,7 @@
 
                 // Update display with the saved values directly from localStorage
                 updateDisplayFromLocalStorage();
+                updateTotalPrices();
 
                 if (language !== previousLanguage) {
                     $.ajax({

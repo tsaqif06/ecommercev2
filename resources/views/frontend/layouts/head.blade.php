@@ -346,5 +346,47 @@
     .notification .message {
         flex-grow: 1;
     }
+
+    .payment-icons img {
+        height: 30px;
+        width: auto;
+        max-width: 30px;
+        background-color: #fff;
+        {{--  padding: 5px;  --}} border-radius: 5px;
+        object-fit: contain;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        margin-left: 6px;
+    }
+
+    .single-icon {
+        position: relative;
+        display: inline-block;
+    }
+
+    .single-icon span {
+        position: absolute;
+        top: -8px;
+        right: -10px;
+        background: #ffc107;
+        color: #000;
+        padding: 2px 6px;
+        border-radius: 50%;
+        font-size: 10px;
+        font-weight: bold;
+    }
+
+    @media (min-width: 992px) {
+        .footer-info {
+            margin-left: -120px;
+        }
+
+        .footer-row {
+            margin-top: -80px;
+        }
+
+        .first-row-footer {
+            margin-top: 30px;
+        }
+    }
 </style>
 @stack('styles')
