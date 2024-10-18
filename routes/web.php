@@ -122,6 +122,8 @@ Route::get('payment', [PaymentController::class, 'payment'])->name('payment');
 Route::get('payment/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel');
 Route::post('payment/success', [PaymentController::class, 'success'])->name('payment.success');
 
+Route::get('/order', "HomeController@orderIndeex")->name('user.order.indeex');
+
 
 // Backend section start
 

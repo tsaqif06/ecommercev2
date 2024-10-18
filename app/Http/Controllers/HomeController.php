@@ -58,6 +58,10 @@ class HomeController extends Controller
         $orders=Order::orderBy('id','DESC')->where('user_id',auth()->user()->id)->paginate(10);
         return view('user.order.index')->with('orders',$orders);
     }
+    public function orderIndeex(){
+        $orders=Order::orderBy('id','DESC')->where('user_id',auth()->user()->id)->paginate(10);
+        return view('user.order.indextest')->with('orders',$orders);
+    }
     public function userOrderDelete($id)
     {
         $order=Order::find($id);
@@ -220,11 +224,11 @@ class HomeController extends Controller
             'new_password' => ['required'],
             'new_confirm_password' => ['same:new_password'],
         ]);
-   
+
         User::find(auth()->user()->id)->update(['password'=> Hash::make($request->new_password)]);
-   
+
         return redirect()->route('user')->with('success','Password successfully changed');
     }
 
-    
+
 }

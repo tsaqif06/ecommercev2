@@ -7,12 +7,12 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">Payment Details {{ $invoice_id }}</div>
+                    <div class="card-header">Payment Details</div>
 
                     <div class="card-body">
                         <h5>Order Summary</h5>
                         <ul class="list-group mb-3">
-                            @foreach ($items as $item)
+                            {{--  @foreach ($items as $item)
                                 <li class="list-group-item d-flex justify-content-between lh-condensed">
                                     <div>
                                         <h6 class="my-0">{{ $item['name'] }}</h6>
@@ -20,14 +20,14 @@
                                     </div>
                                     <span class="text-muted currency_convert">{{ $item['price'] }}</span>
                                 </li>
-                            @endforeach
-                            <li class="list-group-item d-flex justify-content-between lh-condensed">
+                            @endforeach  --}}
+                            {{--  <li class="list-group-item d-flex justify-content-between lh-condensed">
                                 <div>
                                     <h6 class="my-0">Shipping Type : </h6>
                                     <small class="text-muted">{{ $shipping_name }}</small>
                                 </div>
                                 <span class="text-muted currency_convert">{{ $shipping_price }}</span>
-                            </li>
+                            </li>  --}}
                             @if (isset($shipping_discount))
                                 <li class="list-group-item d-flex justify-content-between">
                                     <span>Shipping Discount</span>
@@ -36,14 +36,14 @@
                             @endif
                             <li class="list-group-item d-flex justify-content-between">
                                 <span>Total</span>
-                                <strong class="currency_convert">{{ $total }}</strong>
+                                {{--  <strong class="currency_con   vert">{{ $total }}</strong>  --}}
                             </li>
                             <li class="list-group-item d-flex justify-content-between">
                                 <span>Nomor Rekening</span>
-                                <strong>{{ $no_rekening }}</strong>
+                                {{--  <strong>{{ $no_rekening }}</strong>  --}}
                             </li>
                         </ul>
-                        <form id="payment-form" action="{{ route('payment.success') }}" method="POST"
+                        {{--  <form id="payment-form" action="{{ route('payment.success') }}" method="POST"
                             enctype="multipart/form-data">
                             @csrf
                             <input type="hidden" value="{{ $order_id }}" id="order_id" name="order_id">
@@ -69,45 +69,16 @@
                                 <button type="submit" class="btn btn-primary">Submit</button>
                                 <button type="button" class="btn btn-secondary" id="cancel-button">Cancel</button>
                             </div>
-                        </form>
+                        </form>  --}}
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        function previewImage(input) {
-            var preview = document.getElementById('img-preview');
-            var file = input.files[0];
-            var reader = new FileReader();
-
-            reader.onloadend = function() {
-                preview.src = reader.result;
-                preview.style.display = 'block'; // Menampilkan gambar setelah diunggah
-            }
-
-            if (file) {
-                reader.readAsDataURL(file);
-            } else {
-                preview.src = "";
-                preview.style.display = 'none'; // Menyembunyikan gambar jika file dihapus
-            }
-        }
-
-        $('#cancel-button').on('click', function() {
-            $.ajax({
-                url: '{{ route('payment.cancel') }}',
-                type: 'GET',
-                success: function(response) {
-                    alert(response.message); // Tampilkan pesan pembatalan
-                    window.location.href = '{{ route('home') }}'; // Arahkan ke halaman beranda
-                },
-                error: function(xhr) {
-                    console.error('Error:', xhr.responseText); // Tampilkan error jika ada
-                }
-            });
+        $(document).ready(function() {
+            $('#footer').addClass('d-none'); // Menyembunyikan footer
         });
     </script>
 @endsection
