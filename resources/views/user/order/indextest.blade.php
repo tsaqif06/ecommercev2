@@ -6,75 +6,43 @@
     <div class="container" style="margin: 150px 0 50px">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">Payment Details</div>
+                <div class="card mb-4" style="border: 0;">
+                    <div class="card-body" style="text-align: center">
+                        <h5 class="card-title text-center">GET VIP SERVICE WITH OUR 1-STEP LOGIN:</h6>
+                            <h6 class="card-text">★ YOU CAN CHAT WITH HECATESOFFICIAL</h6>
+                            <h6 class="card-text">★ BE THE FIRST TO GET SPECIAL DISCOUNTS</h6>
+                            <h6 class="card-text">★ NEVER LOSE ANY OF YOUR ORDERS</h6>
+                            <div class="d-flex justify-content-center mt-4">
+                                <button class="btn btn-outline-custom mr-2 rounded" style="width: 100%">SIGNUP</button>
+                                <button class="btn btn-custom ml-2 rounded" style="width: 100%">LOGIN</button>
+                            </div>
+                    </div>
+                </div>
 
+                <!-- Orders Section -->
+                <div class="card mt-2">
                     <div class="card-body">
-                        <h5>Order Summary</h5>
-                        <ul class="list-group mb-3">
-                            {{--  @foreach ($items as $item)
-                                <li class="list-group-item d-flex justify-content-between lh-condensed">
-                                    <div>
-                                        <h6 class="my-0">{{ $item['name'] }}</h6>
-                                        <small class="text-muted">Qty: {{ $item['qty'] }}</small>
-                                    </div>
-                                    <span class="text-muted currency_convert">{{ $item['price'] }}</span>
-                                </li>
-                            @endforeach  --}}
-                            {{--  <li class="list-group-item d-flex justify-content-between lh-condensed">
-                                <div>
-                                    <h6 class="my-0">Shipping Type : </h6>
-                                    <small class="text-muted">{{ $shipping_name }}</small>
-                                </div>
-                                <span class="text-muted currency_convert">{{ $shipping_price }}</span>
-                            </li>  --}}
-                            @if (isset($shipping_discount))
-                                <li class="list-group-item d-flex justify-content-between">
-                                    <span>Shipping Discount</span>
-                                    <span class="text-success currency_convert">-${{ $shipping_discount }}</span>
-                                </li>
-                            @endif
-                            <li class="list-group-item d-flex justify-content-between">
-                                <span>Total</span>
-                                {{--  <strong class="currency_con   vert">{{ $total }}</strong>  --}}
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between">
-                                <span>Nomor Rekening</span>
-                                {{--  <strong>{{ $no_rekening }}</strong>  --}}
-                            </li>
-                        </ul>
-                        {{--  <form id="payment-form" action="{{ route('payment.success') }}" method="POST"
-                            enctype="multipart/form-data">
-                            @csrf
-                            <input type="hidden" value="{{ $order_id }}" id="order_id" name="order_id">
-                            <div class="form-group">
-                                <label for="proof_payment" style="cursor: pointer">Upload Bukti Pembayaran:</label>
-                                <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="proof_payment" name="proof_payment"
-                                        accept="image/*" capture="camera" onchange="previewImage(this)">
-                                    <label class="custom-file-label" for="proof_payment" style="cursor: pointer">Pilih
-                                        file</label>
-                                </div>
-                                @error('proof_payment')
-                                    <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
+                        <div class="d-flex justify-content-between">
+                            <h2 class="card-title">My Orders (0)</h2>
+                            <select class="form-control w-25 float-right mb-3">
+                                <option>ALL STATUS</option>
+                                <option>NOT PAID</option>
+                                <option>PAID</option>
+                                <option>PACKAGED</option>
+                                <option>SENT</option>
+                                <option>DONE</option>
+                                <option>CANCELLED</option>
+                            </select>
+                        </div>
 
-                            <div class="form-group">
-                                <img id="img-preview" src="#" alt="Preview Gambar"
-                                    style="max-width: 100%; height: auto; display: none;">
-                            </div>
-
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                                <button type="button" class="btn btn-secondary" id="cancel-button">Cancel</button>
-                            </div>
-                        </form>  --}}
+                        <p class="card-text">YOULL BE ABLE TO CHECK YOUR ORDERS AND THEIR PROGRESS FROM THIS LIST.</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
         $(document).ready(function() {
@@ -82,3 +50,85 @@
         });
     </script>
 @endsection
+
+@push('styles')
+    {{--  <style>
+        .login-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .login-section h2 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .login-section p {
+            font-size: 14px;
+            margin: 5px 0;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            text-transform: uppercase;
+            width: calc(50% - 10px);
+            transition: background-color 0.3s;
+        }
+
+        .button-signup {
+            background-color: white;
+            color: #333;
+            border: 1px solid #ccc;
+        }
+
+        .button-signup:hover {
+            background-color: #f0f0f0;
+        }
+
+        .button-login {
+            background-color: #8b0000;
+            color: white;
+        }
+
+        .button-login:hover {
+            background-color: #a50000;
+        }
+
+        /* Orders section styles */
+        .orders-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .orders-section h2 {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .status-select {
+            float: right;
+            padding: 5px;
+            border-radius: 3px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+        .orders-section p {
+            font-size: 14px;
+            margin-top: 20px;
+            color: #666;
+        }
+    </style>  --}}
+@endpush
