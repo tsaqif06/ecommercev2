@@ -26,6 +26,33 @@ class OrderController extends Controller
         return view('backend.order.index')->with('orders', $orders);
     }
 
+    public function showOrder(Request $request)
+    {
+        $status = $request->query('status');
+        $orders = null;
+
+        if (auth()->user()) {
+            $orders = Order::where('user_id', auth()->user()->id)
+                ->orderBy('id', 'DESC')
+                ->get();
+        }
+
+
+        if ($status) {
+            if ($status === 'paid' || $status === 'unpaid') {
+                $orders->where('payment_status', $status);
+            } elseif ($status === 'confirmed' || $status === 'unconfirmed') {
+                $orders->where('status', $status);
+            }
+        }
+
+        if ($request->ajax()) {
+            return view('user.order.order_list', compact('orders'));
+        }
+
+        return view('user.order.index', compact('orders'));
+    }
+
     /**
      * Show the form for creating a new resource.
      *

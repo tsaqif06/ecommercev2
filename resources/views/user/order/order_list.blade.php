@@ -1,4 +1,4 @@
-@if ($orders->isEmpty())
+@if ($orders == null)
     <p class="card-text">
         YOULL BE ABLE TO CHECK YOUR ORDERS AND THEIR PROGRESS FROM THIS LIST.
     </p>

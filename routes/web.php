@@ -122,6 +122,8 @@ Route::get('payment', [PaymentController::class, 'payment'])->name('payment');
 Route::get('payment/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel');
 Route::post('payment/success', [PaymentController::class, 'success'])->name('payment.success');
 
+Route::get('/order', "OrderController@showOrder")->name('user.order.index');
+
 
 // Backend section start
 
@@ -182,7 +184,6 @@ Route::group(['prefix' => '/user', 'middleware' => ['user']], function () {
     Route::get('/profile', [HomeController::class, 'profile'])->name('user-profile');
     Route::post('/profile/{id}', [HomeController::class, 'profileUpdate'])->name('user-profile-update');
     //  Order
-    Route::get('/order', "HomeController@orderIndex")->name('user.order.index');
     Route::get('/order/show/{id}', "HomeController@orderShow")->name('user.order.show');
     Route::delete('/order/delete/{id}', [HomeController::class, 'userOrderDelete'])->name('user.order.delete');
     // Product Review

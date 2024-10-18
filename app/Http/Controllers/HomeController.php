@@ -62,29 +62,6 @@ class HomeController extends Controller
         return view('user.order.index')->with('orders', $orders);
     }
 
-    public function orderIndex(Request $request)
-    {
-        $status = $request->query('status');
-
-        $orders = Order::where('user_id', auth()->user()->id);
-
-        if ($status) {
-            if ($status === 'paid' || $status === 'unpaid') {
-                $orders->where('payment_status', $status);
-            } elseif ($status === 'confirmed' || $status === 'unconfirmed') {
-                $orders->where('status', $status);
-            }
-        }
-
-        $orders = $orders->orderBy('id', 'DESC')->get();
-
-        if ($request->ajax()) {
-            return view('user.order.order_list', compact('orders'));
-        }
-
-        return view('user.order.index', compact('orders'));
-    }
-
 
 
 
