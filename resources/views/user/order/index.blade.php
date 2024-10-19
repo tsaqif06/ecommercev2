@@ -38,6 +38,7 @@
                         </p>
 
                         <form class="mt-3" method="post" action="{{ route('register.submit') }}">
+                            @csrf
                             <div class="form-floating-custom mb-3 position-relative">
                                 <input type="text" class="form-control" placeholder=" " id="name" name="name"
                                     value="{{ old('name') }}" style="padding-left: -40px;" required>
@@ -78,6 +79,7 @@
                         <h5 class="modal-title mb-3" id="loginModalLabel">Login</h5>
 
                         <form class="mt-3" method="post" action="{{ route('login.submit') }}">
+                            @csrf
                             <div class="form-floating-custom mb-3 position-relative">
                                 <input type="email" class="form-control" placeholder=" " id="loginEmail" name="email"
                                     value="{{ old('email') }}" required>
