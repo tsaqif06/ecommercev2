@@ -28,6 +28,8 @@ class OrderController extends Controller
 
     public function showOrder(Request $request)
     {
+        $profile = Auth()->user();
+
         $status = $request->query('status');
         $orders = null;
 
@@ -50,7 +52,7 @@ class OrderController extends Controller
             return view('user.order.order_list', compact('orders'));
         }
 
-        return view('user.order.index', compact('orders'));
+        return view('user.order.index', compact('orders', 'profile'));
     }
 
     /**

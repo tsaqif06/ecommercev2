@@ -110,9 +110,83 @@
                 </div>
             </div>
         </div>
+    @else
+        <div class="container profile-container" style="margin: 150px 0 50px">
+            <div class="row w-100">
+                <div class="col-md-12">
+                    <div class="profile-card">
+                        <div class="row g-0">
+                            <!-- Profile Display Column -->
+                            <div class="col-md-4 profile-header">
+                                <div class="text-center">
+                                    @if ($profile->photo)
+                                        <img src="{{ $profile->photo }}" alt="Profile Picture"
+                                            class="rounded-circle profile-img mb-3" id="profileImage">
+                                    @else
+                                        <img src="{{ asset('backend/img/avatar.png') }}" alt="Profile Picture"
+                                            class="rounded-circle profile-img mb-3" id="profileImage">
+                                    @endif
+                                    <h3 id="displayName" class="mb-0">{{ $profile->name }}</h3>
+                                    <p id="displayEmail" class="mb-2" style=" color: white;">{{ $profile->email }}
+                                    </p>
+                                    <span id="displayRole" class="badge bg-light text-primary"
+                                        style="color: #5b5b5b; font-size: 16px; font-weight: bold;">{{ $profile->role }}</span>
+                                </div>
+                            </div>
+                            <!-- Profile Update Form Column -->
+                            <div class="col-md-8">
+                                <div class="card-body p-4">
+                                    <h4 class="card-title mb-4">Update Profile</h4>
+                                    <form id="profileForm" method="POST"
+                                        action="{{ route('user-profile-update', $profile->id) }}">
+                                        @csrf
+                                        <div class="mb-3">
+                                            <label for="name" class="form-label">Name</label>
+                                            <input type="text" class="form-control pl-3" id="name"
+                                                name="name" value="{{ $profile->name }}"
+                                                style="height: 50px; border-radius: 50px" required>
+                                            @error('name')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="email" class="form-label">Email</label>
+                                            <input type="email" class="form-control pl-3" id="email"
+                                                name="email" value="{{ $profile->email }}"
+                                                style="height: 50px; border-radius: 50px" required>
+                                            @error('email')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="inputPhoto" class="form-label">Update Profile Picture</label>
+                                            <div class="input-group">
+                                                <span class="input-group-btn">
+                                                    <a id="lfm" data-input="thumbnail" data-preview="holder"
+                                                        class="btn btn-custom"
+                                                        style="color: white; border-radius: 50px 0 0 50px">
+                                                        <i class="fa fa-picture-o"></i> Choose
+                                                    </a>
+                                                </span>
+                                                <input id="thumbnail" class="form-control pl-3" type="text"
+                                                    name="photo" value="{{ $profile->photo }}"
+                                                    style="border-radius: 0 50px 50px 0">
+                                            </div>
+                                            @error('photo')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                        <button type="submit" class="btn btn-custom btn-update w-100">Update
+                                            Profile</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     @endif
-    <div class="container" style="margin: 150px 0 50px">
-    </div>
 
     <!-- Orders Section -->
     <div class="card mt-2" style="width: 100%;">
@@ -155,6 +229,42 @@
     <style>
         div.dataTables_wrapper div.dataTables_paginate {
             display: none;
+        }
+
+        .profile-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-card {
+            background-color: #ffffff;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-header {
+            background-color: #5b5b5b;
+            color: white;
+            padding: 30px;
+        }
+
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border: 5px solid white;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-control,
+        .btn {
+            border-radius: 20px;
+        }
+
+        .btn-update {
+            background-color: red;
+            border: none;
         }
 
         /* Custom floating label styling */
@@ -213,6 +323,7 @@
 @endpush
 
 @push('scripts')
+    <script src="/vendor/laravel-filemanager/js/stand-alone-button.js"></script>
     <!-- Page level plugins -->
     <script src="{{ asset('backend/vendor/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('backend/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
@@ -221,11 +332,15 @@
     <!-- Page level custom scripts -->
     <script src="{{ asset('backend/js/demo/datatables-demo.js') }}"></script>
     <script>
+        $('#lfm').filemanager('image');
+    </script>
+    <script>
         $(document).ready(function() {
             $('#footer').addClass('d-none'); // Menyembunyikan footer
 
             // Inisialisasi DataTables
             $('#orders-table').DataTable({
+                "scrollX": true,
                 "paging": true,
                 "ordering": true,
                 "info": true,
