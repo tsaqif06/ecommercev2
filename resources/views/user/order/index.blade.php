@@ -24,51 +24,72 @@
         </div>
     </div>
 
+    <!-- Register Modal -->
     <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content container-fluid rounded" style="width: 500px; height: 400px">
+            <div class="modal-content container-fluid rounded" style="max-width: 500px; max-height: 430px;">
                 <div class="modal-body">
-                    <h5 class="modal-title mt-2" id="sortModalLabel">Sort Products By</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    <!-- Tombol atas -->
-                    <div class="d-flex mb-3">
-                        <button type="button" class="btn btn-outline-custom rounded">All</button>
-                        <button type="button" class="btn btn-outline-custom rounded">Available</button>
-                    </div>
+                    <button type="button" class="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title mb-3" id="registerModalLabel">Register</h5>
+                    <p style="font-weight: bold;">Create an account to become our member, earn points, get free vouchers,
+                        and hear our news earlier.
+                    </p>
 
-                    <!-- Tombol pilihan di bawah -->
-                    <button type="button" class="btn btn-sort">Featured</button>
-                    <button type="button" class="btn btn-sort">Recent</button>
-                    <button type="button" class="btn btn-sort">Oldest</button>
-                    <button type="button" class="btn btn-sort">Most Popular</button>
-                    <button type="button" class="btn btn-sort">Lowest Price</button>
-                    <button type="button" class="btn btn-sort">Highest Price</button>
-                    <button type="button" class="btn btn-sort">Product Name (A-Z)</button>
+                    <form class="mt-3">
+                        <div class="form-floating-custom mb-3 position-relative">
+                            <input type="text" class="form-control" placeholder=" " id="registerFullName"
+                                style="padding-left: -40px;" required>
+                            <label for="registerFullName">Your Full Name*</label>
+                        </div>
+                        <div class="form-floating-custom mb-3 position-relative">
+                            <input type="text" class="form-control" placeholder=" " id="registerEmailPhone" required>
+                            <label for="registerEmailPhone">Your email/phone number</label>
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="form-floating-custom mb-3 position-relative">
+                            <input type="password" class="form-control" placeholder=" " id="registerPassword" required>
+                            <label for="registerPassword">Password</label>
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100" style="border-radius: 10px">Create New
+                            Account</button>
+                    </form>
+
+                    <p class="text-center mt-3">
+                        Already have an account?
+                        <a href="#" class="switch-to-login">Login here</a>
+                    </p>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Login Modal -->
     <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content container-fluid rounded" style="width: 500px; height: 400px">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content modal container-fluid rounded" style="max-width: 500px; max-height: 300px;">
                 <div class="modal-body">
-                    <h5 class="modal-title mt-2" id="sortModalLabel">Sort Products By</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    <!-- Tombol atas -->
-                    <div class="d-flex mb-3">
-                        <button type="button" class="btn btn-outline-custom rounded">All</button>
-                        <button type="button" class="btn btn-outline-custom rounded">Available</button>
-                    </div>
+                    <button type="button" class="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title mb-3" id="loginModalLabel">Login</h5>
 
-                    <!-- Tombol pilihan di bawah -->
-                    <button type="button" class="btn btn-sort">Featured</button>
-                    <button type="button" class="btn btn-sort">Recent</button>
-                    <button type="button" class="btn btn-sort">Oldest</button>
-                    <button type="button" class="btn btn-sort">Most Popular</button>
-                    <button type="button" class="btn btn-sort">Lowest Price</button>
-                    <button type="button" class="btn btn-sort">Highest Price</button>
-                    <button type="button" class="btn btn-sort">Product Name (A-Z)</button>
+                    <form class="mt-3">
+                        <div class="form-floating-custom mb-3 position-relative">
+                            <input type="text" class="form-control" placeholder=" " id="loginEmailPhone" required>
+                            <label for="loginEmailPhone">Your email/phone number</label>
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="form-floating-custom mb-3 position-relative">
+                            <input type="password" class="form-control" placeholder=" " id="loginPassword" required>
+                            <label for="loginPassword">Password</label>
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100" style="border-radius: 10px">Login</button>
+                    </form>
+
+                    <p class="text-center mt-3">
+                        Dont have an account?
+                        <a href="#" class="switch-to-register">Signup here</a>
+                    </p>
                 </div>
             </div>
         </div>
@@ -89,7 +110,8 @@
                     @endphp
                     My Orders ({{ $orderCount }})
                 </h2>
-                <form id="order-filter-form" method="GET" action="{{ route('user.order.index') }}" class="form-inline">
+                <form id="order-filter-form" method="GET" action="{{ route('user.order.index') }}"
+                    class="form-inline">
                     <select name="status" class="form-control mr-2" id="status-filterorder">
                         <option value="">ALL STATUS</option>
                         <option value="unpaid" {{ request('status') == 'unpaid' ? 'selected' : '' }}>UNPAID</option>
@@ -115,6 +137,59 @@
     <style>
         div.dataTables_wrapper div.dataTables_paginate {
             display: none;
+        }
+
+        /* Custom floating label styling */
+        .form-floating-custom {
+            position: relative;
+        }
+
+        .form-floating-custom input {
+            cursor: pointer;
+            padding-left: 40px;
+            /* Space for icon */
+            padding-top: 16px;
+            height: 45px;
+            border-radius: 10px;
+        }
+
+        .form-floating-custom input:focus {
+            border: 1px solid red;
+        }
+
+        .form-floating-custom label {
+            position: absolute;
+            top: 50%;
+            left: 40px;
+            /* Adjusted for space after the icon */
+            transform: translateY(-50%);
+            transition: all 0.2s ease;
+            background: #fff;
+            padding: 0 5px;
+            color: #6c757d;
+            font-size: 14px;
+            pointer-events: none;
+            font-weight: bold;
+        }
+
+        /* Move label when input is focused or has content */
+        .form-floating-custom input:focus+label,
+        .form-floating-custom input:not(:placeholder-shown)+label {
+            top: -10px;
+            transform: translateY(0);
+            font-size: 12px;
+            color: #007bff;
+        }
+
+        /* Icon positioning */
+        .form-floating-custom i {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+            pointer-events: none;
+            font-size: 18px;
         }
     </style>
 @endpush
@@ -149,6 +224,27 @@
                         "previous": "Previous"
                     }
                 }
+            });
+
+            $('.switch-to-login').on('click', function(e) {
+                e.preventDefault();
+                $('#registerModal').modal('hide');
+                $('#registerModal').on('hidden.bs.modal', function() {
+                    $('#loginModal').modal('show');
+                    $(this).off(
+                        'hidden.bs.modal'); // Clean up event listener to avoid multiple triggers
+                });
+            });
+
+            // Switch from login modal to register modal
+            $('.switch-to-register').on('click', function(e) {
+                e.preventDefault();
+                $('#loginModal').modal('hide');
+                $('#loginModal').on('hidden.bs.modal', function() {
+                    $('#registerModal').modal('show');
+                    $(this).off(
+                        'hidden.bs.modal'); // Clean up event listener to avoid multiple triggers
+                });
             });
         });
     </script>
