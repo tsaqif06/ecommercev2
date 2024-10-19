@@ -3,98 +3,112 @@
 @section('title', 'E-SHOP || PAYMENT')
 
 @section('main-content')
-    <div class="container" style="margin: 150px 0 50px">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card mb-4" style="border: 0;">
-                    <div class="card-body" style="text-align: center">
-                        <h5 class="card-title text-center">GET VIP SERVICE WITH OUR 1-STEP LOGIN:</h6>
-                            <h6 class="card-text">★ YOU CAN CHAT WITH HECATESOFFICIAL</h6>
-                            <h6 class="card-text">★ BE THE FIRST TO GET SPECIAL DISCOUNTS</h6>
-                            <h6 class="card-text">★ NEVER LOSE ANY OF YOUR ORDERS</h6>
-                            <div class="d-flex justify-content-center mt-4">
-                                <button data-toggle="modal" data-target="#registerModal"
-                                    class="btn btn-outline-custom mr-2 rounded" style="width: 100%">SIGNUP</button>
-                                <button data-toggle="modal" data-target="#loginModal" class="btn btn-custom ml-2 rounded"
-                                    style="width: 100%">LOGIN</button>
-                            </div>
+    @if (!Auth::check())
+        <div class="container" style="margin: 150px 0 50px">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card mb-4" style="border: 0;">
+                        <div class="card-body" style="text-align: center">
+                            <h5 class="card-title text-center">GET VIP SERVICE WITH OUR 1-STEP LOGIN:</h6>
+                                <h6 class="card-text">★ BE THE FIRST TO GET SPECIAL DISCOUNTS</h6>
+                                <h6 class="card-text">★ NEVER LOSE ANY OF YOUR ORDERS</h6>
+                                <div class="d-flex justify-content-center mt-4">
+                                    <button data-toggle="modal" data-target="#registerModal"
+                                        class="btn btn-outline-custom mr-2 rounded" style="width: 100%">SIGNUP</button>
+                                    <button data-toggle="modal" data-target="#loginModal"
+                                        class="btn btn-custom ml-2 rounded" style="width: 100%">LOGIN</button>
+                                </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Register Modal -->
-    <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content container-fluid rounded" style="max-width: 500px; max-height: 430px;">
-                <div class="modal-body">
-                    <button type="button" class="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"></button>
-                    <h5 class="modal-title mb-3" id="registerModalLabel">Register</h5>
-                    <p style="font-weight: bold;">Create an account to become our member, earn points, get free vouchers,
-                        and hear our news earlier.
-                    </p>
+        <!-- Register Modal -->
+        <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content container-fluid rounded" style="max-width: 500px; max-height: 430px;">
+                    <div class="modal-body">
+                        <button type="button" class="btn-close float-end" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                        <h5 class="modal-title mb-3" id="registerModalLabel">Register</h5>
+                        <p style="font-weight: bold;">Create an account to become our member, earn points, get free
+                            vouchers,
+                            and hear our news earlier.
+                        </p>
 
-                    <form class="mt-3">
-                        <div class="form-floating-custom mb-3 position-relative">
-                            <input type="text" class="form-control" placeholder=" " id="registerFullName"
-                                style="padding-left: -40px;" required>
-                            <label for="registerFullName">Your Full Name*</label>
-                        </div>
-                        <div class="form-floating-custom mb-3 position-relative">
-                            <input type="text" class="form-control" placeholder=" " id="registerEmailPhone" required>
-                            <label for="registerEmailPhone">Your email/phone number</label>
-                            <i class="fas fa-user"></i>
-                        </div>
-                        <div class="form-floating-custom mb-3 position-relative">
-                            <input type="password" class="form-control" placeholder=" " id="registerPassword" required>
-                            <label for="registerPassword">Password</label>
-                            <i class="fas fa-lock"></i>
-                        </div>
-                        <button type="submit" class="btn btn-primary w-100" style="border-radius: 10px">Create New
-                            Account</button>
-                    </form>
+                        <form class="mt-3" method="post" action="{{ route('register.submit') }}">
+                            <div class="form-floating-custom mb-3 position-relative">
+                                <input type="text" class="form-control" placeholder=" " id="name" name="name"
+                                    value="{{ old('name') }}" style="padding-left: -40px;" required>
+                                <label for="registerFullName">Your Full Name*</label>
+                            </div>
+                            <div class="form-floating-custom mb-3 position-relative">
+                                <input type="text" class="form-control" placeholder=" " id="registerEmail" name="email"
+                                    value="{{ old('email') }}" required>
+                                <label for="registerEmailPhone">Your email</label>
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="form-floating-custom mb-3 position-relative">
+                                <input type="password" class="form-control" placeholder=" " id="registerPassword"
+                                    name="password" value="{{ old('password') }}" required>
+                                <label for="registerPassword">Password</label>
+                                <i class="fas fa-lock"></i>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100" style="border-radius: 10px">Create New
+                                Account</button>
+                        </form>
 
-                    <p class="text-center mt-3">
-                        Already have an account?
-                        <a href="#" class="switch-to-login">Login here</a>
-                    </p>
+                        <p class="text-center mt-3">
+                            Already have an account?
+                            <a href="#" class="switch-to-login">Login here</a>
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Login Modal -->
-    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content modal container-fluid rounded" style="max-width: 500px; max-height: 300px;">
-                <div class="modal-body">
-                    <button type="button" class="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"></button>
-                    <h5 class="modal-title mb-3" id="loginModalLabel">Login</h5>
+        <!-- Login Modal -->
+        <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content modal container-fluid rounded" style="max-width: 500px; max-height: 300px;">
+                    <div class="modal-body">
+                        <button type="button" class="btn-close float-end" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                        <h5 class="modal-title mb-3" id="loginModalLabel">Login</h5>
 
-                    <form class="mt-3">
-                        <div class="form-floating-custom mb-3 position-relative">
-                            <input type="text" class="form-control" placeholder=" " id="loginEmailPhone" required>
-                            <label for="loginEmailPhone">Your email/phone number</label>
-                            <i class="fas fa-user"></i>
-                        </div>
-                        <div class="form-floating-custom mb-3 position-relative">
-                            <input type="password" class="form-control" placeholder=" " id="loginPassword" required>
-                            <label for="loginPassword">Password</label>
-                            <i class="fas fa-lock"></i>
-                        </div>
-                        <button type="submit" class="btn btn-primary w-100" style="border-radius: 10px">Login</button>
-                    </form>
+                        <form class="mt-3" method="post" action="{{ route('login.submit') }}">
+                            <div class="form-floating-custom mb-3 position-relative">
+                                <input type="email" class="form-control" placeholder=" " id="loginEmail" name="email"
+                                    value="{{ old('email') }}" required>
+                                @error('email')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                                <label for="loginEmailPhone">Your email</label>
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="form-floating-custom mb-3 position-relative">
+                                <input type="password" class="form-control" placeholder=" " id="loginPassword"
+                                    name="password" value="{{ old('password') }}" required>
+                                @error('password')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                                <label for="loginPassword">Password</label>
+                                <i class="fas fa-lock"></i>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100"
+                                style="border-radius: 10px">Login</button>
+                        </form>
 
-                    <p class="text-center mt-3">
-                        Dont have an account?
-                        <a href="#" class="switch-to-register">Signup here</a>
-                    </p>
+                        <p class="text-center mt-3">
+                            Dont have an account?
+                            <a href="#" class="switch-to-register">Signup here</a>
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-
+    @endif
 
     <!-- Orders Section -->
     <div class="card mt-2" style="width: 100%;">
