@@ -559,12 +559,22 @@
 
 
                 $('.currency_convert').each(function() {
-                    let originalAmount = parseFloat($(this).text().replace(/[$,]/g, ''));
-                    console.log(originalAmount)
-                    let convertedAmount = convertCurrency(originalAmount, 'USD',
-                        selectedCurrency);
+                    // Check if the element is an input
+                    let originalAmount;
+                    if ($(this).is('input')) {
+                        // Get the value from input (remove symbols like $ and commas)
+                        originalAmount = parseFloat($(this).val().replace(/[$,]/g, ''));
+                    } else {
+                        // Get the text for non-input elements
+                        originalAmount = parseFloat($(this).text().replace(/[$,]/g, ''));
+                    }
 
-                    {{--  $(this).prev('.currency-label').text(`Total (${selectedCurrency})`);  --}}
+                    if (isNaN(originalAmount)) {
+                        originalAmount = 0; // Default to 0 if parsing fails
+                    }
+
+                    // Perform currency conversion
+                    let convertedAmount = convertCurrency(originalAmount, 'USD', selectedCurrency);
 
                     const currencySymbol = {
                         "USD": "$",
@@ -573,10 +583,18 @@
                         "MYR": "RM"
                     };
 
-                    // Memperbarui nilai total
-                    $(this).text(
-                        `${currencySymbol[selectedCurrency]} ${convertedAmount.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`
-                    );
+                    // Update the element with the converted amount
+                    if ($(this).is('input')) {
+                        // If it's an input, update its value without the symbol
+                        $(this).val(
+                            `${convertedAmount.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`
+                        );
+                    } else {
+                        // If it's not an input, update the text content with the symbol
+                        $(this).text(
+                            `${currencySymbol[selectedCurrency]} ${convertedAmount.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`
+                        );
+                    }
                 });
             }
 

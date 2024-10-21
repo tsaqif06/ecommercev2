@@ -63,7 +63,7 @@
                                             </div>
                                             <button type="submit" class="btn btn-custom mt-2"
                                                 style="width: 100%; border-radius: 10px;">Apply</button>
-                                            <input type="hidden" name="price_range" id="price_range"
+                                            <input type="text" name="price_range" id="price_range"
                                                 value="@if (!empty($_GET['price'])) {{ $_GET['price'] }} @endif" />
                                         </div>
                                     </div>
@@ -460,15 +460,40 @@
             /*----------------------------------------------------*/
             /*  Jquery Ui slider js
             /*----------------------------------------------------*/
+
+            const exchangeRates = {
+                "USD": 1,
+                "IDR": 15000, // Misalnya 1 USD = 15,000 IDR
+                "SGD": 1.37, // Misalnya 1 USD = 1.37 SGD
+                "MYR": 4.18 // Misalnya 1 USD = 4.18 MYR
+            };
+
+            function convertCurrency(amount, fromCurrency, toCurrency) {
+                if (fromCurrency === toCurrency) {
+                    return amount;
+                }
+                let usdAmount = amount / exchangeRates[fromCurrency];
+                return usdAmount * exchangeRates[toCurrency];
+            }
+
             if ($("#slider-range").length > 0) {
-                const max_value = parseInt($("#slider-range").data('max')) || 500;
                 const min_value = parseInt($("#slider-range").data('min')) || 0;
-                const currency = $("#slider-range").data('currency') || '';
+                const currency = $("#slider-range").data('currency') || 'USD';
+
+                const originalMaxValue = parseInt($("#slider-range").data('max')) || 500;
+                const selectedCurrency = localStorage.getItem('currency') || 'USD'; // Ambil mata uang yang dipilih
+
+                $(".currency-label").text(selectedCurrency);
+
+                // Konversi max_value menggunakan window.currencyConvert
+                const max_value = convertCurrency(originalMaxValue, 'USD', selectedCurrency);
+
                 let price_range = min_value + '-' + max_value;
 
                 if ($("#price_range").length > 0 && $("#price_range").val()) {
                     price_range = $("#price_range").val().trim();
                 }
+
 
                 let price = price_range.split('-').map(Number);
 
@@ -478,13 +503,13 @@
                     max: max_value,
                     values: price,
                     slide: function(event, ui) {
-                        // Update the amount display
                         $("#amount").val(currency + ui.values[0] + " - " + currency + ui.values[1]);
+                        let currentCurrency = $(".currency-label").first().text().replace(/[$,]/g, '');
+                        const max_value_fn = convertCurrency(ui.values[1], currentCurrency, 'USD');
 
-                        // Update the hidden price range input
-                        $("#price_range").val(ui.values[0] + "-" + ui.values[1]);
 
-                        // Update min_price and max_price inputs
+                        $("#price_range").val(ui.values[0] + "-" + max_value_fn);
+
                         $("#min_price").val(ui.values[0]);
                         $("#max_price").val(ui.values[1]);
                     }
