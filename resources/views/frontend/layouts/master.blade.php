@@ -37,7 +37,7 @@
                             style="color: #121212; font-size: 26px; cursor: pointer;"></i>
                     </div>
                     <div class="ml-1 sidebar-menu">
-                        <a href="{{ route('cart') }}" class="btn btn-sidebar"
+                        <a href="{{ route('product-grids') }}" class="btn btn-sidebar"
                             style="font-size: 14px; font-weight: bold; color: #121212">Product</a>
                     </div>
 

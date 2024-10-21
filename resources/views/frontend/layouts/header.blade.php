@@ -456,30 +456,7 @@
     <!--/ End Header Inner -->
 </header>
 
-<div class="modal fade" id="sortModal" tabindex="-1" aria-labelledby="sortModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content container-fluid rounded" style="width: 500px; height: 400px">
-            <div class="modal-body">
-                <h5 class="modal-title mt-2" id="sortModalLabel">Sort Products By</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                <!-- Tombol atas -->
-                <div class="d-flex mb-3">
-                    <button type="button" class="btn btn-outline-custom rounded">All</button>
-                    <button type="button" class="btn btn-outline-custom rounded">Available</button>
-                </div>
 
-                <!-- Tombol pilihan di bawah -->
-                <button type="button" class="btn btn-sort">Featured</button>
-                <button type="button" class="btn btn-sort">Recent</button>
-                <button type="button" class="btn btn-sort">Oldest</button>
-                <button type="button" class="btn btn-sort">Most Popular</button>
-                <button type="button" class="btn btn-sort">Lowest Price</button>
-                <button type="button" class="btn btn-sort">Highest Price</button>
-                <button type="button" class="btn btn-sort">Product Name (A-Z)</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 @push('scripts')
     <script>
