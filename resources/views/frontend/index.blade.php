@@ -90,19 +90,10 @@
                                                         @endif
                                                     </a>
                                                     <div class="button-head">
-                                                        <div class="product-action">
-                                                            <a data-toggle="modal" data-target="#{{ $product->id }}"
-                                                                title="Quick View" href="#"><i
-                                                                    class="ti-eye"></i><span>Quick Shop</span></a>
-                                                            <a title="Wishlist"
-                                                                href="{{ route('add-to-wishlist', $product->slug) }}"><i
-                                                                    class="ti-heart "></i><span>Add to Wishlist</span></a>
-                                                        </div>
-                                                        <div class="product-action-2">
-                                                            <a title="Add to cart"
-                                                                href="{{ route('add-to-cart', $product->slug) }}">Add to
-                                                                cart</a>
-                                                        </div>
+                                                        <a data-toggle="modal" data-target="#{{ $product->id }}"
+                                                            title="Quick View" href="#"><button
+                                                                class="btn btn-custom rounded"
+                                                                style="width: 100%">BUY</button></a>
                                                     </div>
                                                 </div>
                                                 <div class="product-content">
@@ -115,9 +106,10 @@
                                                                 $product->price -
                                                                 ($product->price * $product->discount) / 100;
                                                         @endphp
-                                                        <span>${{ number_format($after_discount, 2) }}</span>
-                                                        <del
-                                                            style="padding-left:4%;">${{ number_format($product->price, 2) }}</del>
+                                                        <span
+                                                            class="currency_convert">{{ number_format($after_discount, 2) }}</span>
+                                                        <del style="padding-left:4%;"
+                                                            class="currency_convert">{{ number_format($product->price, 2) }}</del>
                                                     </div>
                                                 </div>
                                             </div>
@@ -147,9 +139,11 @@
                 <div class="col-12">
                     <div class="d-flex align-items-center justify-content-center text-white"
                         style="background-color: rgba(0,0,0,0.6); height: 300px;">
-                        <button type="button" class="btn btn-custom rounded">
-                            <span class="d-flex align-items-center gap-2">SEE ALL PRODUCT</span>
-                        </button>
+                        <a href="{{ route('product-grids') }}">
+                            <button type="button" class="btn btn-custom rounded">
+                                <span class="d-flex align-items-center gap-2">SEE ALL PRODUCT</span>
+                            </button>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -162,7 +156,7 @@
             <div class="modal fade" id="{{ $product->id }}" tabindex="-1" role="dialog">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
-                        <div class="modal-header">
+                        <div class="modal-header ml-2">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                                     class="ti-close" aria-hidden="true"></span></button>
                         </div>
@@ -191,11 +185,6 @@
                                         <div class="quickview-ratting-review">
                                             <div class="quickview-ratting-wrap">
                                                 <div class="quickview-ratting">
-                                                    {{-- <i class="yellow fa fa-star"></i>
-                                                    <i class="yellow fa fa-star"></i>
-                                                    <i class="yellow fa fa-star"></i>
-                                                    <i class="yellow fa fa-star"></i>
-                                                    <i class="fa fa-star"></i> --}}
                                                     @php
                                                         $rate = DB::table('product_reviews')
                                                             ->where('product_id', $product->id)
@@ -228,9 +217,17 @@
                                             $after_discount =
                                                 $product->price - ($product->price * $product->discount) / 100;
                                         @endphp
-                                        <h3><small><del
-                                                    class="text-muted">${{ number_format($product->price, 2) }}</del></small>
-                                            ${{ number_format($after_discount, 2) }} </h3>
+                                        <div class="d-flex align-items-center">
+                                            <h3 class="mr-2">
+                                                <small>
+                                                    <del
+                                                        class="text-muted currency_convert">{{ number_format($product->price, 2) }}</del>
+                                                </small>
+                                            </h3>
+                                            <h3 class="currency_convert">
+                                                ${{ number_format($after_discount, 2) }}
+                                            </h3>
+                                        </div>
                                         <div class="quickview-peragraph">
                                             <p>{!! html_entity_decode($product->summary) !!}</p>
                                         </div>
@@ -249,15 +246,6 @@
                                                             @endforeach
                                                         </select>
                                                     </div>
-                                                    {{-- <div class="col-lg-6 col-12">
-                                                        <h5 class="title">Color</h5>
-                                                        <select>
-                                                            <option selected="selected">orange</option>
-                                                            <option>purple</option>
-                                                            <option>black</option>
-                                                            <option>pink</option>
-                                                        </select>
-                                                    </div> --}}
                                                 </div>
                                             </div>
                                         @endif
@@ -286,14 +274,8 @@
                                             </div>
                                             <div class="add-to-cart">
                                                 <button type="submit" class="btn">Add to cart</button>
-                                                <a href="{{ route('add-to-wishlist', $product->slug) }}"
-                                                    class="btn min"><i class="ti-heart"></i></a>
                                             </div>
                                         </form>
-                                        {{--  <div class="default-social">
-                                            <!-- ShareThis BEGIN -->
-                                            <div class="sharethis-inline-share-buttons"></div><!-- ShareThis END -->
-                                        </div>  --}}
                                     </div>
                                 </div>
                             </div>
@@ -381,7 +363,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
     <script>
         /*==================================================================
-                                                                                                                                            [ Isotope ]*/
+                                                                                                                                                            [ Isotope ]*/
         var $topeContainer = $('.isotope-grid');
         var $filter = $('.filter-tope-group');
 

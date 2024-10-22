@@ -338,6 +338,10 @@
         $(document).ready(function() {
             $('#footer').addClass('d-none'); // Menyembunyikan footer
 
+            @if (session('showLoginModal'))
+                $('#loginModal').modal('show');
+            @endif
+
             // Inisialisasi DataTables
             $('#orders-table').DataTable({
                 "scrollX": true,

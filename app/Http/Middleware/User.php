@@ -15,10 +15,10 @@ class User
      */
     public function handle($request, Closure $next)
     {
-        if(empty(session('user'))){
-            return redirect()->route('login.form');
-        }
-        else{
+        if (empty(session('user'))) {
+            session()->flash('showLoginModal', true);
+            return redirect()->route('user.order.index');
+        } else {
             return $next($request);
         }
     }
