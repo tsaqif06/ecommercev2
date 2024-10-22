@@ -207,9 +207,9 @@
                                                     $after_discount =
                                                         $product->price - ($product->price * $product->discount) / 100;
                                                 @endphp
-                                                <span>${{ number_format($after_discount, 2) }}</span>
-                                                <del
-                                                    style="padding-left:4%;">${{ number_format($product->price, 2) }}</del>
+                                                <span class="currency_convert">{{ number_format($after_discount, 2) }}</span>
+                                                <del style="padding-left:4%;"
+                                                    class="currency_convert">{{ number_format($product->price, 2) }}</del>
                                             </div>
                                         </div>
                                     </div>
@@ -219,7 +219,7 @@
                             @endif
                         </div>
 
-                        <div class="row mt-5"> <!-- Menambahkan margin top di sini -->
+                        <div class="row mt-5">
                             <div class="col-md-12 d-flex justify-content-center">
                                 <!-- Previous Page Link -->
                                 <a href="{{ $products->previousPageUrl() . (request()->has('sortBy') ? '&sortBy=' . request()->get('sortBy') : '') }}"
@@ -242,13 +242,6 @@
                                 </a>
                             </div>
                         </div>
-
-                        <!-- To keep existing query parameters -->
-                        {{--  <div class="row">
-                            <div class="col-md-12 d-flex justify-content-center">
-                                {{ $products->appends(request()->query())->links() }}
-                            </div>
-                        </div>  --}}
 
                     </div>
                 </div>
