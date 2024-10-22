@@ -20,9 +20,82 @@
     </div>
     <!-- End Breadcrumbs -->
 
+    {{--  <select class='sortBy' name='sortBy' onchange="this.form.submit();">
+        <option value="">Default</option>
+        <option value="title" @if (!empty($_GET['sortBy']) && $_GET['sortBy'] == 'title') selected @endif>
+            Name
+        </option>
+        <option value="price" @if (!empty($_GET['sortBy']) && $_GET['sortBy'] == 'price') selected @endif>
+            Price
+        </option>
+        <option value="category" @if (!empty($_GET['sortBy']) && $_GET['sortBy'] == 'category') selected @endif>
+            Category
+        </option>
+        <option value="brand" @if (!empty($_GET['sortBy']) && $_GET['sortBy'] == 'brand') selected @endif>
+            Brand
+        </option>
+    </select>  --}}
+
     <!-- Product Style -->
-    <form action="{{ route('shop.filter') }}" method="POST">
+    <form action="{{ route('shop.filter') }}" method="POST" id="sortForm">
         @csrf
+        <input type="hidden" name="sortBy" id="sortByInput" value="{{ !empty($_GET['sortBy']) ? $_GET['sortBy'] : '' }}">
+
+        <!-- Modal with sorting buttons -->
+        <div class="modal fade" id="sortModal" tabindex="-1" aria-labelledby="sortModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content container-fluid rounded" style="width: 500px; height: 320px;">
+                    <div class="modal-body">
+                        <h5 class="modal-title mt-2" id="sortModalLabel">Sort Products By</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                        <!-- Tombol pilihan di bawah -->
+                        <button type="button" class="btn btn-sort" data-sort="default">
+                            Default
+                            @if (empty($_GET['sortBy']))
+                                <i class="fas fa-check ml-2"></i>
+                            @endif
+                        </button>
+
+                        <button type="button" class="btn btn-sort" data-sort="recent">
+                            Recent
+                            @if (!empty($_GET['sortBy']) && $_GET['sortBy'] == 'recent')
+                                <i class="fas fa-check ml-2"></i>
+                            @endif
+                        </button>
+
+                        <button type="button" class="btn btn-sort" data-sort="oldest">
+                            Oldest
+                            @if (!empty($_GET['sortBy']) && $_GET['sortBy'] == 'oldest')
+                                <i class="fas fa-check ml-2"></i>
+                            @endif
+                        </button>
+
+                        <button type="button" class="btn btn-sort" data-sort="lowest_price">
+                            Lowest Price
+                            @if (!empty($_GET['sortBy']) && $_GET['sortBy'] == 'lowest_price')
+                                <i class="fas fa-check ml-2"></i>
+                            @endif
+                        </button>
+
+                        <button type="button" class="btn btn-sort" data-sort="highest_price">
+                            Highest Price
+                            @if (!empty($_GET['sortBy']) && $_GET['sortBy'] == 'highest_price')
+                                <i class="fas fa-check ml-2"></i>
+                            @endif
+                        </button>
+
+                        <button type="button" class="btn btn-sort" data-sort="name_a_z">
+                            Product Name (A-Z)
+                            @if (!empty($_GET['sortBy']) && $_GET['sortBy'] == 'name_a_z')
+                                <i class="fas fa-check ml-2"></i>
+                            @endif
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <section class="product-area shop-sidebar shop section">
             <div class="container-fluid">
                 <div class="row">
@@ -63,7 +136,7 @@
                                             </div>
                                             <button type="submit" class="btn btn-custom mt-2"
                                                 style="width: 100%; border-radius: 10px;">Apply</button>
-                                            <input type="text" name="price_range" id="price_range"
+                                            <input type="hidden" name="price_range" id="price_range"
                                                 value="@if (!empty($_GET['price'])) {{ $_GET['price'] }} @endif" />
                                         </div>
                                     </div>
@@ -76,46 +149,38 @@
                         <div class="row">
                             <div class="col-12">
                                 <!-- Shop Top -->
-                                <div class="shop-top">
-                                    <div class="shop-shorter">
-                                        <div class="single-shorter">
-                                            <label>Show :</label>
-                                            <select class="show" name="show" onchange="this.form.submit();">
-                                                <option value="">Default</option>
-                                                <option value="9" @if (!empty($_GET['show']) && $_GET['show'] == '9') selected @endif>09
-                                                </option>
-                                                <option value="15" @if (!empty($_GET['show']) && $_GET['show'] == '15') selected @endif>15
-                                                </option>
-                                                <option value="21" @if (!empty($_GET['show']) && $_GET['show'] == '21') selected @endif>21
-                                                </option>
-                                                <option value="30" @if (!empty($_GET['show']) && $_GET['show'] == '30') selected @endif>30
-                                                </option>
-                                            </select>
-                                        </div>
-                                        <div class="single-shorter">
-                                            <label>Sort By :</label>
-                                            <select class='sortBy' name='sortBy' onchange="this.form.submit();">
-                                                <option value="">Default</option>
-                                                <option value="title" @if (!empty($_GET['sortBy']) && $_GET['sortBy'] == 'title') selected @endif>
-                                                    Name</option>
-                                                <option value="price" @if (!empty($_GET['sortBy']) && $_GET['sortBy'] == 'price') selected @endif>
-                                                    Price</option>
-                                                <option value="category" @if (!empty($_GET['sortBy']) && $_GET['sortBy'] == 'category') selected @endif>
-                                                    Category</option>
-                                                <option value="brand" @if (!empty($_GET['sortBy']) && $_GET['sortBy'] == 'brand') selected @endif>
-                                                    Brand</option>
-                                            </select>
+                                @php
+                                    $sortOptions = [
+                                        'default' => 'Default',
+                                        'recent' => 'Recent',
+                                        'oldest' => 'Oldest',
+                                        'lowest_price' => 'Lowest Price',
+                                        'highest_price' => 'Highest Price',
+                                        'name_a_z' => 'Product Name (A-Z)',
+                                    ];
+
+                                    $currentSortBy = !empty($_GET['sortBy']) ? $_GET['sortBy'] : 'default';
+                                    $displayName = $sortOptions[$currentSortBy] ?? 'Default';
+                                @endphp
+
+                                <div class="shop-top d-flex justify-content-end">
+                                    <div class="shop-shorter d-flex align-items-center">
+                                        <h6 class="mb-0 mr-3">Sort Products By</h6>
+                                        <div class="dropdown">
+                                            <button class="btn btn-outline-custom dropdown-toggle rounded" type="button"
+                                                id="sortByButton" data-toggle="modal" data-target="#sortModal"
+                                                aria-expanded="false" style="padding: 10px; cursor: pointer">
+                                                {{ $displayName }} <!-- Menampilkan nama yang ramah pengguna -->
+                                                <i class="fas fa-caret-down ml-2"></i>
+                                            </button>
                                         </div>
                                     </div>
-                                    <ul class="view-mode">
-                                        <li class="active"><a href="javascript:void(0)"><i class="fa fa-th-large"></i></a>
-                                        </li>
-                                        <li><a href="{{ route('product-lists') }}"><i class="fa fa-th-list"></i></a></li>
-                                    </ul>
                                 </div>
                                 <!--/ End Shop Top -->
                             </div>
                         </div>
+
+
                         <div class="row">
                             {{-- {{$products}} --}}
                             @if (count($products) > 0)
@@ -191,31 +256,6 @@
 
 
     <!-- Modal -->
-    <div class="modal fade" id="sortModal" tabindex="-1" aria-labelledby="sortModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content container-fluid rounded" style="width: 500px; height: 400px">
-                <div class="modal-body">
-                    <h5 class="modal-title mt-2" id="sortModalLabel">Sort Products By</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    <!-- Tombol atas -->
-                    <div class="d-flex mb-3">
-                        <button type="button" class="btn btn-outline-custom rounded">All</button>
-                        <button type="button" class="btn btn-outline-custom rounded">Available</button>
-                    </div>
-
-                    <!-- Tombol pilihan di bawah -->
-                    <button type="button" class="btn btn-sort">Featured</button>
-                    <button type="button" class="btn btn-sort">Recent</button>
-                    <button type="button" class="btn btn-sort">Oldest</button>
-                    <button type="button" class="btn btn-sort">Most Popular</button>
-                    <button type="button" class="btn btn-sort">Lowest Price</button>
-                    <button type="button" class="btn btn-sort">Highest Price</button>
-                    <button type="button" class="btn btn-sort">Product Name (A-Z)</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     @if ($products)
         @foreach ($products as $key => $product)
             <div class="modal fade" id="{{ $product->id }}" tabindex="-1" role="dialog">
@@ -544,5 +584,13 @@
                 });
             }
         })
+    </script>
+    <script>
+        $('.btn-sort').on('click', function() {
+            const sortValue = $(this).data('sort');
+
+            $('#sortByInput').val(sortValue);
+            $('#sortForm').submit();
+        });
     </script>
 @endpush

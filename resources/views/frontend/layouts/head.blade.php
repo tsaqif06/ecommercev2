@@ -245,17 +245,6 @@
         color: #fff;
     }
 
-    .btn-sort {
-        width: 100%;
-        border-radius: 1rem;
-        text-align: left;
-        background-color: white;
-        color: black;
-        border: 0;
-        font-size: 12px;
-        padding-left: 8px;
-    }
-
     .btn-sidebar {
         width: 100%;
         border-radius: 1rem;
@@ -268,18 +257,28 @@
         margin-top: 12px;
     }
 
+    .btn-sort {
+        width: 100%;
+        border-radius: 1rem;
+        text-align: left;
+        background-color: white;
+        color: black;
+        border: 0;
+        font-size: 12px;
+        padding-left: 8px;
+    }
+
+
     .btn-sort:hover,
     .btn-sidebar:hover {
         background-color: #d4c0c0;
+        color: black;
     }
 
-    .active-sort {
-        background-color: #e7f3fe;
-        /* Warna latar belakang untuk tombol aktif */
+    .btn-sort.active {
+        background-color: #d4c0c0;
         color: black;
-        /* Warna teks untuk tombol aktif */
         border-color: #007bff;
-        /* Border untuk tombol aktif */
     }
 
     .rounded {
