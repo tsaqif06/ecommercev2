@@ -20,22 +20,6 @@
     </div>
     <!-- End Breadcrumbs -->
 
-    {{--  <select class='sortBy' name='sortBy' onchange="this.form.submit();">
-        <option value="">Default</option>
-        <option value="title" @if (!empty($_GET['sortBy']) && $_GET['sortBy'] == 'title') selected @endif>
-            Name
-        </option>
-        <option value="price" @if (!empty($_GET['sortBy']) && $_GET['sortBy'] == 'price') selected @endif>
-            Price
-        </option>
-        <option value="category" @if (!empty($_GET['sortBy']) && $_GET['sortBy'] == 'category') selected @endif>
-            Category
-        </option>
-        <option value="brand" @if (!empty($_GET['sortBy']) && $_GET['sortBy'] == 'brand') selected @endif>
-            Brand
-        </option>
-    </select>  --}}
-
     <!-- Product Style -->
     <form action="{{ route('shop.filter') }}" method="POST" id="sortForm">
         @csrf
@@ -180,9 +164,7 @@
                             </div>
                         </div>
 
-
                         <div class="row">
-                            {{-- {{$products}} --}}
                             @if (count($products) > 0)
                                 @foreach ($products as $product)
                                     <div class="col-lg-4 col-md-6 col-12">
@@ -235,15 +217,38 @@
                             @else
                                 <h4 class="text-warning" style="margin:100px auto;">There are no products.</h4>
                             @endif
-
-
-
                         </div>
-                        <div class="row">
-                            <div class="col-md-12 justify-content-center d-flex">
-                                {{ $products->appends($_GET)->links() }}
+
+                        <div class="row mt-5"> <!-- Menambahkan margin top di sini -->
+                            <div class="col-md-12 d-flex justify-content-center">
+                                <!-- Previous Page Link -->
+                                <a href="{{ $products->previousPageUrl() . (request()->has('sortBy') ? '&sortBy=' . request()->get('sortBy') : '') }}"
+                                    class="btn btn-outline-custom {{ $products->onFirstPage() ? 'd-none' : '' }}">
+                                    <i class="fas fa-chevron-left"></i> <!-- Arrow left icon -->
+                                </a>
+
+                                <!-- Pagination Links -->
+                                @for ($i = 1; $i <= $products->lastPage(); $i++)
+                                    <a href="{{ $products->url($i) . (request()->has('sortBy') ? '&sortBy=' . request()->get('sortBy') : '') }}"
+                                        class="btn btn-outline-custom {{ $i == $products->currentPage() ? 'active' : '' }}">
+                                        {{ $i }}
+                                    </a>
+                                @endfor
+
+                                <!-- Next Page Link -->
+                                <a href="{{ $products->nextPageUrl() . (request()->has('sortBy') ? '&sortBy=' . request()->get('sortBy') : '') }}"
+                                    class="btn btn-outline-custom {{ $products->hasMorePages() ? '' : 'd-none' }}">
+                                    <i class="fas fa-chevron-right"></i> <!-- Arrow right icon -->
+                                </a>
                             </div>
                         </div>
+
+                        <!-- To keep existing query parameters -->
+                        {{--  <div class="row">
+                            <div class="col-md-12 d-flex justify-content-center">
+                                {{ $products->appends(request()->query())->links() }}
+                            </div>
+                        </div>  --}}
 
                     </div>
                 </div>
@@ -252,8 +257,6 @@
     </form>
 
     <!--/ End Product Style 1  -->
-
-
 
     <!-- Modal -->
     @if ($products)
@@ -490,6 +493,24 @@
             pointer-events: none;
             font-size: 14px;
             font-weight: bold;
+        }
+
+        .btn-outline-custom {
+            margin: 0 5px;
+            /* Spasi antar tombol */
+        }
+
+        .btn-outline-custom.active {
+            background-color: #007bff;
+            /* Warna latar belakang untuk tombol aktif */
+            color: white;
+            /* Warna teks untuk tombol aktif */
+        }
+
+        .btn-outline-custom:hover {
+            background-color: #0056b3;
+            /* Warna saat hover */
+            color: white;
         }
     </style>
 @endpush
