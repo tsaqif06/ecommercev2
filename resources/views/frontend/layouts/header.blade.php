@@ -217,7 +217,8 @@
                                             <h4><a href="{{ route('product-detail', $data->product['slug']) }}"
                                                     target="_blank">{{ $data->product['title'] }}</a></h4>
                                             <p class="quantity">{{ $data->quantity }} x - <span
-                                                    class="amount">${{ number_format($data->price, 2) }}</span></p>
+                                                    class="amount currency_convert">${{ number_format($data->price, 2) }}</span>
+                                            </p>
                                         </li>
                                     @endforeach
                                 </ul>
@@ -225,7 +226,7 @@
                                     <div class="total">
                                         <span>Total</span>
                                         <span
-                                            class="total-amount">${{ number_format(Helper::totalCartPrice(), 2) }}</span>
+                                            class="total-amount currency_convert">${{ number_format(Helper::totalCartPrice(), 2) }}</span>
                                     </div>
                                     <a href="{{ route('checkout') }}" class="btn animate">Checkout</a>
                                 </div>
@@ -477,9 +478,9 @@
 
             const exchangeRates = {
                 "USD": 1,
-                "IDR": 15000, // Misalnya 1 USD = 15,000 IDR
-                "SGD": 1.37, // Misalnya 1 USD = 1.37 SGD
-                "MYR": 4.18 // Misalnya 1 USD = 4.18 MYR
+                "IDR": 15620, // Misalnya 1 USD = 15,000 IDR
+                "SGD": 1.32, // Misalnya 1 USD = 1.37 SGD
+                "MYR": 4.34 // Misalnya 1 USD = 4.18 MYR
             };
 
             const assetUrl = "{{ asset('storage/flags') }}";

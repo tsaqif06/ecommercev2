@@ -181,8 +181,8 @@
                                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                                         <li class="nav-item"><a class="nav-link active" data-toggle="tab"
                                                 href="#description" role="tab">Description</a></li>
-                                        <li class="nav-item"><a class="nav-link active" data-toggle="tab"
-                                                href="#reviews" role="tab">Reviews</a></li>
+                                        <li class="nav-item"><a class="nav-linkxa" data-toggle="tab" href="#reviews"
+                                                role="tab">Reviews</a></li>
                                     </ul>
                                     <!--/ End Tab Nav -->
                                 </div>
@@ -297,7 +297,7 @@
 
                                                     <div class="ratting-main">
                                                         <div class="avg-ratting">
-                                                            {{-- @php 
+                                                            {{-- @php
 																			$rate=0;
 																			foreach($product_detail->rate as $key=>$rate){
 																				$rate +=$rate

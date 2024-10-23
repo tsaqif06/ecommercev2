@@ -498,9 +498,9 @@
 
             const exchangeRates = {
                 "USD": 1,
-                "IDR": 15000, // Misalnya 1 USD = 15,000 IDR
-                "SGD": 1.37, // Misalnya 1 USD = 1.37 SGD
-                "MYR": 4.18 // Misalnya 1 USD = 4.18 MYR
+                "IDR": 15620, // Misalnya 1 USD = 15,000 IDR
+                "SGD": 1.32, // Misalnya 1 USD = 1.37 SGD
+                "MYR": 4.34 // Misalnya 1 USD = 4.18 MYR
             };
 
             function convertCurrency(amount, fromCurrency, toCurrency) {
