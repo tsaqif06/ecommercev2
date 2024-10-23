@@ -240,7 +240,8 @@
                     </div>
 
                     <!-- Tombol untuk profil -->
-                    <a href="/profile" class="text-dark text-p-default mx-3" style="cursor: pointer">
+                    <a href="{{ route('user.order.index') }}" class="text-dark text-p-default mx-3"
+                        style="cursor: pointer">
                         <i class="fas fa-user" style="font-size: 20px"></i> <!-- Ikon profile -->
                     </a>
                 </div>

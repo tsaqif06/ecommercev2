@@ -24,7 +24,7 @@
             <div class="row">
                 <!-- Left Column: Cart Items -->
                 <div class="col-lg-8 col-md-12 col-12">
-                    <h4 class="my-cart-title">My Cart ({{ count(Helper::getAllProductFromCart()) }})</h4>
+                    <h4 class="my-cart-title">My Cart ({{ Helper::cartCount() }})</h4>
                     <div class="select-delete-all">
                         <a href="{{ route('cart.clear') }}" class="delete-all">DELETE ALL</a>
                     </div>
@@ -166,8 +166,8 @@
     </div>
     <!--/ End Shopping Cart -->
 
-    <div class="product-area most-popular related-product section mt-5">
-        <div class="container">
+    <div class="product-area most-popular related-product section mt-5" style="margin-top: 100px">
+        <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
                     <div class="section-title">
