@@ -1,23 +1,24 @@
 <?php
 
+use App\Models\Product;
+use \UniSharp\LaravelFilemanager\Lfm;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\FrontendController;
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\MessageController;
 use App\Http\Controllers\CartController;
-use App\Http\Controllers\WishlistController;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\ProductReviewController;
-use App\Http\Controllers\PostCommentController;
-use App\Http\Controllers\CouponController;
-use App\Http\Controllers\PaymentController;
-use App\Http\Controllers\PayPalController;
-use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\HomeController;
-use \UniSharp\LaravelFilemanager\Lfm;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\CouponController;
+use App\Http\Controllers\PayPalController;
+use App\Http\Controllers\MessageController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\LanguageController;
+use App\Http\Controllers\WishlistController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\PostCommentController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ProductReviewController;
 
 
 /*
@@ -75,11 +76,15 @@ Route::get('/product-brand/{slug}', [FrontendController::class, 'productBrand'])
 Route::get('/add-to-cart/{slug}', [CartController::class, 'addToCart'])->name('add-to-cart')->middleware('user');
 Route::post('/add-to-cart', [CartController::class, 'singleAddToCart'])->name('single-add-to-cart')->middleware('user');
 Route::get('cart-delete/{id}', [CartController::class, 'cartDelete'])->name('cart-delete');
+Route::get('cart-clear', [CartController::class, 'cartClear'])->name('cart.clear');
 Route::post('cart-update', [CartController::class, 'cartUpdate'])->name('cart.update');
 
 Route::get('/cart', function () {
-    return view('frontend.pages.cart');
+    $products = Product::limit(5)->get();
+
+    return view('frontend.pages.cart', compact('products'));
 })->name('cart');
+
 Route::get('/checkout', [CartController::class, 'checkout'])->name('checkout')->middleware('user');
 // Wishlist
 Route::get('/wishlist', function () {
