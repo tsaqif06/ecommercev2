@@ -15,9 +15,13 @@
     <div class="navbar bg-transparent fixed-top" style="margin-top: 56px;">
         <div id="searchContainer"
             style="position: absolute; display: none; z-index: 1000; background: white; width: 100%; height: 60px;">
-            <input type="text" id="searchInput" placeholder="Search our products..." class="form-control"
-                style="width: 50%; height: 60px; position: absolute; top: 0; left: 50%; transform: translateX(-50%); padding-right: 50px; border-radius: 30px; padding-left: 20px; box-sizing: border-box;"
-                autofocus />
+            <form action="{{ route('product.search') }}" method="POST" id="searchForm">
+                @csrf
+                <input type="text" id="searchInput" name="search" placeholder="Search our products..."
+                    class="form-control"
+                    style="width: 50%; height: 60px; position: absolute; top: 0; left: 50%; transform: translateX(-50%); padding-right: 50px; border-radius: 30px; padding-left: 20px; box-sizing: border-box;"
+                    autofocus />
+            </form>
             <span class="search-icon"
                 style="position: absolute; top: 50%; right: 27%; transform: translateY(-50%); cursor: pointer; z-index: 1001;">
                 <img src="https://cdn-icons-png.flaticon.com/512/622/622669.png" alt="search icon"
@@ -772,33 +776,7 @@
                 $('#backdrop').hide();
             });
 
-            // Sample product suggestions for demonstration
-            var suggestions = [{
-                    name: "HECATE - GOSA LEATHER JACKET (SYNTH)",
-                    price: "Rp 1,000,000",
-                    slug: "hecate-gosa-leather-jacket-synth"
-                },
-                {
-                    name: "HECATE - GOSA GENUINE LEATHER JACKET",
-                    price: "Rp 2,599,000",
-                    slug: "hecate-gosa-genuine-leather-jacket"
-                },
-                {
-                    name: "HECATE - DISTRESSED ROGUE HOODIE FADED",
-                    price: "Rp 895,000",
-                    slug: "hecate-distressed-rogue-hoodie-faded"
-                },
-                {
-                    name: "HECATE - PHRASE FLANNEL | KEMEJA UNISEX",
-                    price: "Rp 500,000",
-                    slug: "hecate-phrase-flannel-kemeja-unisex"
-                },
-                {
-                    name: "HECATE - GIVEN TSHIRT | KAOS UNISEX",
-                    price: "Rp 300,000",
-                    slug: "hecate-given-tshirt-kaos-unisex"
-                }
-            ];
+            var suggestions = @json(Helper::getAllProductsForSuggestions());
 
             // Get recent search history from localStorage
             function getSearchHistory() {
@@ -840,7 +818,7 @@
 
                         // Navigate to the search results page when the term is clicked
                         historyItem.find('.search-term').on('click', function() {
-                            window.location.href = `/products?search=${term}`;
+                            $('#searchForm').submit();
                         });
 
                         // Remove individual history item
@@ -900,21 +878,34 @@
                     );
 
                     $.each(matches, function(index, suggestion) {
-                        var suggestionItem = $('<div class="suggestion-item"></div>')
-                            .html('<strong>' + suggestion.name + '</strong><br><span>' + suggestion.price +
-                                '</span>')
-                            .css({
-                                padding: '10px',
-                                cursor: 'pointer',
-                                borderBottom: '1px solid #ddd'
-                            });
+                        var suggestionItem = $('<div class="suggestion-item d-flex"></div>');
 
+                        // HTML untuk gambar dan teks
+                        var suggestionContent = `
+                            <div class="suggestion-image" style="flex-shrink: 0;">
+                                <img src="${suggestion.photo}" alt="${suggestion.name}" style="width: 60px; height: 60px; object-fit: cover;">
+                            </div>
+                            <div class="suggestion-text" style="margin-left: 10px;">
+                                <strong>${suggestion.name}</strong><br>
+                            </div>
+                        `;
+
+                        // Apply HTML and style
+                        suggestionItem.html(suggestionContent).css({
+                            padding: '10px',
+                            cursor: 'pointer',
+                            borderBottom: '1px solid #ddd',
+                            display: 'flex',
+                            alignItems: 'center' // Align image and text vertically
+                        });
+
+                        // Append suggestionItem to the parent container (assuming you have a container)
                         // Handle click event to redirect to product page and save the search term
                         suggestionItem.on('click', function() {
                             $('#searchInput').val(suggestion.name);
                             saveSearchTerm(suggestion.name); // Save to search history
                             window.location.href =
-                                `/product/${suggestion.slug}`; // Navigate to the product page
+                                `/product-detail/${suggestion.slug}`; // Navigate to the product page
                         });
 
                         suggestionsBox.append(suggestionItem);
@@ -938,7 +929,7 @@
                     var input = $(this).val().trim();
                     if (input) {
                         saveSearchTerm(input);
-                        window.location.href = `/products?search=${input}`;
+                        $('#searchForm').submit();
                     }
                 }
             });
