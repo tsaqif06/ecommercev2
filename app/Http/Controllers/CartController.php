@@ -114,17 +114,23 @@ class CartController extends Controller
         request()->session()->flash('error', 'Error please try again');
         return back();
     }
+
     public function cartClear()
     {
         $cart = Cart::where('user_id', auth()->user()->id)->where('order_id', null)->get();
-        if ($cart) {
-            $cart->delete();
+
+        if ($cart->isNotEmpty()) {
+            foreach ($cart as $item) {
+                $item->delete(); // Menghapus setiap item dalam cart
+            }
             request()->session()->flash('success', 'Cart successfully removed');
-            return back();
+        } else {
+            request()->session()->flash('error', 'Error please try again');
         }
-        request()->session()->flash('error', 'Error please try again');
+
         return back();
     }
+
 
     public function cartUpdate(Request $request)
     {

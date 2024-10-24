@@ -25,15 +25,18 @@
                 <!-- Left Column: Cart Items -->
                 <div class="col-lg-8 col-md-12 col-12">
                     <h4 class="my-cart-title">My Cart ({{ Helper::cartCount() }})</h4>
-                    <div class="select-delete-all">
-                        <a href="{{ route('cart.clear') }}" class="delete-all">DELETE ALL</a>
-                    </div>
-
+                    @if (!Helper::getAllProductFromCart()->isEmpty())
+                        <div class="select-delete-all">
+                            <a href="{{ route('cart.clear') }}" class="delete-all"
+                                style="color: red; font-weight: bold;">DELETE
+                                ALL</a>
+                        </div>
+                    @endif
                     <!-- Shopping Summary -->
                     <div class="cart-item-list">
                         <form action="{{ route('cart.update') }}" method="POST">
                             @csrf
-                            @if (Helper::getAllProductFromCart())
+                            @if (!Helper::getAllProductFromCart()->isEmpty())
                                 @foreach (Helper::getAllProductFromCart() as $key => $cart)
                                     <div class="cart-item">
                                         <div class="cart-item-body d-flex">
@@ -82,7 +85,8 @@
 
                                         <!-- Peringatan Stok Rendah di Bawah -->
                                         @if ($cart->product['stock'] <= 3)
-                                            <div class="low-stock-alert mt-2"> <!-- Tambahkan margin top -->
+                                            <div class="low-stock-alert mt-2" style="border-radius: 5px; padding: 20px;">
+                                                <!-- Tambahkan margin top -->
                                                 <h6 style="text-align: left; font-weight: bold;">ONLY
                                                     {{ $cart->product['stock'] }} STOCKS LEFT</h6>
                                             </div>
@@ -91,11 +95,11 @@
                                 @endforeach
 
                                 <div class="cart-actions">
-                                    <button class="btn btn-custom rounded" type="submit">Update Cart</button>
+                                    <button class="btn btn-outline-custom rounded" type="submit">Update Cart</button>
                                 </div>
                             @else
-                                <p>Your cart is currently empty. <a href="{{ route('product-grids') }}"
-                                        style="color:blue;">Continue shopping</a></p>
+                                <h6>Your cart is currently empty. <a href="{{ route('product-grids') }}"
+                                        style="color:red;">Continue shopping</a></h6>
                             @endif
                         </form>
                     </div>
@@ -108,12 +112,12 @@
                         <ul>
                             <li class="order_subtotal" data-price="{{ Helper::totalCartPrice() }}">
                                 Cart Subtotal<span class="currency_convert">
-                                    {{ number_format(Helper::totalCartPrice(), 0) }}</span>
+                                    {{ number_format(Helper::totalCartPrice(), 2) }}</span>
                             </li>
                             @if (session()->has('coupon'))
                                 <li class="coupon_price" data-price="{{ Session::get('coupon')['value'] }}">
                                     You Save<span class="currency_convert">
-                                        {{ number_format(Session::get('coupon')['value'], 0) }}</span>
+                                        {{ number_format(Session::get('coupon')['value'], 2) }}</span>
                                 </li>
                             @endif
                             @php
@@ -124,7 +128,7 @@
                             @endphp
                             <hr>
                             <li class="last" id="order_total_price">
-                                You Pay<span class="currency_convert">{{ number_format($total_amount, 0) }}</span>
+                                You Pay<span class="currency_convert">{{ number_format($total_amount, 2) }}</span>
                             </li>
                         </ul>
                         <a href="{{ route('checkout') }}" class="btn btn-custom rounded order-now-btn">ORDER NOW</a>
@@ -152,7 +156,7 @@
 
                                     <!-- Tombol Apply di sebelah kanan -->
                                     <div class="input-group-append">
-                                        <button class="btn btn-primary" type="submit"
+                                        <button class="btn btn-custom" type="submit"
                                             style="border-radius: 0 15px 15px 0">Apply</button>
                                     </div>
                                 </div>

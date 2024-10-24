@@ -96,6 +96,10 @@
             }
         }
 
+        $(document).ready(function() {
+            $('#footer').addClass('d-none');
+        });
+
         $('#cancel-button').on('click', function() {
             $.ajax({
                 url: '{{ route('payment.cancel') }}',

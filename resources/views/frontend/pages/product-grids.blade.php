@@ -249,8 +249,8 @@
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header ml-2">
-                            <button type="button" class="close" data-dismiss="modal"
-                                aria-label="Close"><span class="ti-close" aria-hidden="true"></span></button>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    class="ti-close" aria-hidden="true"></span></button>
                         </div>
                         <div class="modal-body">
                             <div class="row no-gutters">
@@ -426,7 +426,7 @@
         }
 
         .form-floating-custom .price-input:focus {
-            border-color: #007bff;
+            border-color: black;
             outline: none;
         }
 
@@ -439,7 +439,7 @@
             transition: all 0.2s ease;
             /* Background to overlap the input border */
             padding: 0 5px;
-            color: #6c757d;
+            color: black;
             font-size: 14px;
             pointer-events: none;
             font-weight: bold;
@@ -451,7 +451,7 @@
             top: 5px;
             /* Lowered position when floating */
             font-size: 12px;
-            color: #007bff;
+            color: black;
             padding: 0 5px;
             background: #fff;
         }
@@ -462,7 +462,7 @@
             left: 20px;
             top: 50%;
             transform: translateY(-50%);
-            color: #6c757d;
+            color: black;
             pointer-events: none;
             font-size: 14px;
             font-weight: bold;

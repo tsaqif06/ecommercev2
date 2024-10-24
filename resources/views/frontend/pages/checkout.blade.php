@@ -130,25 +130,25 @@
                                         <li class="shipping">
                                             Shipping Cost
                                             @if (count(Helper::shipping()) > 0 && Helper::cartCount() > 0)
-                                                <select name="shipping" class="nice-select" required>
-                                                    <option value="">Select your address</option>
+                                                <select name="shipping" class="nice-select" id="shipping-select" required>
+                                                    <option value="" disabled>Select your address</option>
                                                     @foreach (Helper::shipping() as $shipping)
-                                                        <option value="{{ $shipping->id }}" class="shippingOption"
-                                                            data-price="{{ $shipping->price }}">{{ $shipping->type }}:
-                                                            <span class="currency_convert">
-                                                                ${{ $shipping->price }}</span>
+                                                        <option value="{{ $shipping->id }}"
+                                                            data-price="{{ $shipping->price }}">
+                                                            {{ $shipping->type }}
                                                         </option>
                                                     @endforeach
                                                 </select>
                                             @else
                                                 <span>Free</span>
                                             @endif
+
                                         </li>
 
                                         @if (session('coupon'))
                                             <li class="coupon_price" data-price="{{ session('coupon')['value'] }}">You
                                                 Save<span
-                                                    class="currency_convert">${{ number_format(session('coupon')['value'], 2) }}</span>
+                                                    class="currency_convert">{{ number_format(session('coupon')['value'], 2) }}</span>
                                             </li>
                                         @endif
                                         @php
@@ -160,12 +160,12 @@
                                         @if (session('coupon'))
                                             <li class="last" id="order_total_price">
                                                 Total<span
-                                                    class="currency_convert">${{ number_format($total_amount, 2) }}</span>
+                                                    class="currency_convert">{{ number_format($total_amount, 2) }}</span>
                                             </li>
                                         @else
                                             <li class="last" id="order_total_price">
                                                 Total<span
-                                                    class="currency_convert">${{ number_format($total_amount, 2) }}</span>
+                                                    class="currency_convert">{{ number_format($total_amount, 2) }}</span>
                                             </li>
                                         @endif
                                     </ul>
@@ -300,14 +300,60 @@
     </script>
     <script>
         $(document).ready(function() {
+            const exchangeRates = {
+                "USD": 1,
+                "IDR": 15620, // Misalnya 1 USD = 15,000 IDR
+                "SGD": 1.32, // Misalnya 1 USD = 1.37 SGD
+                "MYR": 4.34 // Misalnya 1 USD = 4.18 MYR
+            };
+
+            const savedCurrency = localStorage.getItem('currency') || 'IDR';
+
+            function convertCurrency(amount, fromCurrency, toCurrency) {
+                if (fromCurrency === toCurrency) {
+                    return amount;
+                }
+                let usdAmount = amount / exchangeRates[fromCurrency];
+                return usdAmount * exchangeRates[toCurrency];
+            }
+
+            const currencySymbol = {
+                "USD": "$",
+                "IDR": "Rp",
+                "SGD": "S$",
+                "MYR": "RM"
+            };
+
+            $('#shipping-select option').each(function() {
+                var price = convertCurrency($(this).data('price'), 'USD', savedCurrency);
+
+                console.log($(this).text());
+                console.log(price);
+
+                if (price) {
+                    $(this).text(
+                        `${$(this).text()} - ${currencySymbol[savedCurrency]} ${price.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`
+                    );
+                }
+            });
+
+            $('#shipping-select').niceSelect('update');
+
             $('.shipping select[name=shipping]').change(function() {
                 let cost = parseFloat($(this).find('option:selected').data('price')) || 0;
                 let subtotal = parseFloat($('.order_subtotal').data('price'));
                 let coupon = parseFloat($('.coupon_price').data('price')) || 0;
-                // alert(coupon);
-                $('#order_total_price span').text('$' + (subtotal + cost - coupon).toFixed(2));
-            });
 
+                cost = convertCurrency(cost, 'USD', savedCurrency);
+                subtotal = convertCurrency(subtotal, 'USD', savedCurrency);
+                coupon = convertCurrency(coupon, 'USD', savedCurrency);
+
+                $('#order_total_price span').text(
+                    `${currencySymbol[savedCurrency]} ${(subtotal + cost - coupon).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`
+                );
+
+
+            });
         });
     </script>
 @endpush
