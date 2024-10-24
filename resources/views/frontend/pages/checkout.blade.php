@@ -130,7 +130,7 @@
                                         <li class="shipping">
                                             Shipping Cost
                                             @if (count(Helper::shipping()) > 0 && Helper::cartCount() > 0)
-                                                <select name="shipping" class="nice-select">
+                                                <select name="shipping" class="nice-select" required>
                                                     <option value="">Select your address</option>
                                                     @foreach (Helper::shipping() as $shipping)
                                                         <option value="{{ $shipping->id }}" class="shippingOption"

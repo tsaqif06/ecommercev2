@@ -12,9 +12,9 @@ class PaymentController extends Controller
 {
     public function payment()
     {
-        // if (!session()->get('id') || session()->get('id') == null) {
-        //     return redirect()->route('checkout');
-        // }
+        if (!session()->get('id') || session()->get('id') == null) {
+            return redirect()->route('checkout');
+        }
         $cart = Cart::where('user_id', auth()->user()->id)->where('order_id', null)->get()->toArray();
 
         $data = [];
@@ -28,19 +28,19 @@ class PaymentController extends Controller
             ];
         }, $cart);
 
-        $data['invoice_id'] = 'ORD-' . strtoupper(uniqid());
-        $data['invoice_description'] = "Order #{$data['invoice_id']} Invoice";
         $data['return_url'] = route('payment.success');
         $data['cancel_url'] = route('payment.cancel');
 
 
         $orderId = session()->get('id');
-        $orderId = 31;
+        // $orderId = 31;
 
         // Query untuk mengambil data order berdasarkan id
         $order = Order::find($orderId);
         $total = $order->total_amount;
 
+        $data['invoice_id'] = $order->order_number;
+        $data['invoice_description'] = "Order #{$data['invoice_id']} Invoice";
         $data['total'] = $total;
         $data['shipping_name'] = $order->shipping->type;
         $data['shipping_price'] = $order->shipping->price;

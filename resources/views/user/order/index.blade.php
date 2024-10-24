@@ -294,10 +294,18 @@
             transition: all 0.2s ease;
             background: #fff;
             padding: 0 5px;
-            color: #6c757d;
+            color: black;
             font-size: 14px;
             pointer-events: none;
             font-weight: bold;
+        }
+
+        input:-webkit-autofill {
+            background-color: white !important;
+            color: black !important;
+            -webkit-box-shadow: 0 0 0 1000px white inset !important;
+            box-shadow: 0 0 0 1000px white inset !important;
+            border-color: #ced4da !important;
         }
 
         /* Move label when input is focused or has content */
@@ -306,7 +314,7 @@
             top: -10px;
             transform: translateY(0);
             font-size: 12px;
-            color: #007bff;
+            color: black;
         }
 
         /* Icon positioning */
@@ -315,7 +323,7 @@
             left: 10px;
             top: 50%;
             transform: translateY(-50%);
-            color: #6c757d;
+            color: black;
             pointer-events: none;
             font-size: 18px;
         }
