@@ -310,7 +310,7 @@
                                             <span
                                                 class="total-amount">${{ number_format(Helper::totalWishlistPrice(), 2) }}</span>
                                         </div>
-                                        <a href="{{ route('cart') }}" class="btn animate">Cart</a>
+                                        <a href="{{ route('cart') }}" class="btn animate">{{ __('main.cart') }}</a>
                                     </div>
                                 </div>
                             @endauth
@@ -327,7 +327,7 @@
                                 <div class="shopping-item">
                                     <div class="dropdown-cart-header">
                                         <span>{{ count(Helper::getAllProductFromCart()) }} Items</span>
-                                        <a href="{{ route('cart') }}">View Cart</a>
+                                        <a href="{{ route('cart') }}">{{ __('main.view_cart') }}</a>
                                     </div>
                                     <ul class="shopping-list">
                                         {{-- {{Helper::getAllProductFromCart()}} --}}

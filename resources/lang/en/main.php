@@ -13,6 +13,7 @@ return [
     'language' => 'Language',
     'currency' => 'currency',
     'view_cart' => 'View Cart',
+    'cart' => 'Cart',
     'setting_success' => 'Setting changes were successfully saved',
     'setting_fail' => 'Failed to save changes. Please try again',
     'recent_search' => 'Recent Search',

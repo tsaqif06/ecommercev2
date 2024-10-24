@@ -13,6 +13,7 @@ return [
     'language' => 'Bahasa',
     'currency' => 'Mata uang',
     'view_cart' => 'Lihat Keranjang',
+    'cart' => 'Keranjang',
     'setting_success' => 'Perubahan pengaturan berhasil disimpan',
     'setting_fail' => 'Gagal menyimpan perubahan. Silakan coba lagi',
     'recent_search' => 'Pencarian Terakhir',
