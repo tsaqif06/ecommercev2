@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use PDF;
+use Helper;
+use App\User;
+use Notification;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Models\Shipping;
-use App\User;
-use PDF;
-use Notification;
-use Helper;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use App\Notifications\StatusNotification;
+// use App\Models\Notification as Notification;
 
 class OrderController extends Controller
 {
@@ -157,12 +158,6 @@ class OrderController extends Controller
             'fas' => 'fa-file-alt'
         ];
         Notification::send($users, new StatusNotification($details));
-        if (request('payment_method') == 'transfer') {
-            return redirect()->route('payment')->with(['id' => $order->id]);
-        } else {
-            session()->forget('cart');
-            session()->forget('coupon');
-        }
         // Cart::where('user_id', auth()->user()->id)->where('order_id', null)->update(['order_id' => $order->id]);
 
         // dd($users);

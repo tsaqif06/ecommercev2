@@ -12,7 +12,7 @@
                     <th>Name</th>
                     <th>Email</th>
                     <th style="width: 5px;">Qty</th>
-                    <th>Charge</th>
+                    <th>Shipping</th>
                     <th>Total Amount</th>
                     <th>Payment Status</th>
                     <th>Status</th>

@@ -30,7 +30,7 @@
                             </li>
                             @if (isset($shipping_discount))
                                 <li class="list-group-item d-flex justify-content-between">
-                                    <span>Shipping Discount</span>
+                                    <span>Coupon Discount</span>
                                     <span class="text-success currency_convert">{{ $shipping_discount }}</span>
                                 </li>
                             @endif
