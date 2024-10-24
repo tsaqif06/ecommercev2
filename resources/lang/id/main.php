@@ -19,4 +19,5 @@ return [
     'delete_all' => 'Hapus Semua',
     'results_found' => 'Hasil Ditemukan',
     'no_results' => 'Ups, maaf tidak ada hasil untuk',
+    'got_questions' => 'Ada pertanyaan? Hubungi kami 24/7',
 ];

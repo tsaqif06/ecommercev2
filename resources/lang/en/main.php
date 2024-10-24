@@ -19,4 +19,5 @@ return [
     'delete_all' => 'Delete All',
     'results_found' => 'Results Found',
     'no_results' => 'Ups, sorry no results for',
+    'got_questions' => 'Got Question? Call us 24/7',
 ];
