@@ -51,7 +51,7 @@
                                 @endphp
                                 @if ($categories)
                                     <button class="btn" style="background:black"data-filter="*">
-                                        All Products
+                                        {{ __('main.all_product') }}
                                     </button>
                                     @foreach ($categories as $key => $cat)
                                         <button class="btn"
@@ -82,7 +82,7 @@
                                                         @if ($product->stock <= 0)
                                                             <span class="out-of-stock">Sale out</span>
                                                         @elseif($product->condition == 'new')
-                                                            <span class="new">New</span>
+                                                            <span class="new">{{ __('main.new') }}</span>
                                                         @elseif($product->condition == 'hot')
                                                             <span class="hot">Hot</span>
                                                         @else
@@ -93,7 +93,7 @@
                                                         <a data-toggle="modal" data-target="#{{ $product->id }}"
                                                             title="Quick View" href="#"><button
                                                                 class="btn btn-custom rounded"
-                                                                style="width: 100%">BUY</button></a>
+                                                                style="width: 100%">{{ __('main.buy') }}</button></a>
                                                     </div>
                                                 </div>
                                                 <div class="product-content">
@@ -141,7 +141,7 @@
                         style="background-color: rgba(0,0,0,0.6); height: 300px;">
                         <a href="{{ route('product-grids') }}">
                             <button type="button" class="btn btn-custom rounded">
-                                <span class="d-flex align-items-center gap-2">SEE ALL PRODUCT</span>
+                                <span class="d-flex align-items-center gap-2">{{ __('main.see_all_products') }}</span>
                             </button>
                         </a>
                     </div>
@@ -201,15 +201,15 @@
                                                         @endif
                                                     @endfor
                                                 </div>
-                                                <a href="#"> ({{ $rate_count }} customer review)</a>
+                                                <a href="#"> ({{ $rate_count }} {{ __('main.cust_review') }})</a>
                                             </div>
                                             <div class="quickview-stock">
                                                 @if ($product->stock > 0)
-                                                    <span><i class="fa fa-check-circle-o"></i> {{ $product->stock }} in
-                                                        stock</span>
+                                                    <span><i class="fa fa-check-circle-o"></i> {{ $product->stock }}
+                                                        {{ __('main.in_stock') }}</span>
                                                 @else
                                                     <span><i class="fa fa-times-circle-o text-danger"></i>
-                                                        {{ $product->stock }} out stock</span>
+                                                        {{ $product->stock }} {{ __('main.out_stock') }}</span>
                                                 @endif
                                             </div>
                                         </div>
@@ -235,7 +235,7 @@
                                             <div class="size">
                                                 <div class="row">
                                                     <div class="col-lg-6 col-12">
-                                                        <h5 class="title">Size</h5>
+                                                        <h5 class="title">{{ __('main.size') }}</h5>
                                                         <select>
                                                             @php
                                                                 $sizes = explode(',', $product->size);
@@ -273,7 +273,8 @@
                                                 <!--/ End Input Order -->
                                             </div>
                                             <div class="add-to-cart">
-                                                <button type="submit" class="btn">Add to cart</button>
+                                                <button type="submit"
+                                                    class="btn">{{ __('main.add_to_cart') }}</button>
                                             </div>
                                         </form>
                                     </div>
@@ -363,7 +364,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
     <script>
         /*==================================================================
-                                                                                                                                                            [ Isotope ]*/
+                                                                                                                                                                    [ Isotope ]*/
         var $topeContainer = $('.isotope-grid');
         var $filter = $('.filter-tope-group');
 
