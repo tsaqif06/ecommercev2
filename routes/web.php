@@ -184,7 +184,11 @@ Route::group(['prefix' => '/admin', 'middleware' => ['auth', 'admin']], function
 
 // User section start
 Route::group(['prefix' => '/user', 'middleware' => ['user']], function () {
-    Route::get('/', [HomeController::class, 'index'])->name('user');
+    // Route::get('/', [HomeController::class, 'index'])->name('user');
+    Route::get('/', function () {
+        return redirect()->route('user.order.index');
+    })->name('user');
+
     // Profile
     Route::get('/profile', [HomeController::class, 'profile'])->name('user-profile');
     Route::post('/profile/{id}', [HomeController::class, 'profileUpdate'])->name('user-profile-update');
@@ -205,7 +209,7 @@ Route::group(['prefix' => '/user', 'middleware' => ['user']], function () {
 
     // Password Change
     Route::get('change-password', [HomeController::class, 'changePassword'])->name('user.change.password.form');
-    Route::post('change-password', [HomeController::class, 'changPasswordStore'])->name('change.password');
+    Route::post('change-password', [HomeController::class, 'changPassswordStore'])->name('change.password');
 });
 
 Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']], function () {

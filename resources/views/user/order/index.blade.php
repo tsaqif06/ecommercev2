@@ -117,8 +117,9 @@
                     <div class="profile-card">
                         <div class="row g-0">
                             <!-- Profile Display Column -->
-                            <div class="col-md-4 profile-header">
+                            <div class="col-md-4 profile-header position-relative">
                                 <div class="text-center">
+                                    <!-- Display Profile Image -->
                                     @if ($profile->photo)
                                         <img src="{{ $profile->photo }}" alt="Profile Picture"
                                             class="rounded-circle profile-img mb-3" id="profileImage">
@@ -126,12 +127,24 @@
                                         <img src="{{ asset('backend/img/avatar.png') }}" alt="Profile Picture"
                                             class="rounded-circle profile-img mb-3" id="profileImage">
                                     @endif
+
+                                    <!-- Display Profile Name and Email -->
                                     <h3 id="displayName" class="mb-0">{{ $profile->name }}</h3>
-                                    <p id="displayEmail" class="mb-2" style=" color: white;">{{ $profile->email }}
-                                    </p>
+                                    <p id="displayEmail" class="mb-2" style="color: white;">{{ $profile->email }}</p>
                                     <span id="displayRole" class="badge bg-light text-primary"
-                                        style="color: #5b5b5b; font-size: 16px; font-weight: bold;">{{ $profile->role }}</span>
+                                        style="color: #5b5b5b; font-size: 16px; font-weight: bold;">
+                                        {{ $profile->role }}
+                                    </span>
                                 </div>
+
+                                <!-- Logout Icon (Positioned in Bottom Left Corner) -->
+                                <form action="{{ route('user.logout') }}" class="position-absolute"
+                                    style="bottom: 10px; left: 10px;">
+                                    @csrf
+                                    <button type="submit" class="border-0 bg-transparent ml-4" title="Log Out">
+                                        <i class="fa fa-power-off" style="font-size: 24px; color: white;"></i>
+                                    </button>
+                                </form>
                             </div>
                             <!-- Profile Update Form Column -->
                             <div class="col-md-8">
