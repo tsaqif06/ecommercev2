@@ -9,21 +9,22 @@
             </div>
         </div>
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary float-left">Order Lists</h6>
+            <h6 class="m-0 font-weight-bold text-primary float-left">Coupon List</h6>
+            @if (auth()->user()->role == 'admin')
+                <a href="{{ route('coupon.create') }}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip"
+                    data-placement="bottom" title="Add User"><i class="fas fa-plus"></i> Add Coupon</a>
+            @endif
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                @if (count($orders) > 0)
-                    <table class="table table-bordered" id="order-dataTable" width="100%" cellspacing="0">
+                @if (count($coupons) > 0)
+                    <table class="table table-bordered" id="banner-dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
                                 <th>S.N.</th>
-                                <th>Order No.</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Quantity</th>
-                                <th>Charge</th>
-                                <th>Total Amount</th>
+                                <th>Coupon Code</th>
+                                <th>Type</th>
+                                <th>Value</th>
                                 <th>Status</th>
                                 @if (auth()->user()->role == 'admin')
                                     <th>Action</th>
@@ -33,12 +34,9 @@
                         <tfoot>
                             <tr>
                                 <th>S.N.</th>
-                                <th>Order No.</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Quantity</th>
-                                <th>Charge</th>
-                                <th>Total Amount</th>
+                                <th>Coupon Code</th>
+                                <th>Type</th>
+                                <th>Value</th>
                                 <th>Status</th>
                                 @if (auth()->user()->role == 'admin')
                                     <th>Action</th>
@@ -46,58 +44,74 @@
                             </tr>
                         </tfoot>
                         <tbody>
-                            @foreach ($orders as $order)
-                                @php
-                                    $shipping_charge = DB::table('shippings')
-                                        ->where('id', $order->shipping_id)
-                                        ->pluck('price');
-                                @endphp
+                            @foreach ($coupons as $coupon)
                                 <tr>
-                                    <td>{{ $order->id }}</td>
-                                    <td>{{ $order->order_number }}</td>
-                                    <td>{{ $order->first_name }} {{ $order->last_name }}</td>
-                                    <td>{{ $order->email }}</td>
-                                    <td>{{ $order->quantity }}</td>
+                                    <td>{{ $coupon->id }}</td>
+                                    <td>{{ $coupon->code }}</td>
                                     <td>
-                                        @foreach ($shipping_charge as $data)
-                                            $ {{ number_format($data, 2) }}
-                                        @endforeach
-                                    </td>
-                                    <td>${{ number_format($order->total_amount, 2) }}</td>
-                                    <td>
-                                        @if ($order->status == 'confirmed')
-                                            <span class="badge badge-primary">{{ $order->status }}</span>
+                                        @if ($coupon->type == 'fixed')
+                                            <span class="badge badge-primary">{{ $coupon->type }}</span>
                                         @else
-                                            <span class="badge badge-danger">{{ $order->status }}</span>
+                                            <span class="badge badge-warning">{{ $coupon->type }}</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if ($coupon->type == 'fixed')
+                                            ${{ number_format($coupon->value, 2) }}
+                                        @else
+                                            {{ $coupon->value }}%
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if ($coupon->status == 'active')
+                                            <span class="badge badge-success">{{ $coupon->status }}</span>
+                                        @else
+                                            <span class="badge badge-warning">{{ $coupon->status }}</span>
                                         @endif
                                     </td>
                                     @if (auth()->user()->role == 'admin')
                                         <td>
-                                            <a href="{{ route('order.show', $order->id) }}"
-                                                class="btn btn-warning btn-sm float-left mr-1"
-                                                style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip"
-                                                title="view" data-placement="bottom"><i class="fas fa-eye"></i></a>
-                                            <a href="{{ route('order.edit', $order->id) }}"
+                                            <a href="{{ route('coupon.edit', $coupon->id) }}"
                                                 class="btn btn-primary btn-sm float-left mr-1"
                                                 style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip"
                                                 title="edit" data-placement="bottom"><i class="fas fa-edit"></i></a>
-                                            <form method="POST" action="{{ route('order.destroy', [$order->id]) }}">
+                                            <form method="POST" action="{{ route('coupon.destroy', [$coupon->id]) }}">
                                                 @csrf
                                                 @method('delete')
-                                                <button class="btn btn-danger btn-sm dltBtn" data-id={{ $order->id }}
+                                                <button class="btn btn-danger btn-sm dltBtn" data-id={{ $coupon->id }}
                                                     style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip"
                                                     data-placement="bottom" title="Delete"><i
                                                         class="fas fa-trash-alt"></i></button>
                                             </form>
                                         </td>
                                     @endif
+                                    {{-- Delete Modal --}}
+                                    {{-- <div class="modal fade" id="delModal{{$user->id}}" tabindex="-1" role="dialog" aria-labelledby="#delModal{{$user->id}}Label" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="#delModal{{$user->id}}Label">Delete user</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                              <form method="post" action="{{ route('banners.destroy',$user->id) }}">
+                                @csrf
+                                @method('delete')
+                                <button type="submit" class="btn btn-danger" style="margin:auto; text-align:center">Parmanent delete user</button>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                    </div> --}}
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
-                    <span style="float:right">{{ $orders->links() }}</span>
+                    <span style="float:right">{{ $coupons->links() }}</span>
                 @else
-                    <h6 class="text-center">No orders found!!! Please order some products</h6>
+                    <h6 class="text-center">No Coupon found!!! Please create coupon</h6>
                 @endif
             </div>
         </div>
@@ -111,6 +125,15 @@
         div.dataTables_wrapper div.dataTables_paginate {
             display: none;
         }
+
+        .zoom {
+            transition: transform .2s;
+            /* Animation */
+        }
+
+        .zoom:hover {
+            transform: scale(3.2);
+        }
     </style>
 @endpush
 
@@ -123,10 +146,10 @@
     <!-- Page level custom scripts -->
     <script src="{{ asset('backend/js/demo/datatables-demo.js') }}"></script>
     <script>
-        $('#order-dataTable').DataTable({
+        $('#banner-dataTable').DataTable({
             "columnDefs": [{
                 "orderable": false,
-                "targets": [8]
+                "targets": [4, 5]
             }]
         });
 

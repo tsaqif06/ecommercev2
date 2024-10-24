@@ -9,21 +9,21 @@
             </div>
         </div>
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary float-left">Order Lists</h6>
+            <h6 class="m-0 font-weight-bold text-primary float-left">Post Category Lists</h6>
+            @if (auth()->user()->role == 'admin')
+                <a href="{{ route('post-category.create') }}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip"
+                    data-placement="bottom" title="Add User"><i class="fas fa-plus"></i> Add Post Category</a>
+            @endif
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                @if (count($orders) > 0)
-                    <table class="table table-bordered" id="order-dataTable" width="100%" cellspacing="0">
+                @if (count($postCategories) > 0)
+                    <table class="table table-bordered" id="post-category-dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
                                 <th>S.N.</th>
-                                <th>Order No.</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Quantity</th>
-                                <th>Charge</th>
-                                <th>Total Amount</th>
+                                <th>Title</th>
+                                <th>Slug</th>
                                 <th>Status</th>
                                 @if (auth()->user()->role == 'admin')
                                     <th>Action</th>
@@ -33,12 +33,8 @@
                         <tfoot>
                             <tr>
                                 <th>S.N.</th>
-                                <th>Order No.</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Quantity</th>
-                                <th>Charge</th>
-                                <th>Total Amount</th>
+                                <th>Title</th>
+                                <th>Slug</th>
                                 <th>Status</th>
                                 @if (auth()->user()->role == 'admin')
                                     <th>Action</th>
@@ -46,58 +42,61 @@
                             </tr>
                         </tfoot>
                         <tbody>
-                            @foreach ($orders as $order)
-                                @php
-                                    $shipping_charge = DB::table('shippings')
-                                        ->where('id', $order->shipping_id)
-                                        ->pluck('price');
-                                @endphp
+                            @foreach ($postCategories as $data)
                                 <tr>
-                                    <td>{{ $order->id }}</td>
-                                    <td>{{ $order->order_number }}</td>
-                                    <td>{{ $order->first_name }} {{ $order->last_name }}</td>
-                                    <td>{{ $order->email }}</td>
-                                    <td>{{ $order->quantity }}</td>
+                                    <td>{{ $data->id }}</td>
+                                    <td>{{ $data->title }}</td>
+                                    <td>{{ $data->slug }}</td>
                                     <td>
-                                        @foreach ($shipping_charge as $data)
-                                            $ {{ number_format($data, 2) }}
-                                        @endforeach
-                                    </td>
-                                    <td>${{ number_format($order->total_amount, 2) }}</td>
-                                    <td>
-                                        @if ($order->status == 'confirmed')
-                                            <span class="badge badge-primary">{{ $order->status }}</span>
+                                        @if ($data->status == 'active')
+                                            <span class="badge badge-success">{{ $data->status }}</span>
                                         @else
-                                            <span class="badge badge-danger">{{ $order->status }}</span>
+                                            <span class="badge badge-warning">{{ $data->status }}</span>
                                         @endif
                                     </td>
                                     @if (auth()->user()->role == 'admin')
                                         <td>
-                                            <a href="{{ route('order.show', $order->id) }}"
-                                                class="btn btn-warning btn-sm float-left mr-1"
-                                                style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip"
-                                                title="view" data-placement="bottom"><i class="fas fa-eye"></i></a>
-                                            <a href="{{ route('order.edit', $order->id) }}"
+                                            <a href="{{ route('post-category.edit', $data->id) }}"
                                                 class="btn btn-primary btn-sm float-left mr-1"
                                                 style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip"
                                                 title="edit" data-placement="bottom"><i class="fas fa-edit"></i></a>
-                                            <form method="POST" action="{{ route('order.destroy', [$order->id]) }}">
+                                            <form method="POST" action="{{ route('post-category.destroy', [$data->id]) }}">
                                                 @csrf
                                                 @method('delete')
-                                                <button class="btn btn-danger btn-sm dltBtn" data-id={{ $order->id }}
+                                                <button class="btn btn-danger btn-sm dltBtn" data-id={{ $data->id }}
                                                     style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip"
                                                     data-placement="bottom" title="Delete"><i
                                                         class="fas fa-trash-alt"></i></button>
                                             </form>
                                         </td>
                                     @endif
+                                    {{-- Delete Modal --}}
+                                    {{-- <div class="modal fade" id="delModal{{$user->id}}" tabindex="-1" role="dialog" aria-labelledby="#delModal{{$user->id}}Label" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="#delModal{{$user->id}}Label">Delete user</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                              <form method="post" action="{{ route('banners.destroy',$user->id) }}">
+                                @csrf
+                                @method('delete')
+                                <button type="submit" class="btn btn-danger" style="margin:auto; text-align:center">Parmanent delete user</button>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                    </div> --}}
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
-                    <span style="float:right">{{ $orders->links() }}</span>
+                    <span style="float:right">{{ $postCategories->links() }}</span>
                 @else
-                    <h6 class="text-center">No orders found!!! Please order some products</h6>
+                    <h6 class="text-center">No Post Category found!!! Please create post category</h6>
                 @endif
             </div>
         </div>
@@ -123,10 +122,10 @@
     <!-- Page level custom scripts -->
     <script src="{{ asset('backend/js/demo/datatables-demo.js') }}"></script>
     <script>
-        $('#order-dataTable').DataTable({
+        $('#post-category-dataTable').DataTable({
             "columnDefs": [{
                 "orderable": false,
-                "targets": [8]
+                "targets": [3, 4]
             }]
         });
 

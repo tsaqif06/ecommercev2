@@ -9,21 +9,20 @@
             </div>
         </div>
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary float-left">Order Lists</h6>
+            <h6 class="m-0 font-weight-bold text-primary float-left">Review Lists</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                @if (count($orders) > 0)
+                @if (count($reviews) > 0)
                     <table class="table table-bordered" id="order-dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
                                 <th>S.N.</th>
-                                <th>Order No.</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Quantity</th>
-                                <th>Charge</th>
-                                <th>Total Amount</th>
+                                <th>Review By</th>
+                                <th>Product Title</th>
+                                <th>Review</th>
+                                <th>Rate</th>
+                                <th>Date</th>
                                 <th>Status</th>
                                 @if (auth()->user()->role == 'admin')
                                     <th>Action</th>
@@ -33,12 +32,11 @@
                         <tfoot>
                             <tr>
                                 <th>S.N.</th>
-                                <th>Order No.</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Quantity</th>
-                                <th>Charge</th>
-                                <th>Total Amount</th>
+                                <th>Review By</th>
+                                <th>Product Title</th>
+                                <th>Review</th>
+                                <th>Rate</th>
+                                <th>Date</th>
                                 <th>Status</th>
                                 @if (auth()->user()->role == 'admin')
                                     <th>Action</th>
@@ -46,45 +44,42 @@
                             </tr>
                         </tfoot>
                         <tbody>
-                            @foreach ($orders as $order)
-                                @php
-                                    $shipping_charge = DB::table('shippings')
-                                        ->where('id', $order->shipping_id)
-                                        ->pluck('price');
-                                @endphp
+                            @foreach ($reviews as $review)
                                 <tr>
-                                    <td>{{ $order->id }}</td>
-                                    <td>{{ $order->order_number }}</td>
-                                    <td>{{ $order->first_name }} {{ $order->last_name }}</td>
-                                    <td>{{ $order->email }}</td>
-                                    <td>{{ $order->quantity }}</td>
+                                    <td>{{ $review->id }}</td>
+                                    <td>{{ $review->user_info['name'] }}</td>
+                                    <td>{{ $review->product->title }}</td>
+                                    <td>{{ $review->review }}</td>
                                     <td>
-                                        @foreach ($shipping_charge as $data)
-                                            $ {{ number_format($data, 2) }}
-                                        @endforeach
+                                        <ul style="list-style:none">
+                                            @for ($i = 1; $i <= 5; $i++)
+                                                @if ($review->rate >= $i)
+                                                    <li style="float:left;color:#F7941D;"><i class="fa fa-star"></i></li>
+                                                @else
+                                                    <li style="float:left;color:#F7941D;"><i class="far fa-star"></i></li>
+                                                @endif
+                                            @endfor
+                                        </ul>
                                     </td>
-                                    <td>${{ number_format($order->total_amount, 2) }}</td>
+                                    <td>{{ $review->created_at->format('M d D, Y g: i a') }}</td>
                                     <td>
-                                        @if ($order->status == 'confirmed')
-                                            <span class="badge badge-primary">{{ $order->status }}</span>
+                                        @if ($review->status == 'active')
+                                            <span class="badge badge-success">{{ $review->status }}</span>
                                         @else
-                                            <span class="badge badge-danger">{{ $order->status }}</span>
+                                            <span class="badge badge-warning">{{ $review->status }}</span>
                                         @endif
                                     </td>
                                     @if (auth()->user()->role == 'admin')
+                                        s
                                         <td>
-                                            <a href="{{ route('order.show', $order->id) }}"
-                                                class="btn btn-warning btn-sm float-left mr-1"
-                                                style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip"
-                                                title="view" data-placement="bottom"><i class="fas fa-eye"></i></a>
-                                            <a href="{{ route('order.edit', $order->id) }}"
+                                            <a href="{{ route('review.edit', $review->id) }}"
                                                 class="btn btn-primary btn-sm float-left mr-1"
                                                 style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip"
                                                 title="edit" data-placement="bottom"><i class="fas fa-edit"></i></a>
-                                            <form method="POST" action="{{ route('order.destroy', [$order->id]) }}">
+                                            <form method="POST" action="{{ route('review.destroy', [$review->id]) }}">
                                                 @csrf
                                                 @method('delete')
-                                                <button class="btn btn-danger btn-sm dltBtn" data-id={{ $order->id }}
+                                                <button class="btn btn-danger btn-sm dltBtn" data-id={{ $review->id }}
                                                     style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip"
                                                     data-placement="bottom" title="Delete"><i
                                                         class="fas fa-trash-alt"></i></button>
@@ -95,9 +90,9 @@
                             @endforeach
                         </tbody>
                     </table>
-                    <span style="float:right">{{ $orders->links() }}</span>
+                    <span style="float:right">{{ $reviews->links() }}</span>
                 @else
-                    <h6 class="text-center">No orders found!!! Please order some products</h6>
+                    <h6 class="text-center">No reviews found!!!</h6>
                 @endif
             </div>
         </div>
@@ -126,7 +121,7 @@
         $('#order-dataTable').DataTable({
             "columnDefs": [{
                 "orderable": false,
-                "targets": [8]
+                "targets": [5, 6]
             }]
         });
 

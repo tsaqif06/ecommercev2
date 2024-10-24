@@ -1,9 +1,13 @@
-@extends('backend.layouts.master')
+@extends('user.layouts.master')
 
 @section('title', 'Order Detail')
 
 @section('main-content')
     <div class="card">
+        <h5 class="card-header">Order <a href="{{ route('order.pdf', $order->id) }}"
+                class=" btn btn-sm btn-primary shadow-sm float-right"><i class="fas fa-download fa-sm text-white-50"></i>
+                Generate PDF</a>
+        </h5>
         <div class="card-body">
             @if ($order)
                 <table class="table table-striped table-hover">
@@ -37,10 +41,6 @@
                                 @endif
                             </td>
                             <td>
-                                <a href="{{ route('order.edit', $order->id) }}"
-                                    class="btn btn-primary btn-sm float-left mr-1"
-                                    style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="edit"
-                                    data-placement="bottom"><i class="fas fa-edit"></i></a>
                                 <form method="POST" action="{{ route('order.destroy', [$order->id]) }}">
                                     @csrf
                                     @method('delete')
@@ -79,12 +79,13 @@
                                             <td> : {{ $order->status }}</td>
                                         </tr>
                                         <tr>
+                                            @php
+                                                $shipping_charge = DB::table('shippings')
+                                                    ->where('id', $order->shipping_id)
+                                                    ->pluck('price');
+                                            @endphp
                                             <td>Shipping Charge</td>
-                                            <td> : $ {{ $order->shipping->price }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Coupon</td>
-                                            <td> : $ {{ number_format($order->coupon, 2) }}</td>
+                                            <td> :${{ $order->shipping->price }}</td>
                                         </tr>
                                         <tr>
                                             <td>Total Amount</td>
