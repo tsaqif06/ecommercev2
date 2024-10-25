@@ -9,14 +9,14 @@
                 <tr>
                     <th>S.N.</th>
                     <th>Order No.</th>
-                    <th>Name</th>
+                    <th>{{ __('main.name') }}</th>
                     <th>Email</th>
                     <th style="width: 5px;">Qty</th>
-                    <th>Shipping</th>
-                    <th>Total Amount</th>
-                    <th>Payment Status</th>
+                    <th>{{ __('main.shipping') }}</th>
+                    <th>{{ __('main.total_amount') }}</th>
+                    <th>{{ __('main.payment_status') }}</th>
                     <th>Status</th>
-                    <th>Action</th>
+                    <th>{{ __('main.action') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -47,7 +47,7 @@
                             <a href="{{ route('user.order.show', $order->id) }}"
                                 class="btn btn-warning rounded-circle mx-1"
                                 style="width: 30px; height: 30px; padding: 0; display: flex; align-items: center; justify-content: center; background-color: #ffc107; border: none;"
-                                data-toggle="tooltip" title="View" data-placement="bottom">
+                                data-toggle="tooltip" title="{{ __('main.view') }}" data-placement="bottom">
                                 <i class="fas fa-eye" style="font-size: 14px; color: white;"></i>
                             </a>
 
@@ -57,7 +57,7 @@
                                 <button type="submit" class="btn btn-custom rounded-circle mx-1"
                                     style="width: 30px; height: 30px; padding: 0; display: flex; align-items: center; justify-content: center; border: none;"
                                     data-id="{{ $order->id }}" data-toggle="tooltip" data-placement="bottom"
-                                    title="Delete">
+                                    title="{{ __('main.delete') }}">
                                     <i class="fas fa-trash-alt" style="font-size: 14px; color: white;"></i>
                                 </button>
                             </form>
