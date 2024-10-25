@@ -90,6 +90,8 @@ return [
     'unconfirmed' => 'Unconfirmed',
     'confirmed' => 'Confirmed',
     'search_orders' => 'Search Orders:',
+    'my_orders' => 'My Orders',
+    'youll_be_able' => 'YOULL BE ABLE TO CHECK YOUR ORDERS AND THEIR PROGRESS FROM THIS LIST.',
     'shipping' => 'Shipping',
     'total_amount' => 'Total Amount',
     'payment_status' => 'Payment Status',

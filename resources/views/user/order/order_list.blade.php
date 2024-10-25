@@ -1,6 +1,6 @@
 @if ($orders == null)
     <p class="card-text">
-        YOULL BE ABLE TO CHECK YOUR ORDERS AND THEIR PROGRESS FROM THIS LIST.
+        {{ __('main.youll_be_able') }}
     </p>
 @else
     <div class="table-responsive">

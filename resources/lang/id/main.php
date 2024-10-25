@@ -90,6 +90,8 @@ return [
     'unconfirmed' => 'Belum dikonfirmasi',
     'confirmed' => 'Terkonfirmasi',
     'search_orders' => 'Cari Pesanan:',
+    'my_orders' => 'Pesanan Saya',
+    'youll_be_able' => 'ANDA AKAN DAPAT MEMERIKSA PESANAN ANDA DAN PROSESNYA DARI DAFTAR INI.',
     'shipping' => 'Pengiriman',
     'total_amount' => 'Total Jumlah',
     'payment_status' => 'Status Pembayaran',

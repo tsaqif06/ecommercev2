@@ -212,7 +212,7 @@
                             $orderCount = count($orders);
                         }
                     @endphp
-                    My Orders ({{ $orderCount }})
+                    {{ __('main.my_orders') }} ({{ $orderCount }})
                 </h2>
                 <form id="order-filter-form" method="GET" action="{{ route('user.order.index') }}"
                     class="form-inline">
