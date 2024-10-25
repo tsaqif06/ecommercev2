@@ -113,5 +113,6 @@ return [
     'you_pay' => 'Anda Bayar',
     'order_now' => 'Pesan Sekarang',
     'coupon_redeem' => 'Tukar Kupon',
+    'enter_your_coupon' => 'Masukkan Kupon Anda',
     'you_might_like' => 'Anda Mungkin Suka',
 ];

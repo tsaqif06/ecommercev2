@@ -113,5 +113,6 @@ return [
     'you_pay' => 'You Pay',
     'order_now' => 'Order Now',
     'coupon_redeem' => 'Coupon Redeem',
+    'enter_your_coupon' => 'Enter Your Coupon',
     'you_might_like' => 'You Might Like',
 ];

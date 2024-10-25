@@ -154,7 +154,7 @@
                                 <div class="input-group">
                                     <!-- Gunakan kelas CSS untuk lebar tetap -->
                                     <input type="text" name="code" class="form-control fixed-width-input"
-                                        placeholder="Enter Your Coupon" aria-label="Coupon Code"
+                                        placeholder="{{ __('main.enter_your_coupon') }}" aria-label="Coupon Code"
                                         style="border-radius: 15px 0 0 15px; padding-left: 15px;">
 
                                     <!-- Tombol Apply di sebelah kanan -->
