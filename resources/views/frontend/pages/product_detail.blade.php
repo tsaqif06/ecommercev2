@@ -80,7 +80,8 @@
                                             @endfor
                                         </ul>
                                         <a href="#"
-                                            class="total-review">({{ $product_detail['getReview']->count() }}) Review</a>
+                                            class="total-review">({{ $product_detail['getReview']->count() }})
+                                            {{ __('main.review') }}</a>
                                     </div>
                                     @php
                                         $after_discount =
@@ -110,7 +111,7 @@
                                 <!-- Size -->
                                 @if ($product_detail->size)
                                     <div class="size mt-4">
-                                        <h4>Size</h4>
+                                        <h4>{{ __('main.size') }}</h4>
                                         <ul>
                                             @php
                                                 $sizes = explode(',', $product_detail->size);
@@ -128,7 +129,7 @@
                                     <form action="{{ route('single-add-to-cart') }}" method="POST">
                                         @csrf
                                         <div class="quantity">
-                                            <h6>Quantity :</h6>
+                                            <h6>{{ __('main.quantity') }} :</h6>
                                             <!-- Input Order -->
                                             <div class="input-group">
                                                 <div class="button minus">
@@ -150,19 +151,19 @@
                                             <!--/ End Input Order -->
                                         </div>
                                         <div class="add-to-cart mt-4">
-                                            <button type="submit" class="btn">Add to cart</button>
+                                            <button type="submit" class="btn">{{ __('main.add_to_cart') }}</button>
                                         </div>
                                     </form>
 
-                                    <p class="cat">Category :<a
+                                    <p class="cat">{{ __('main.category') }} :<a
                                             href="{{ route('product-cat', $product_detail->cat_info['slug']) }}">{{ $product_detail->cat_info['title'] }}</a>
                                     </p>
                                     @if ($product_detail->sub_cat_info)
-                                        <p class="cat mt-1">Sub Category :<a
+                                        <p class="cat mt-1">Sub {{ __('main.category') }} :<a
                                                 href="{{ route('product-sub-cat', [$product_detail->cat_info['slug'], $product_detail->sub_cat_info['slug']]) }}">{{ $product_detail->sub_cat_info['title'] }}</a>
                                         </p>
                                     @endif
-                                    <p class="availability">Stock : @if ($product_detail->stock > 0)
+                                    <p class="availability">{{ __('main.stock') }} : @if ($product_detail->stock > 0)
                                             <span class="badge badge-success">{{ $product_detail->stock }}</span>
                                         @else
                                             <span class="badge badge-danger">{{ $product_detail->stock }}</span>
@@ -181,8 +182,8 @@
                                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                                         <li class="nav-item"><a class="nav-link active" data-toggle="tab"
                                                 href="#description" role="tab">Description</a></li>
-                                        <li class="nav-item"><a class="nav-linkxa" data-toggle="tab" href="#reviews"
-                                                role="tab">Reviews</a></li>
+                                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#reviews"
+                                                role="tab">{{ __('main.review') }}</a></li>
                                     </ul>
                                     <!--/ End Tab Nav -->
                                 </div>
@@ -209,11 +210,11 @@
                                                     <!-- Review -->
                                                     <div class="comment-review">
                                                         <div class="add-review">
-                                                            <h5>Add A Review</h5>
-                                                            <p>Your email address will not be published. Required fields are
-                                                                marked</p>
+                                                            <h5>{{ __('main.add_review') }}</h5>
+                                                            <p>{{ __('main.your_email_will_not') }}</p>
                                                         </div>
-                                                        <h4>Your Rating <span class="text-danger">*</span></h4>
+                                                        <h4>{{ __('main.your_rating') }} <span
+                                                                class="text-danger">*</span></h4>
                                                         <div class="review-inner">
                                                             <!-- Form -->
                                                             @auth
@@ -270,23 +271,24 @@
                                                                         </div>
                                                                         <div class="col-lg-12 col-12">
                                                                             <div class="form-group">
-                                                                                <label>Write a review</label>
+                                                                                <label>{{ __('main.write_review') }}</label>
                                                                                 <textarea name="review" rows="6" placeholder=""></textarea>
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-lg-12 col-12">
                                                                             <div class="form-group button5">
                                                                                 <button type="submit"
-                                                                                    class="btn">Submit</button>
+                                                                                    class="btn">{{ __('main.submit') }}</button>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                 </form>
                                                             @else
                                                                 <p class="text-center p-5">
-                                                                    You need to <a href="{{ route('login.form') }}"
-                                                                        style="color:rgb(54, 54, 204)">Login</a> OR <a
-                                                                        style="color:blue"
+                                                                    {{ __('main.you_need_to') }} <a
+                                                                        href="{{ route('login.form') }}"
+                                                                        style="color:rgb(54, 54, 204)">Login</a>
+                                                                    {{ __('main.or') }} <a style="color:blue"
                                                                         href="{{ route('register.form') }}">Register</a>
 
                                                                 </p>
@@ -306,8 +308,9 @@
                                                             <h4>{{ ceil($product_detail->getReview->avg('rate')) }}
                                                                 <span>(Overall)</span>
                                                             </h4>
-                                                            <span>Based on {{ $product_detail->getReview->count() }}
-                                                                Comments</span>
+                                                            <span>{{ __('main.based_on') }}
+                                                                {{ $product_detail->getReview->count() }}
+                                                                {{ __('main.comments') }}</span>
                                                         </div>
                                                         @foreach ($product_detail['getReview'] as $data)
                                                             <!-- Single Rating -->
@@ -367,7 +370,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="section-title">
-                        <h2>Related Products</h2>
+                        <h2>{{ __('main.related_products') }}</h2>
                     </div>
                 </div>
             </div>
@@ -393,7 +396,7 @@
                                         <div class="button-head">
                                             <a href="{{ route('product-detail', $data->slug) }}"
                                                 title="Quick View"><button class="btn btn-custom rounded"
-                                                    style="width: 100%">BUY</button></a>
+                                                    style="width: 100%">{{ __('main.buy') }}</button></a>
                                         </div>
                                     </div>
                                     <div class="product-content">
@@ -419,126 +422,6 @@
         </div>
     </div>
     <!-- End Most Popular Area -->
-
-
-    <!-- Modal -->
-    <div class="modal fade" id="modelExample" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            class="ti-close" aria-hidden="true"></span></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row no-gutters">
-                        <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-                            <!-- Product Slider -->
-                            <div class="product-gallery">
-                                <div class="quickview-slider-active">
-                                    <div class="single-slider">
-                                        <img src="images/modal1.png" alt="#">
-                                    </div>
-                                    <div class="single-slider">
-                                        <img src="images/modal2.png" alt="#">
-                                    </div>
-                                    <div class="single-slider">
-                                        <img src="images/modal3.png" alt="#">
-                                    </div>
-                                    <div class="single-slider">
-                                        <img src="images/modal4.png" alt="#">
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- End Product slider -->
-                        </div>
-                        <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-                            <div class="quickview-content">
-                                <h2>Flared Shift Dress</h2>
-                                <div class="quickview-ratting-review">
-                                    <div class="quickview-ratting-wrap">
-                                        <div class="quickview-ratting">
-                                            <i class="yellow fa fa-star"></i>
-                                            <i class="yellow fa fa-star"></i>
-                                            <i class="yellow fa fa-star"></i>
-                                            <i class="yellow fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                        </div>
-                                        <a href="#"> (1 customer review)</a>
-                                    </div>
-                                    <div class="quickview-stock">
-                                        <span><i class="fa fa-check-circle-o"></i> in stock</span>
-                                    </div>
-                                </div>
-                                <h3>$29.00</h3>
-                                <div class="quickview-peragraph">
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia iste laborum ad
-                                        impedit pariatur esse optio tempora sint ullam autem deleniti nam in quos qui nemo
-                                        ipsum numquam.</p>
-                                </div>
-                                <div class="size">
-                                    <div class="row">
-                                        <div class="col-lg-6 col-12">
-                                            <h5 class="title">Size</h5>
-                                            <select>
-                                                <option selected="selected">s</option>
-                                                <option>m</option>
-                                                <option>l</option>
-                                                <option>xl</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-lg-6 col-12">
-                                            <h5 class="title">Color</h5>
-                                            <select>
-                                                <option selected="selected">orange</option>
-                                                <option>purple</option>
-                                                <option>black</option>
-                                                <option>pink</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="quantity">
-                                    <!-- Input Order -->
-                                    <div class="input-group">
-                                        <div class="button minus">
-                                            <button type="button" class="btn btn-primary btn-number" disabled="disabled"
-                                                data-type="minus" data-field="quant[1]">
-                                                <i class="ti-minus"></i>
-                                            </button>
-                                        </div>
-                                        <input type="text" name="qty" class="input-number" data-min="1"
-                                            data-max="1000" value="1">
-                                        <div class="button plus">
-                                            <button type="button" class="btn btn-primary btn-number" data-type="plus"
-                                                data-field="quant[1]">
-                                                <i class="ti-plus"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <!--/ End Input Order -->
-                                </div>
-                                <div class="add-to-cart">
-                                    <a href="#" class="btn">Add to cart</a>
-                                    <a href="#" class="btn min"><i class="ti-heart"></i></a>
-                                    <a href="#" class="btn min"><i class="fa fa-compress"></i></a>
-                                </div>
-                                <div class="default-social">
-                                    <h4 class="share-now">Share:</h4>
-                                    <ul>
-                                        <li><a class="facebook" href="#"><i class="fa fa-facebook"></i></a></li>
-                                        <li><a class="twitter" href="#"><i class="fa fa-twitter"></i></a></li>
-                                        <li><a class="youtube" href="#"><i class="fa fa-pinterest-p"></i></a></li>
-                                        <li><a class="dribbble" href="#"><i class="fa fa-google-plus"></i></a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Modal end -->
 
 @endsection
 @push('styles')
