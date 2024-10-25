@@ -98,4 +98,20 @@ return [
     'action' => 'Action',
     'view' => 'View',
     'delete' => 'Delete',
+
+    // cart
+    'my_cart' => 'My Cart',
+    'low_stock' => 'Low stock',
+    'only' => 'Only',
+    'stock_left' => 'Stocks Left',
+    'update_cart' => 'Update Cart',
+    'your_cart_empty' => 'Your cart is currently empty.',
+    'continue_shop' => 'Continue Shopping',
+    'checkout_summary' => 'Checkout Summary',
+    'cart_subtotal' => 'Cart Subtotal',
+    'you_save' => 'You Save',
+    'you_pay' => 'You Pay',
+    'order_now' => 'Order Now',
+    'coupon_redeem' => 'Coupon Redeem',
+    'you_might_like' => 'You Might Like',
 ];

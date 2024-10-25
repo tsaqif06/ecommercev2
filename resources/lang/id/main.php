@@ -98,4 +98,20 @@ return [
     'action' => 'Aksi',
     'view' => 'Lihat',
     'delete' => 'Hapus',
+
+    // keranjang
+    'my_cart' => 'Keranjang Saya',
+    'low_stock' => 'Stok terbatas',
+    'only' => 'Hanya',
+    'stock_left' => 'Sisa Stok',
+    'update_cart' => 'Perbarui Keranjang',
+    'your_cart_empty' => 'Keranjang Anda kosong saat ini.',
+    'continue_shop' => 'Lanjutkan Belanja',
+    'checkout_summary' => 'Ringkasan Pembayaran',
+    'cart_subtotal' => 'Subtotal Keranjang',
+    'you_save' => 'Anda Hemat',
+    'you_pay' => 'Anda Bayar',
+    'order_now' => 'Pesan Sekarang',
+    'coupon_redeem' => 'Tukar Kupon',
+    'you_might_like' => 'Anda Mungkin Suka',
 ];
