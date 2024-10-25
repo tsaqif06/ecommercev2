@@ -181,7 +181,7 @@
                                     <!-- Tab Nav -->
                                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                                         <li class="nav-item"><a class="nav-link active" data-toggle="tab"
-                                                href="#description" role="tab">Description</a></li>
+                                                href="#description" role="tab">{{ __('main.description') }}</a></li>
                                         <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#reviews"
                                                 role="tab">{{ __('main.review') }}</a></li>
                                     </ul>
