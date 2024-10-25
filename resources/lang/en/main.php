@@ -30,4 +30,19 @@ return [
     'size' => 'Size',
     'see_all_products' => 'See All Products',
     'got_questions' => 'Got Question? Call us 24/7',
+
+    // product page
+    'sort_products_by' => 'Sort Products by',
+    'default' => 'Default',
+    'recent' => 'Recent',
+    'oldest' => 'Oldest',
+    'lowest_price' => 'Lowest Price',
+    'highest_price' => 'Highest Price',
+    'price' => 'Price',
+    'min_price' => 'Minimum Price',
+    'max_price' => 'Maximum Price',
+    'product_name' => 'Product Name',
+    'search' => 'Search',
+    'apply' => 'Apply',
+    'no_products' => 'There are no products',
 ];

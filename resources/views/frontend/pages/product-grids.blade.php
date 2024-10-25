@@ -30,47 +30,47 @@
             <div class="modal-dialog">
                 <div class="modal-content container-fluid rounded" style="width: 500px; height: 320px;">
                     <div class="modal-body">
-                        <h5 class="modal-title mt-2" id="sortModalLabel">Sort Products By</h5>
+                        <h5 class="modal-title mt-2" id="sortModalLabel">{{ __('main.sort_products_by') }}</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
                         <!-- Tombol pilihan di bawah -->
                         <button type="button" class="btn btn-sort" data-sort="default">
-                            Default
+                            {{ __('main.default') }}
                             @if (empty($_GET['sortBy']))
                                 <i class="fas fa-check ml-2"></i>
                             @endif
                         </button>
 
                         <button type="button" class="btn btn-sort" data-sort="recent">
-                            Recent
+                            {{ __('main.recent') }}
                             @if (!empty($_GET['sortBy']) && $_GET['sortBy'] == 'recent')
                                 <i class="fas fa-check ml-2"></i>
                             @endif
                         </button>
 
                         <button type="button" class="btn btn-sort" data-sort="oldest">
-                            Oldest
+                            {{ __('main.oldest') }}
                             @if (!empty($_GET['sortBy']) && $_GET['sortBy'] == 'oldest')
                                 <i class="fas fa-check ml-2"></i>
                             @endif
                         </button>
 
                         <button type="button" class="btn btn-sort" data-sort="lowest_price">
-                            Lowest Price
+                            {{ __('main.lowest_price') }}
                             @if (!empty($_GET['sortBy']) && $_GET['sortBy'] == 'lowest_price')
                                 <i class="fas fa-check ml-2"></i>
                             @endif
                         </button>
 
                         <button type="button" class="btn btn-sort" data-sort="highest_price">
-                            Highest Price
+                            {{ __('main.highest_price') }}
                             @if (!empty($_GET['sortBy']) && $_GET['sortBy'] == 'highest_price')
                                 <i class="fas fa-check ml-2"></i>
                             @endif
                         </button>
 
                         <button type="button" class="btn btn-sort" data-sort="name_a_z">
-                            Product Name (A-Z)
+                            {{ __('main.product_name') }} (A-Z)
                             @if (!empty($_GET['sortBy']) && $_GET['sortBy'] == 'name_a_z')
                                 <i class="fas fa-check ml-2"></i>
                             @endif
@@ -89,16 +89,17 @@
                             <div class="single-widget category" style="margin-bottom: -20px;">
                                 <div class="searchToggle btn-sidebar" style="cursor: pointer">
                                     <i class="fas fa-search" style="font-size: 20px; color: #121212; cursor: pointer;"></i>
-                                    <span class="ml-1" style="font-size: 15px; font-weight: bold;">Search</span>
+                                    <span class="ml-1"
+                                        style="font-size: 15px; font-weight: bold;">{{ __('main.search') }}</span>
                                 </div>
                                 <a href="{{ route('product-grids') }}" class="btn btn-sidebar"
-                                    style="font-size: 14px; font-weight: bold; color: #121212">All Product</a>
+                                    style="font-size: 14px; font-weight: bold; color: #121212">{{ __('main.all_product') }}</a>
                             </div>
                             <!--/ End Single Widget -->
                             <hr>
                             <!-- Shop By Price -->
                             <div class="single-widget range" style="margin-top: -20px;">
-                                <h3 class="title" style="border: 0;">Price</h3>
+                                <h3 class="title" style="border: 0;">{{ __('main.price') }}</h3>
                                 <div class="price-filter" style="margin-top: -30px;">
                                     <div class="price-filter-inner">
                                         @php
@@ -109,17 +110,17 @@
                                             <div class="form-floating-custom mb-3 position-relative">
                                                 <input type="text" class="form-control price-input" placeholder=" "
                                                     id="min_price" name="min_price" required>
-                                                <label for="min_price">Minimum Price</label>
+                                                <label for="min_price">{{ __('main.min_price') }}</label>
                                                 <span class="currency-label">IDR</span>
                                             </div>
                                             <div class="form-floating-custom mb-3 position-relative">
                                                 <input type="text" class="form-control price-input" placeholder=" "
                                                     id="max_price" name="max_price" required>
-                                                <label for="max_price">Maximum Price</label>
+                                                <label for="max_price">{{ __('main.max_price') }}</label>
                                                 <span class="currency-label">IDR</span>
                                             </div>
                                             <button type="submit" class="btn btn-custom mt-2"
-                                                style="width: 100%; border-radius: 10px;">Apply</button>
+                                                style="width: 100%; border-radius: 10px;">{{ __('main.apply') }}</button>
                                             <input type="hidden" name="price_range" id="price_range"
                                                 value="@if (!empty($_GET['price'])) {{ $_GET['price'] }} @endif" />
                                         </div>
@@ -135,21 +136,22 @@
                                 <!-- Shop Top -->
                                 @php
                                     $sortOptions = [
-                                        'default' => 'Default',
-                                        'recent' => 'Recent',
-                                        'oldest' => 'Oldest',
-                                        'lowest_price' => 'Lowest Price',
-                                        'highest_price' => 'Highest Price',
-                                        'name_a_z' => 'Product Name (A-Z)',
+                                        'default' => __('main.default'),
+                                        'recent' => __('main.recent'),
+                                        'oldest' => __('main.oldest'),
+                                        'lowest_price' => __('main.lowest_price'),
+                                        'highest_price' => __('main.highest_price'),
+                                        'name_a_z' => __('main.product_name') . ' (A-Z)',
                                     ];
 
                                     $currentSortBy = !empty($_GET['sortBy']) ? $_GET['sortBy'] : 'default';
                                     $displayName = $sortOptions[$currentSortBy] ?? 'Default';
                                 @endphp
 
+
                                 <div class="shop-top d-flex justify-content-end">
                                     <div class="shop-shorter d-flex align-items-center">
-                                        <h6 class="mb-0 mr-3">Sort Products By</h6>
+                                        <h6 class="mb-0 mr-3">{{ __('main.sort_products_by') }}</h6>
                                         <div class="dropdown">
                                             <button class="btn btn-outline-custom dropdown-toggle rounded" type="button"
                                                 id="sortByButton" data-toggle="modal" data-target="#sortModal"
@@ -186,7 +188,7 @@
                                                     <a data-toggle="modal" data-target="#{{ $product->id }}"
                                                         title="Quick View" href="#"><button
                                                             class="btn btn-custom rounded"
-                                                            style="width: 100%">BUY</button></a>
+                                                            style="width: 100%">{{ __('main.buy') }}</button></a>
                                                 </div>
                                             </div>
                                             <div class="product-content">
@@ -206,7 +208,7 @@
                                     </div>
                                 @endforeach
                             @else
-                                <h4 class="text-warning" style="margin:100px auto;">There are no products.</h4>
+                                <h4 class="text-warning" style="margin:100px auto;">{{ __('main.no_products') }}</h4>
                             @endif
                         </div>
 
@@ -297,11 +299,11 @@
                                             </div>
                                             <div class="quickview-stock">
                                                 @if ($product->stock > 0)
-                                                    <span><i class="fa fa-check-circle-o"></i> {{ $product->stock }} in
-                                                        stock</span>
+                                                    <span><i class="fa fa-check-circle-o"></i> {{ $product->stock }}
+                                                        {{ __('main.in_stock') }}</span>
                                                 @else
                                                     <span><i class="fa fa-times-circle-o text-danger"></i>
-                                                        {{ $product->stock }} out stock</span>
+                                                        {{ $product->stock }} {{ __('main.out_stock') }}</span>
                                                 @endif
                                             </div>
                                         </div>
@@ -341,7 +343,7 @@
                                         <div class="size">
                                             <div class="row">
                                                 <div class="col-lg-6 col-12">
-                                                    <h5 class="title">Size</h5>
+                                                    <h5 class="title">{{ __('main.size') }}</h5>
                                                     <select>
                                                         @php
                                                             $sizes = explode(',', $product->size);
@@ -378,7 +380,8 @@
                                                 <!--/ End Input Order -->
                                             </div>
                                             <div class="add-to-cart">
-                                                <button type="submit" class="btn btn-custom rounded">Add to cart</button>
+                                                <button type="submit"
+                                                    class="btn btn-custom rounded">{{ __('main.add_to_cart') }}</button>
                                             </div>
                                         </form>
                                     </div>

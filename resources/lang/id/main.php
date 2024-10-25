@@ -30,4 +30,19 @@ return [
     'size' => 'Ukuran',
     'see_all_products' => 'Lihat Semua Produk',
     'got_questions' => 'Ada pertanyaan? Hubungi kami 24/7',
+
+    // halaman produk
+    'sort_products_by' => 'Urutkan Produk Berdasarkan',
+    'default' => 'Default',
+    'recent' => 'Terbaru',
+    'oldest' => 'Terlama',
+    'lowest_price' => 'Harga Terendah',
+    'highest_price' => 'Harga Tertinggi',
+    'price' => 'Harga',
+    'min_price' => 'Harga Minimum',
+    'max_price' => 'Harga Maksimum',
+    'product_name' => 'Nama Produk',
+    'search' => 'Cari',
+    'apply' => 'Terapkan',
+    'no_products' => 'Tidak ada produk',
 ];
