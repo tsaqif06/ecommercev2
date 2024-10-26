@@ -39,8 +39,10 @@
             <div class="col-auto">
                 <i class="fas fa-bars sidebar-toggle mr-3 mt-2"
                     style="color: #121212; font-size: 26px; cursor: pointer;"></i>
-                <img src="{{ asset('storage/logo.webp') }}" class="flex-0-0 object-contain"
-                    style="max-width:100%; height:44px; width:auto;" alt="Logo of Hecates.official">
+                <a href="{{ route('home') }}">
+                    <img src="{{ asset('storage/logo.webp') }}" class="flex-0-0 object-contain"
+                        style="max-width:100%; height:44px; width:auto; cursor: pointer;" alt="Logo of Hecates.official">
+                </a>
             </div>
 
             <!-- Dropdown -->
