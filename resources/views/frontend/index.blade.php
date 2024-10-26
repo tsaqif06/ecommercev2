@@ -26,6 +26,83 @@
 
     <!--/ End Slider Area -->
 
+    <!-- Start Flash Sale Section -->
+    @if ($flashSaleProducts && $flashSaleProducts->count() > 0)
+        <div class="flash-sale-area section" style="background: rgba(0,0,0,0.05)">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="section-title">
+                            <h2>Flash Sale</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="product-info">
+                            <div class="row justify-content-center">
+                                @foreach ($flashSaleProducts as $product)
+                                    <div class="col-sm-12 col-md-6 col-lg-4">
+                                        <div class="single-product"
+                                            style="background: white; padding: 10px 15px; border-radius: 15px">
+                                            <div class="product-img">
+                                                <a href="{{ route('product-detail', $product->slug) }}">
+                                                    @php
+                                                        $photo = explode(',', $product->photo);
+                                                    @endphp
+                                                    <img class="default-img" src="{{ $photo[0] }}"
+                                                        alt="{{ $product->title }}">
+                                                    <img class="hover-img" src="{{ $photo[0] }}"
+                                                        alt="{{ $product->title }}">
+                                                </a>
+                                                <div class="countdown-banner">
+                                                    <span class="countdown-text">Flash Sale Ends In: </span>
+                                                    <div class="countdown" data-endtime="{{ $product->flash_sale_end }}">
+                                                        <span class="days">00</span>:<span class="hours">00</span>:<span
+                                                            class="minutes">00</span>:<span class="seconds">00</span>
+                                                    </div>
+                                                </div>
+                                                <div class="button-head">
+                                                    <a data-toggle="modal" data-target="#{{ $product->id }}"
+                                                        title="Quick View" href="#">
+                                                        <button class="btn btn-custom rounded"
+                                                            style="width: 100%">{{ __('main.buy') }}</button>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="product-content">
+                                                <h3><a
+                                                        href="{{ route('product-detail', $product->slug) }}">{{ $product->title }}</a>
+                                                </h3>
+                                                <div class="product-price">
+                                                    @php
+                                                        $after_discount =
+                                                            $product->price -
+                                                            ($product->price * $product->discount) / 100;
+
+                                                        $after_discount =
+                                                            $after_discount -
+                                                            ($after_discount * $product->flash_sale_discount) / 100;
+                                                    @endphp
+                                                    <span
+                                                        class="currency_convert">{{ number_format($after_discount, 2) }}</span>
+                                                    <del style="padding-left:4%;"
+                                                        class="currency_convert">{{ number_format($product->price, 2) }}</del>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+    <!-- End Flash Sale Section -->
+
+
     <!-- Start Product Area -->
     <div class="product-area section">
         <div class="container">
@@ -68,7 +145,8 @@
                             @if ($product_lists)
                                 <div class="row justify-content-center">
                                     @foreach ($product_lists as $key => $product)
-                                        <div class="col-sm-12 col-md-6 col-lg-4 p-b-35 isotope-item {{ $product->cat_id }}">
+                                        <div
+                                            class="col-sm-12 col-md-6 col-lg-4 p-b-35 isotope-item {{ $product->cat_id }}">
                                             <div class="single-product">
                                                 <div class="product-img">
                                                     <a href="{{ route('product-detail', $product->slug) }}">
@@ -357,6 +435,35 @@
             object-fit: cover;
             /* Menjaga proporsi gambar agar tidak terdistorsi */
         }
+
+        .countdown-banner {
+            background-color: #ff0000;
+            /* Warna merah mencolok */
+            color: #ffffff;
+            /* Warna teks putih */
+            text-align: center;
+            font-weight: bold;
+            padding: 10px 0;
+            font-size: 1.2em;
+            border-radius: 15px;
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+
+        .countdown-banner .countdown {
+            display: inline-block;
+        }
+
+        .countdown-banner .countdown span {
+            margin: 0 5px;
+        }
+
+        /* Styling pada countdown agar lebih proporsional */
+        .single-product .product-img {
+            position: relative;
+        }
     </style>
 @endpush
 
@@ -364,7 +471,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
     <script>
         /*==================================================================
-                                                                                                                                                                        [ Isotope ]*/
+                                                                                                                                                                                                            [ Isotope ]*/
         var $topeContainer = $('.isotope-grid');
         var $filter = $('.filter-tope-group');
 
@@ -435,5 +542,38 @@
             }
             return false
         }
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('.countdown').each(function() {
+                var endTime = new Date($(this).data('endtime')).getTime();
+
+                var interval = setInterval(() => {
+                    var now = new Date().getTime();
+                    var timeLeft = endTime - now;
+
+                    // Menghitung waktu dalam hari, jam, menit dan detik
+                    var days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                    var hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    var minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                    var seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+                    // Tampilkan hasil di elemen
+                    $(this).find('.days').text(String(days).padStart(2, '0'));
+                    $(this).find('.hours').text(String(hours).padStart(2, '0'));
+                    $(this).find('.minutes').text(String(minutes).padStart(2, '0'));
+                    $(this).find('.seconds').text(String(seconds).padStart(2, '0'));
+
+                    // Jika waktu habis, stop countdown
+                    if (timeLeft < 0) {
+                        clearInterval(interval);
+                        $(this).find('.days').text('00');
+                        $(this).find('.hours').text('00');
+                        $(this).find('.minutes').text('00');
+                        $(this).find('.seconds').text('00');
+                    }
+                }, 1000);
+            });
+        });
     </script>
 @endpush

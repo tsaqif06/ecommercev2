@@ -19,6 +19,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\PostCommentController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProductReviewController;
+use App\Http\Controllers\FlashSaleController;
 
 
 /*
@@ -151,6 +152,8 @@ Route::group(['prefix' => '/admin', 'middleware' => ['auth', 'admin']], function
     Route::resource('/category', 'CategoryController');
     // Product
     Route::resource('/product', 'ProductController');
+    // Flash Sale
+    Route::resource('/flashsale', 'FlashSaleController');
     // Ajax for sub category
     Route::post('/category/{id}/child', 'CategoryController@getChildByParent');
     // POST category

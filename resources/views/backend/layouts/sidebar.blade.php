@@ -128,6 +128,13 @@
         </div>
     </li>
 
+    <!-- Flash Sale -->
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('flashsale.index') }}">
+            <i class="fas fa-tag fa-chart-area"></i>
+            <span>Flash Sale</span>
+        </a>
+    </li>
     <!--Orders -->
     <li class="nav-item">
         <a class="nav-link" href="{{ route('order.index') }}">
