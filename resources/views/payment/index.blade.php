@@ -68,7 +68,8 @@
 
                             <div class="form-group">
                                 <button type="submit" class="btn btn-primary">{{ __('main.submit') }}</button>
-                                <button type="button" class="btn btn-secondary" id="cancel-button">{{ __('main.cancel') }}</button>
+                                <button type="button" class="btn btn-secondary"
+                                    id="cancel-button">{{ __('main.cancel') }}</button>
                             </div>
                         </form>
                     </div>
@@ -104,13 +105,17 @@
         $('#cancel-button').on('click', function() {
             $.ajax({
                 url: '{{ route('payment.cancel') }}',
-                type: 'GET',
+                type: 'POST',
+                data: {
+                    order_id: '{{ $order_id }}',
+                    _token: '{{ csrf_token() }}'
+                },
                 success: function(response) {
-                    alert(response.message); // Tampilkan pesan pembatalan
-                    window.location.href = '{{ route('home') }}'; // Arahkan ke halaman beranda
+                    alert(response.message);
+                    window.location.href = '{{ route('home') }}';
                 },
                 error: function(xhr) {
-                    console.error('Error:', xhr.responseText); // Tampilkan error jika ada
+                    console.error('Error:', xhr.responseText);
                 }
             });
         });

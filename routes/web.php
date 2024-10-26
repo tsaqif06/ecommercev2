@@ -125,7 +125,7 @@ Route::post('/coupon-store', [CouponController::class, 'couponStore'])->name('co
 // Payment
 Route::get('/set-payment-session/{id}', [PaymentController::class, 'setPaymentSession'])->name('set.payment.session');
 Route::get('payment', [PaymentController::class, 'payment'])->name('payment');
-Route::get('payment/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel');
+Route::post('payment/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel');
 Route::post('payment/success', [PaymentController::class, 'success'])->name('payment.success');
 
 Route::get('/order', "OrderController@showOrder")->name('user.order.index');

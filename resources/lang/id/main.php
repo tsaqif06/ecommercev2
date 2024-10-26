@@ -141,4 +141,6 @@ return [
     'upload_proof_payment' => 'Unggah bukti pembayaran',
     'choose_file' => 'Pilih File',
     'cancel' => 'Batal',
+    'success_payment' => 'Anda telah berhasil melakukan pembayaran. Silakan tunggu konfirmasi dari admin.',
+    'payment_canceled' => 'Pembayaran Anda dibatalkan. Keranjang Anda telah dibersihkan.',
 ];

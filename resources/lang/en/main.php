@@ -141,4 +141,6 @@ return [
     'upload_proof_payment' => 'Upload proof of payment',
     'choose_file' => 'Choose File',
     'cancel' => 'Cancel',
+    'success_payment' => 'You have successfully paid. Please wait for admin confirmation.',
+    'payment_canceled' => 'Your payment is canceled. Your cart has been cleared.',
 ];

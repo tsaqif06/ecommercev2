@@ -62,13 +62,24 @@ class PaymentController extends Controller
         return view('payment.index', $data);
     }
 
-    public function cancel()
+    public function cancel(Request $request)
     {
         $userId = auth()->user()->id;
+        $orderId = $request->input('order_id'); // Perbaiki di sini
+
+        // Cari order berdasarkan orderId
+        $order = Order::find($orderId);
+        if ($order) {
+            // Hapus order jika ditemukan
+            $order->delete();
+        }
+
+        // Hapus semua item di cart untuk pengguna yang sesuai
         Cart::where('user_id', $userId)->where('order_id', null)->delete();
 
-        return response()->json(['message' => 'Your payment is canceled. Your cart has been cleared.']);
+        return response()->json(['message' => __('main.payment_canceled')]);
     }
+
 
     public function success(Request $request)
     {
@@ -93,7 +104,7 @@ class PaymentController extends Controller
         $order->save();
 
         // Flash message sukses
-        session()->flash('success', 'You have successfully paid. Please wait for admin confirmation.');
+        session()->flash('success', __('messages.success_payment'));
 
         // Hapus data cart dan coupon dari session
         session()->forget('cart');
