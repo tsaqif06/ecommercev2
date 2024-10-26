@@ -209,7 +209,7 @@ class OrderController extends Controller
         ]);
         $data = $request->all();
         // return $request->status;
-        if ($request->status == 'delivered') {
+        if ($request->status == 'confirmed') {
             foreach ($order->cart as $cart) {
                 $product = $cart->product;
                 // return $product;

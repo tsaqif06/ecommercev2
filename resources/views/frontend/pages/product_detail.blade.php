@@ -99,9 +99,15 @@
                                             $product_detail->price -
                                             ($product_detail->price * $product_detail->discount) / 100;
 
+                                        if (
+                                            $product_detail->flash_sale_start <= now() &&
+                                            $product_detail->flash_sale_end >= now()
+                                        ) {
+                                            $discount_flash = $product_detail->flash_sale_discount;
+                                        }
+
                                         $after_discount_flash =
-                                            $after_discount -
-                                            ($after_discount * $product_detail->flash_sale_discount) / 100;
+                                            $after_discount - ($after_discount * ($discount_flash ?? 0)) / 100;
                                     @endphp
                                     <div class="price-container d-flex align-items-center mt-2">
                                         <span
@@ -446,9 +452,17 @@
                                             @php
                                                 $after_discount = $data->price - ($data->price * $data->discount) / 100;
 
+                                                $discount_flash_2 = 0;
+                                                if (
+                                                    $data->flash_sale_start <= now() &&
+                                                    $data->flash_sale_end >= now()
+                                                ) {
+                                                    $discount_flash_2 = $data->flash_sale_discount;
+                                                }
+
                                                 $after_discount_flash =
                                                     $after_discount -
-                                                    ($after_discount * $data->flash_sale_discount) / 100;
+                                                    ($after_discount * ($discount_flash_2 ?? 0)) / 100;
                                             @endphp
                                             <span
                                                 class="old currency_convert">${{ number_format($data->price, 2) }}</span>

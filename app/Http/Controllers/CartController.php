@@ -37,7 +37,7 @@ class CartController extends Controller
         if ($already_cart) {
             // dd($already_cart);
             $already_cart->quantity = $already_cart->quantity + 1;
-            $already_cart->amount = $product->price + $already_cart->amount;
+            $already_cart->amount = $already_cart->price + $already_cart->amount;
             // return $already_cart->quantity;
             if ($already_cart->product->stock < $already_cart->quantity || $already_cart->product->stock <= 0) return back()->with('error', 'Stock not sufficient!.');
             $already_cart->save();
@@ -46,7 +46,16 @@ class CartController extends Controller
             $cart = new Cart;
             $cart->user_id = auth()->user()->id;
             $cart->product_id = $product->id;
-            $cart->price = ($product->price - ($product->price * $product->discount) / 100);
+            $price = ($product->price - ($product->price * $product->discount) / 100);
+
+            $discount_flash = 0;
+            if (
+                $product->flash_sale_start <= now() &&
+                $product->flash_sale_end >= now()
+            ) {
+                $discount_flash = $product->flash_sale_discount;
+            }
+            $cart->price = ($price - ($price * ($discount_flash ?? 0)) / 100);
             $cart->quantity = 1;
             $cart->amount = $cart->price * $cart->quantity;
             if ($cart->product->stock < $cart->quantity || $cart->product->stock <= 0) return back()->with('error', 'Stock not sufficient!.');
@@ -82,7 +91,7 @@ class CartController extends Controller
         if ($already_cart) {
             $already_cart->quantity = $already_cart->quantity + $request->quant[1];
             // $already_cart->price = ($product->price * $request->quant[1]) + $already_cart->price ;
-            $already_cart->amount = ($product->price * $request->quant[1]) + $already_cart->amount;
+            $already_cart->amount = ($already_cart->price * $request->quant[1]) + $already_cart->amount;
 
             if ($already_cart->product->stock < $already_cart->quantity || $already_cart->product->stock <= 0) return back()->with('error', 'Stock not sufficient!.');
 
@@ -92,7 +101,16 @@ class CartController extends Controller
             $cart = new Cart;
             $cart->user_id = auth()->user()->id;
             $cart->product_id = $product->id;
-            $cart->price = ($product->price - ($product->price * $product->discount) / 100);
+            $price = ($product->price - ($product->price * $product->discount) / 100);
+
+            $discount_flash = 0;
+            if (
+                $product->flash_sale_start <= now() &&
+                $product->flash_sale_end >= now()
+            ) {
+                $discount_flash = $product->flash_sale_discount;
+            }
+            $cart->price = ($price - ($price * ($discount_flash ?? 0)) / 100);
             $cart->quantity = $request->quant[1];
             $cart->amount = ($cart->price * $request->quant[1]);
             if ($cart->product->stock < $cart->quantity || $cart->product->stock <= 0) return back()->with('error', 'Stock not sufficient!.');
@@ -156,7 +174,17 @@ class CartController extends Controller
                     // return $cart;
 
                     if ($cart->product->stock <= 0) continue;
-                    $after_price = ($cart->product->price - ($cart->product->price * $cart->product->discount) / 100);
+                    $price = ($cart->product->price - ($cart->product->price * $cart->product->discount) / 100);
+
+                    $discount_flash = 0;
+                    if (
+                        $cart->product->flash_sale_start <= now() &&
+                        $cart->product->flash_sale_end >= now()
+                    ) {
+                        $discount_flash = $cart->product->flash_sale_discount;
+                    }
+                    $after_price = ($price - ($price * ($discount_flash ?? 0)) / 100);
+                    // dd($after_price);
                     $cart->amount = $after_price * $quant;
                     // return $cart->price;
                     $cart->save();

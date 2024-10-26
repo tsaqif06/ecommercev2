@@ -223,9 +223,17 @@
                                                     $after_discount =
                                                         $product->price - ($product->price * $product->discount) / 100;
 
+                                                    $discount_flash = 0;
+                                                    if (
+                                                        $product->flash_sale_start <= now() &&
+                                                        $product->flash_sale_end >= now()
+                                                    ) {
+                                                        $discount_flash = $product->flash_sale_discount;
+                                                    }
+
                                                     $after_discount_flash =
                                                         $after_discount -
-                                                        ($after_discount * $product->flash_sale_discount) / 100;
+                                                        ($after_discount * ($discount_flash ?? 0)) / 100;
                                                 @endphp
                                                 <span
                                                     class="currency_convert">{{ number_format($after_discount_flash, 2) }}</span>
@@ -339,9 +347,16 @@
                                             $after_discount =
                                                 $product->price - ($product->price * $product->discount) / 100;
 
+                                            $discount_flash_2 = 0;
+                                            if (
+                                                $product->flash_sale_start <= now() &&
+                                                $product->flash_sale_end >= now()
+                                            ) {
+                                                $discount_flash_2 = $product->flash_sale_discount;
+                                            }
+
                                             $after_discount_flash =
-                                                $after_discount -
-                                                ($after_discount * $product->flash_sale_discount) / 100;
+                                                $after_discount - ($after_discount * ($discount_flash_2 ?? 0)) / 100;
                                         @endphp
                                         <div class="d-flex align-items-center">
                                             <h3 class="mr-2">
