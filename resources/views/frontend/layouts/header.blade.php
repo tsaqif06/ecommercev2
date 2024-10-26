@@ -439,7 +439,7 @@
 
             var timeDifference = lastVisit ? now - lastVisit : Infinity;
 
-            var delayTime = 3600000; // 1 jam dalam milidetik, ubah sesuai kebutuhan
+            var delayTime = 3600000;
 
             if (timeDifference > delayTime) {
                 $.ajax({
@@ -451,6 +451,7 @@
                     },
                     success: function(response) {
                         console.log('Bahasa diubah ke: ' + language);
+                        localStorage.setItem('lastVisit', now);
                         location.reload();
                     },
                     error: function(xhr, status, error) {
@@ -460,7 +461,6 @@
                 });
             }
 
-            localStorage.setItem('lastVisit', now);
 
             updateDisplayFromLocalStorage();
             updateTotalPrices();

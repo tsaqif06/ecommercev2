@@ -44,6 +44,16 @@
                             @endif
                         </td>
                         <td class="text-center d-flex justify-content-center">
+                            @if ($order->payment_status != 'paid')
+                                <a href="{{ route('set.payment.session', ['id' => $order->id]) }}"
+                                    class="btn btn-primary rounded-circle mx-1"
+                                    style="width: 30px; height: 30px; padding: 0; display: flex; align-items: center; justify-content: center; background-color: #007bff; border: none;"
+                                    data-toggle="tooltip" title="{{ __('main.pay') }}" data-placement="bottom"
+                                    target="_blank">
+                                    <i class="fas fa-credit-card" style="font-size: 14px; color: white;"></i>
+                                </a>
+                            @endif
+
                             <a href="{{ route('user.order.show', $order->id) }}"
                                 class="btn btn-warning rounded-circle mx-1"
                                 style="width: 30px; height: 30px; padding: 0; display: flex; align-items: center; justify-content: center; background-color: #ffc107; border: none;"
@@ -51,7 +61,8 @@
                                 <i class="fas fa-eye" style="font-size: 14px; color: white;"></i>
                             </a>
 
-                            <form method="POST" action="{{ route('user.order.delete', [$order->id]) }}" class="d-inline">
+                            <form method="POST" action="{{ route('user.order.delete', [$order->id]) }}"
+                                class="d-inline">
                                 @csrf
                                 @method('delete')
                                 <button type="submit" class="btn btn-custom rounded-circle mx-1"

@@ -10,10 +10,17 @@ use Srmklive\PayPal\Services\PayPal as PayPalClient;
 
 class PaymentController extends Controller
 {
+    public function setPaymentSession($id)
+    {
+        session(['id' => $id]); // Set session 'id'
+        return redirect()->route('payment'); // Redirect ke route payment
+    }
+
+
     public function payment()
     {
         if (!session()->get('id') || session()->get('id') == null) {
-            return redirect()->route('checkout');
+            return redirect()->route('user.order.index');
         }
         $cart = Cart::where('user_id', auth()->user()->id)->where('order_id', null)->get()->toArray();
 

@@ -115,4 +115,30 @@ return [
     'coupon_redeem' => 'Coupon Redeem',
     'enter_your_coupon' => 'Enter Your Coupon',
     'you_might_like' => 'You Might Like',
+
+    // checkout
+    'make_your_checkout' => 'Make Your Checkout Here',
+    'register_to_checkout' => 'Please register in order to checkout more quickly',
+    'first_name' => 'First Name',
+    'last_name' => 'Last Name',
+    'email_address' => 'Email Address',
+    'phone_number' => 'Phone Number',
+    'country' => 'Country',
+    'address_line' => 'Address Line',
+    'postal_code' => 'Postal Code',
+    'cart_totals' => 'CART TOTALS',
+    'shipping_cost' => 'Shipping Cost',
+    'total' => 'Total',
+    'payments' => 'Payments',
+    'proceed_to_checkout' => 'Proceed To Checkout',
+
+    // payment
+    'payment_details' => 'Payment Details',
+    'order_summary' => 'Order Summary',
+    'shipping_type' => 'Shipping Type',
+    'coupon_discount' => 'Coupon Discount',
+    'account_number' => 'Account Number',
+    'upload_proof_payment' => 'Upload proof of payment',
+    'choose_file' => 'Choose File',
+    'cancel' => 'Cancel',
 ];

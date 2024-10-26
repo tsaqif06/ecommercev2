@@ -29,13 +29,13 @@
                 <div class="row">
                     <div class="col-lg-8 col-12">
                         <div class="checkout-form">
-                            <h2>Make Your Checkout Here</h2>
-                            <p>Please register in order to checkout more quickly</p>
+                            <h2>{{ __('main.make_your_checkout') }}</h2>
+                            <p>{{ __('main.register_to_checkout') }}</p>
                             <!-- Form -->
                             <div class="row">
                                 <div class="col-lg-6 col-md-6 col-12">
                                     <div class="form-group">
-                                        <label>First Name<span>*</span></label>
+                                        <label>{{ __('main.first_name') }}<span>*</span></label>
                                         <input type="text" name="first_name" placeholder=""
                                             value="{{ old('first_name') }}" value="{{ old('first_name') }}">
                                         @error('first_name')
@@ -45,7 +45,7 @@
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-12">
                                     <div class="form-group">
-                                        <label>Last Name<span>*</span></label>
+                                        <label>{{ __('main.last_name') }}<span>*</span></label>
                                         <input type="text" name="last_name" placeholder="" value="{{ old('lat_name') }}">
                                         @error('last_name')
                                             <span class='text-danger'>{{ $message }}</span>
@@ -54,7 +54,7 @@
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-12">
                                     <div class="form-group">
-                                        <label>Email Address<span>*</span></label>
+                                        <label>{{ __('main.email_address') }}<span>*</span></label>
                                         <input type="email" name="email" placeholder="" value="{{ old('email') }}">
                                         @error('email')
                                             <span class='text-danger'>{{ $message }}</span>
@@ -63,7 +63,7 @@
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-12">
                                     <div class="form-group">
-                                        <label>Phone Number <span>*</span></label>
+                                        <label>{{ __('main.phone_number') }} <span>*</span></label>
                                         <input type="number" name="phone" placeholder="" required
                                             value="{{ old('phone') }}">
                                         @error('phone')
@@ -73,7 +73,7 @@
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-12">
                                     <div class="form-group">
-                                        <label>Country<span>*</span></label>
+                                        <label>{{ __('main.country') }}<span>*</span></label>
                                         <select id="country" class="nice-select" disabled>
                                             <option value="ID">Indonesia</option>
                                             <option value="MY">Malaysia</option>
@@ -85,7 +85,7 @@
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-12">
                                     <div class="form-group">
-                                        <label>Address Line 1<span>*</span></label>
+                                        <label>{{ __('main.address_line') }} 1<span>*</span></label>
                                         <input type="text" name="address1" placeholder="" value="{{ old('address1') }}">
                                         @error('address1')
                                             <span class='text-danger'>{{ $message }}</span>
@@ -94,7 +94,7 @@
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-12">
                                     <div class="form-group">
-                                        <label>Address Line 2</label>
+                                        <label>{{ __('main.address_line') }} 2</label>
                                         <input type="text" name="address2" placeholder="" value="{{ old('address2') }}">
                                         @error('address2')
                                             <span class='text-danger'>{{ $message }}</span>
@@ -103,7 +103,7 @@
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-12">
                                     <div class="form-group">
-                                        <label>Postal Code</label>
+                                        <label>{{ __('main.postal_code') }}</label>
                                         <input type="text" name="post_code" placeholder=""
                                             value="{{ old('post_code') }}">
                                         @error('post_code')
@@ -120,15 +120,15 @@
                         <div class="order-details">
                             <!-- Order Widget -->
                             <div class="single-widget">
-                                <h2>CART TOTALS</h2>
+                                <h2>{{ __('main.cart_totals') }}</h2>
                                 <div class="content">
                                     <ul>
-                                        <li class="order_subtotal" data-price="{{ Helper::totalCartPrice() }}">Cart
-                                            Subtotal<span
+                                        <li class="order_subtotal" data-price="{{ Helper::totalCartPrice() }}">
+                                            {{ __('main.cart_subtotal') }}<span
                                                 class="currency_convert">${{ number_format(Helper::totalCartPrice(), 2) }}</span>
                                         </li>
                                         <li class="shipping">
-                                            Shipping Cost
+                                            {{ __('main.shipping_cost') }}
                                             @if (count(Helper::shipping()) > 0 && Helper::cartCount() > 0)
                                                 <select name="shipping" class="nice-select" id="shipping-select" required>
                                                     <option value="" disabled>Select your address</option>
@@ -146,8 +146,8 @@
                                         </li>
 
                                         @if (session('coupon'))
-                                            <li class="coupon_price" data-price="{{ session('coupon')['value'] }}">You
-                                                Save<span
+                                            <li class="coupon_price" data-price="{{ session('coupon')['value'] }}">
+                                                {{ __('main.you_save') }}<span
                                                     class="currency_convert">{{ number_format(session('coupon')['value'], 2) }}</span>
                                             </li>
                                         @endif
@@ -174,13 +174,13 @@
                             <!--/ End Order Widget -->
                             <!-- Order Widget -->
                             <div class="single-widget">
-                                <h2>Payments</h2>
+                                <h2>{{ __('main.payments') }}</h2>
                                 <div class="content">
                                     <div class="checkbox">
                                         <form-group>
                                             {{-- <input name="payment_method"  type="radio" value="cod"> <label> Cash On Delivery</label><br> --}}
                                             {{-- <input name="payment_method"  type="radio" value="paypal"> <label> PayPal</label> --}}
-                                            <h6>No Rekening: 1028131937</h6>
+                                            <h6>{{ __('main.account_number') }}: 1028131937</h6>
                                         </form-group>
                                     </div>
                                 </div>
@@ -197,7 +197,8 @@
                             <div class="single-widget get-button">
                                 <div class="content">
                                     <div class="button">
-                                        <button type="submit" class="btn">proceed to checkout</button>
+                                        <button type="submit"
+                                            class="btn">{{ __('main.proceed_to_checkout') }}</button>
                                     </div>
                                 </div>
                             </div>

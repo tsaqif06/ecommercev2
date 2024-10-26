@@ -64,9 +64,9 @@ Route::get('/', [FrontendController::class, 'home'])->name('home');
 
 // Frontend Routes
 Route::get('/home', [FrontendController::class, 'index']);
-Route::get('/about-us', [FrontendController::class, 'aboutUs'])->name('about-us');
-Route::get('/contact', [FrontendController::class, 'contact'])->name('contact');
-Route::post('/contact/message', [MessageController::class, 'store'])->name('contact.store');
+// Route::get('/about-us', [FrontendController::class, 'aboutUs'])->name('about-us');
+// Route::get('/contact', [FrontendController::class, 'contact'])->name('contact');
+// Route::post('/contact/message', [MessageController::class, 'store'])->name('contact.store');
 Route::get('product-detail/{slug}', [FrontendController::class, 'productDetail'])->name('product-detail');
 Route::post('/product/search', [FrontendController::class, 'productSearch'])->name('product.search');
 Route::get('/product-cat/{slug}', [FrontendController::class, 'productCat'])->name('product-cat');
@@ -123,6 +123,7 @@ Route::resource('/comment', 'PostCommentController');
 // Coupon
 Route::post('/coupon-store', [CouponController::class, 'couponStore'])->name('coupon-store');
 // Payment
+Route::get('/set-payment-session/{id}', [PaymentController::class, 'setPaymentSession'])->name('set.payment.session');
 Route::get('payment', [PaymentController::class, 'payment'])->name('payment');
 Route::get('payment/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel');
 Route::post('payment/success', [PaymentController::class, 'success'])->name('payment.success');

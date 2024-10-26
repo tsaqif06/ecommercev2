@@ -115,4 +115,30 @@ return [
     'coupon_redeem' => 'Tukar Kupon',
     'enter_your_coupon' => 'Masukkan Kupon Anda',
     'you_might_like' => 'Anda Mungkin Suka',
+
+    // pembayaran
+    'make_your_checkout' => 'Lakukan Pembayaran Anda di Sini',
+    'register_to_checkout' => 'Silakan daftar untuk proses pembayaran yang lebih cepat',
+    'first_name' => 'Nama Depan',
+    'last_name' => 'Nama Belakang',
+    'email_address' => 'Alamat Email',
+    'phone_number' => 'Nomor Telepon',
+    'country' => 'Negara',
+    'address_line' => 'Alamat Baris',
+    'postal_code' => 'Kode Pos',
+    'cart_totals' => 'TOTAL KERANJANG',
+    'shipping_cost' => 'Biaya Pengiriman',
+    'total' => 'Total',
+    'payments' => 'Pembayaran',
+    'proceed_to_checkout' => 'Lanjutkan ke Pembayaran',
+
+    // pembayaran
+    'payment_details' => 'Detail Pembayaran',
+    'order_summary' => 'Ringkasan Pesanan',
+    'shipping_type' => 'Jenis Pengiriman',
+    'coupon_discount' => 'Diskon Kupon',
+    'account_number' => 'Nomor Rekening',
+    'upload_proof_payment' => 'Unggah bukti pembayaran',
+    'choose_file' => 'Pilih File',
+    'cancel' => 'Batal',
 ];

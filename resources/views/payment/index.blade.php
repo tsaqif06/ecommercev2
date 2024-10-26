@@ -7,10 +7,10 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">Payment Details {{ $invoice_id }}</div>
+                    <div class="card-header">{{ __('main.payment_details') }} {{ $invoice_id }}</div>
 
                     <div class="card-body">
-                        <h5>Order Summary</h5>
+                        <h5>{{ __('main.order_summary') }}</h5>
                         <ul class="list-group mb-3">
                             @foreach ($items as $item)
                                 <li class="list-group-item d-flex justify-content-between lh-condensed">
@@ -23,14 +23,14 @@
                             @endforeach
                             <li class="list-group-item d-flex justify-content-between lh-condensed">
                                 <div>
-                                    <h6 class="my-0">Shipping Type : </h6>
+                                    <h6 class="my-0">{{ __('main.shipping_type') }} : </h6>
                                     <small class="text-muted">{{ $shipping_name }}</small>
                                 </div>
                                 <span class="text-muted currency_convert">{{ $shipping_price }}</span>
                             </li>
                             @if (isset($shipping_discount))
                                 <li class="list-group-item d-flex justify-content-between">
-                                    <span>Coupon Discount</span>
+                                    <span>{{ __('main.coupon_discount') }}</span>
                                     <span class="text-success currency_convert">{{ $shipping_discount }}</span>
                                 </li>
                             @endif
@@ -39,7 +39,7 @@
                                 <strong class="currency_convert">{{ $total }}</strong>
                             </li>
                             <li class="list-group-item d-flex justify-content-between">
-                                <span>Nomor Rekening</span>
+                                <span>{{ __('main.account_number') }}</span>
                                 <strong>{{ $no_rekening }}</strong>
                             </li>
                         </ul>
@@ -48,12 +48,13 @@
                             @csrf
                             <input type="hidden" value="{{ $order_id }}" id="order_id" name="order_id">
                             <div class="form-group">
-                                <label for="proof_payment" style="cursor: pointer">Upload Bukti Pembayaran:</label>
+                                <label for="proof_payment"
+                                    style="cursor: pointer">{{ __('main.upload_proof_payment') }}:</label>
                                 <div class="custom-file">
                                     <input type="file" class="custom-file-input" id="proof_payment" name="proof_payment"
                                         accept="image/*" capture="camera" onchange="previewImage(this)">
-                                    <label class="custom-file-label" for="proof_payment" style="cursor: pointer">Pilih
-                                        file</label>
+                                    <label class="custom-file-label" for="proof_payment"
+                                        style="cursor: pointer">{{ __('main.choose_file') }}</label>
                                 </div>
                                 @error('proof_payment')
                                     <div class="text-danger">{{ $message }}</div>
@@ -66,8 +67,8 @@
                             </div>
 
                             <div class="form-group">
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                                <button type="button" class="btn btn-secondary" id="cancel-button">Cancel</button>
+                                <button type="submit" class="btn btn-primary">{{ __('main.submit') }}</button>
+                                <button type="button" class="btn btn-secondary" id="cancel-button">{{ __('main.cancel') }}</button>
                             </div>
                         </form>
                     </div>
