@@ -1,6 +1,6 @@
 @extends('frontend.layouts.master')
 
-@section('title', 'E-SHOP || PAYMENT')
+@section('title', 'Darcey || PAYMENT')
 
 @section('main-content')
     <div class="container mt-5">

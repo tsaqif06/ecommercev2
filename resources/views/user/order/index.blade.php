@@ -1,6 +1,6 @@
 @extends('frontend.layouts.master')
 
-@section('title', 'E-SHOP || PAYMENT')
+@section('title', 'Darcey || PAYMENT')
 
 @section('main-content')
     @if (!Auth::check())
@@ -110,9 +110,9 @@
             </div>
         </div>
     @else
-        <div class="container profile-container" style="margin: 150px 0 50px">
+        <div class="container profile-container" style="margin: 150px 0 70px 12px">
             <div class="row w-100">
-                <div class="col-md-12">
+                <div class="col-12">
                     <div class="profile-card">
                         <div class="row g-0">
                             <!-- Profile Display Column -->
@@ -204,7 +204,7 @@
     <div class="card mt-2" style="width: 100%;">
         <div class="card-body">
             <div class="d-flex justify-content-between">
-                <h2 class="card-title">
+                <h5 class="card-title">
                     @php
                         $orderCount = 0;
 
@@ -213,7 +213,7 @@
                         }
                     @endphp
                     {{ __('main.my_orders') }} ({{ $orderCount }})
-                </h2>
+                </h5>
                 <form id="order-filter-form" method="GET" action="{{ route('user.order.index') }}"
                     class="form-inline">
                     <select name="status" class="form-control mr-2" id="status-filterorder">

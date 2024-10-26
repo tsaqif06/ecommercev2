@@ -7,7 +7,9 @@
         <div class="container">
             <div class="row my-2">
                 <div class="col text-center">
-                    <h6 class="text-white">Hecate Official Website</h6>
+                    <a href="{{ route('home') }}" style="cursor: pointer">
+                        <h6 class="text-white">Darcey.ind</h6>
+                    </a>
                 </div>
             </div>
         </div>
@@ -41,7 +43,7 @@
                     style="color: #121212; font-size: 26px; cursor: pointer;"></i>
                 <a href="{{ route('home') }}">
                     <img src="{{ asset('storage/logo.webp') }}" class="flex-0-0 object-contain"
-                        style="max-width:100%; height:44px; width:auto; cursor: pointer;" alt="Logo of Hecates.official">
+                        style="max-width:100%; height:44px; width:auto; cursor: pointer;" alt="Logo of darcey.ind">
                 </a>
             </div>
 
@@ -142,7 +144,7 @@
                     </div>
 
                     <!-- Cart Section -->
-                    <div class="sinlge-bar shopping mx-3">
+                    <div class="sinlge-bar shopping mx-3" id="cart-header">
                         <a href="{{ route('cart') }}" class="single-icon">
                             <i class="ti-bag" style="font-size: 20px"></i>
                             <span class="total-count">{{ Helper::cartCount() }}</span>
@@ -739,6 +741,7 @@
         $(document).ready(function() {
             // Toggle the search container and backdrop
             $('.searchToggle').on('click', function() {
+                $('#cart-header').toggle();
                 $('#searchContainer').toggle();
                 $('#backdrop').toggle(); // Show/hide the backdrop
                 $('#searchInput').focus(); // Focus on the search input
@@ -746,6 +749,7 @@
 
             // Hide search and backdrop when clicking outside the search area
             $('#backdrop').on('click', function() {
+                $('#cart-header').toggle();
                 $('#searchContainer').hide();
                 $('#backdrop').hide();
             });

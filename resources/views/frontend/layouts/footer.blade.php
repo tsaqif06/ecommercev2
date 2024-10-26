@@ -8,8 +8,9 @@
                     <!-- Single Widget -->
                     <div class="single-footer about">
                         <div class="logo">
-                            <a href="{{ route('home') }}"><img src="{{ asset('backend/img/logo2.png') }}" alt="#"
-                                    style="cursor: pointer"></a>
+                            <a href="{{ route('home') }}">
+                                <h1 style="color: white;">Darcey.ind</h1>
+                            </a>
                         </div>
                         @php
                             $settings = DB::table('settings')->get();

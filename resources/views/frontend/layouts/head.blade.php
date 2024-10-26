@@ -1,5 +1,6 @@
 <!-- Meta Tag -->
 @yield('meta')
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Title Tag  -->
 <title>@yield('title')</title>
 <!-- Favicon -->
@@ -95,7 +96,7 @@
         top: 0;
         left: 0;
         height: 100%;
-        width: 400px;
+        width: 50wh;
         background-color: #fff;
         color: #121212;
         transition: transform 0.3s ease-in-out;
