@@ -54,6 +54,10 @@
                                                         alt="{{ $product->title }}">
                                                     <img class="hover-img" src="{{ $photo[0] }}"
                                                         alt="{{ $product->title }}">
+                                                    <span
+                                                        class="price-dec">{{ $product->discount + $product->flash_sale_discount }}%
+                                                        Off</span>
+
                                                 </a>
                                                 <div class="countdown-banner">
                                                     <span class="countdown-text">Flash Sale Ends In: </span>
@@ -80,12 +84,12 @@
                                                             $product->price -
                                                             ($product->price * $product->discount) / 100;
 
-                                                        $after_discount =
+                                                        $after_discount_flash =
                                                             $after_discount -
                                                             ($after_discount * $product->flash_sale_discount) / 100;
                                                     @endphp
                                                     <span
-                                                        class="currency_convert">{{ number_format($after_discount, 2) }}</span>
+                                                        class="currency_convert">{{ number_format($after_discount_flash, 2) }}</span>
                                                     <del style="padding-left:4%;"
                                                         class="currency_convert">{{ number_format($product->price, 2) }}</del>
                                                 </div>
@@ -157,15 +161,20 @@
                                                             alt="{{ $photo[0] }}">
                                                         <img class="hover-img" src="{{ $photo[0] }}"
                                                             alt="{{ $photo[0] }}">
-                                                        @if ($product->stock <= 0)
-                                                            <span class="out-of-stock">Sale out</span>
-                                                        @elseif($product->condition == 'new')
-                                                            <span class="new">{{ __('main.new') }}</span>
-                                                        @elseif($product->condition == 'hot')
-                                                            <span class="hot">Hot</span>
-                                                        @else
-                                                            <span class="price-dec">{{ $product->discount }}% Off</span>
-                                                        @endif
+                                                        <div class="d-flex justify-content-between">
+                                                            @if ($product->stock <= 0)
+                                                                <span class="out-of-stock">Sale out</span>
+                                                            @elseif($product->condition == 'new')
+                                                                <span class="new">{{ __('main.new') }}</span>
+                                                            @elseif($product->condition == 'hot')
+                                                                <span class="hot">Hot</span>
+                                                            {{--  @elseif($product->discount != 0.00)  --}}
+                                                            @endif
+                                                            <span class="price-dec"
+                                                                style="top: 50px;">{{ $product->discount }}%
+                                                                Off</span>
+
+                                                        </div>
                                                     </a>
                                                     <div class="button-head">
                                                         <a data-toggle="modal" data-target="#{{ $product->id }}"
@@ -364,6 +373,143 @@
             </div>
         @endforeach
     @endif
+    @foreach ($flashSaleProducts as $key => $product)
+        <div class="modal fade" id="{{ $product->id }}" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header ml-2">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                class="ti-close" aria-hidden="true"></span></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row no-gutters">
+                            <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                                <!-- Product Slider -->
+                                <div class="product-gallery">
+                                    <div class="quickview-slider-active">
+                                        @php
+                                            $photo = explode(',', $product->photo);
+                                            // dd($photo);
+                                        @endphp
+                                        @foreach ($photo as $data)
+                                            <div class="single-slider">
+                                                <img src="{{ $data }}" alt="{{ $data }}">
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                                <!-- End Product slider -->
+                            </div>
+                            <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                                <div class="quickview-content">
+                                    <h2>{{ $product->title }}</h2>
+                                    <div class="quickview-ratting-review">
+                                        <div class="quickview-ratting-wrap">
+                                            <div class="quickview-ratting">
+                                                @php
+                                                    $rate = DB::table('product_reviews')
+                                                        ->where('product_id', $product->id)
+                                                        ->avg('rate');
+                                                    $rate_count = DB::table('product_reviews')
+                                                        ->where('product_id', $product->id)
+                                                        ->count();
+                                                @endphp
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                    @if ($rate >= $i)
+                                                        <i class="yellow fa fa-star"></i>
+                                                    @else
+                                                        <i class="fa fa-star"></i>
+                                                    @endif
+                                                @endfor
+                                            </div>
+                                            <a href="#"> ({{ $rate_count }} {{ __('main.cust_review') }})</a>
+                                        </div>
+                                        <div class="quickview-stock">
+                                            @if ($product->stock > 0)
+                                                <span><i class="fa fa-check-circle-o"></i> {{ $product->stock }}
+                                                    {{ __('main.in_stock') }}</span>
+                                            @else
+                                                <span><i class="fa fa-times-circle-o text-danger"></i>
+                                                    {{ $product->stock }} {{ __('main.out_stock') }}</span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    @php
+                                    $after_discount =
+                                        $product->price -
+                                        ($product->price * $product->discount) / 100;
+
+                                    $after_discount_flash =
+                                        $after_discount -
+                                        ($after_discount * $product->flash_sale_discount) / 100;
+                                    @endphp
+                                    <div class="d-flex align-items-center">
+                                        <h3 class="mr-2">
+                                            <small>
+                                                <del
+                                                    class="text-muted currency_convert">{{ number_format($product->price, 2) }}</del>
+                                            </small>
+                                        </h3>
+                                        <h3 class="currency_convert">
+                                            ${{ number_format($after_discount_flash, 2) }}
+                                        </h3>
+                                    </div>
+                                    <div class="quickview-peragraph">
+                                        <p>{!! html_entity_decode($product->summary) !!}</p>
+                                    </div>
+                                    @if ($product->size)
+                                        <div class="size">
+                                            <div class="row">
+                                                <div class="col-lg-6 col-12">
+                                                    <h5 class="title">{{ __('main.size') }}</h5>
+                                                    <select>
+                                                        @php
+                                                            $sizes = explode(',', $product->size);
+                                                            // dd($sizes);
+                                                        @endphp
+                                                        @foreach ($sizes as $size)
+                                                            <option>{{ $size }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
+                                    <form action="{{ route('single-add-to-cart') }}" method="POST" class="mt-4">
+                                        @csrf
+                                        <div class="quantity">
+                                            <!-- Input Order -->
+                                            <div class="input-group">
+                                                <div class="button minus">
+                                                    <button type="button" class="btn btn-primary btn-number"
+                                                        disabled="disabled" data-type="minus" data-field="quant[1]">
+                                                        <i class="ti-minus"></i>
+                                                    </button>
+                                                </div>
+                                                <input type="hidden" name="slug" value="{{ $product->slug }}">
+                                                <input type="text" name="quant[1]" class="input-number"
+                                                    data-min="1" data-max="1000" value="1">
+                                                <div class="button plus">
+                                                    <button type="button" class="btn btn-primary btn-number"
+                                                        data-type="plus" data-field="quant[1]">
+                                                        <i class="ti-plus"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <!--/ End Input Order -->
+                                        </div>
+                                        <div class="add-to-cart">
+                                            <button type="submit" class="btn">{{ __('main.add_to_cart') }}</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endforeach
     <!-- Modal end -->
 @endsection
 
@@ -471,7 +617,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
     <script>
         /*==================================================================
-                                                                                                                                                                                                            [ Isotope ]*/
+                                                                                                                                                                                                                                    [ Isotope ]*/
         var $topeContainer = $('.isotope-grid');
         var $filter = $('.filter-tope-group');
 
