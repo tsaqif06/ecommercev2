@@ -30,6 +30,9 @@ return [
     'size' => 'Ukuran',
     'see_all_products' => 'Lihat Semua Produk',
     'got_questions' => 'Ada pertanyaan? Hubungi kami 24/7',
+    'd' => 'h',
+    'h' => 'j',
+    's' => 'd',
 
     // halaman produk
     'sort_products_by' => 'Urutkan Produk Berdasarkan',

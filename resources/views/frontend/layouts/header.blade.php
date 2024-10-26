@@ -928,4 +928,37 @@
             });
         });
     </script>
+    <script>
+        $(document).ready(function() {
+            $('.countdown').each(function() {
+                var endTime = new Date($(this).data('endtime')).getTime();
+
+                var interval = setInterval(() => {
+                    var now = new Date().getTime();
+                    var timeLeft = endTime - now;
+
+                    // Menghitung waktu dalam hari, jam, menit dan detik
+                    var days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                    var hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    var minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                    var seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+                    // Tampilkan hasil di elemen
+                    $(this).find('.days').text(String(days).padStart(2, '0'));
+                    $(this).find('.hours').text(String(hours).padStart(2, '0'));
+                    $(this).find('.minutes').text(String(minutes).padStart(2, '0'));
+                    $(this).find('.seconds').text(String(seconds).padStart(2, '0'));
+
+                    // Jika waktu habis, stop countdown
+                    if (timeLeft < 0) {
+                        clearInterval(interval);
+                        $(this).find('.days').text('00');
+                        $(this).find('.hours').text('00');
+                        $(this).find('.minutes').text('00');
+                        $(this).find('.seconds').text('00');
+                    }
+                }, 1000);
+            });
+        });
+    </script>
 @endpush

@@ -30,6 +30,9 @@ return [
     'size' => 'Size',
     'see_all_products' => 'See All Products',
     'got_questions' => 'Got Question? Call us 24/7',
+    'd' => 'd',
+    'h' => 'h',
+    's' => 's',
 
     // product page
     'sort_products_by' => 'Sort Products by',

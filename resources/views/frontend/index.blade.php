@@ -62,8 +62,8 @@
                                                 <div class="countdown-banner">
                                                     <span class="countdown-text">Flash Sale Ends In: </span>
                                                     <div class="countdown" data-endtime="{{ $product->flash_sale_end }}">
-                                                        <span class="days">00</span>:<span class="hours">00</span>:<span
-                                                            class="minutes">00</span>:<span class="seconds">00</span>
+                                                        <span class="days">00</span>{{ __('main.d') }} : <span class="hours">00</span>{{ __('main.h') }} :
+                                                        <span class="minutes">00</span>m : <span class="seconds">00</span>{{ __('main.s') }}
                                                     </div>
                                                 </div>
                                                 <div class="button-head">
@@ -168,7 +168,7 @@
                                                                 <span class="new">{{ __('main.new') }}</span>
                                                             @elseif($product->condition == 'hot')
                                                                 <span class="hot">Hot</span>
-                                                            {{--  @elseif($product->discount != 0.00)  --}}
+                                                                {{--  @elseif($product->discount != 0.00)  --}}
                                                             @endif
                                                             <span class="price-dec"
                                                                 style="top: 50px;">{{ $product->discount }}%
@@ -435,13 +435,11 @@
                                         </div>
                                     </div>
                                     @php
-                                    $after_discount =
-                                        $product->price -
-                                        ($product->price * $product->discount) / 100;
+                                        $after_discount =
+                                            $product->price - ($product->price * $product->discount) / 100;
 
-                                    $after_discount_flash =
-                                        $after_discount -
-                                        ($after_discount * $product->flash_sale_discount) / 100;
+                                        $after_discount_flash =
+                                            $after_discount - ($after_discount * $product->flash_sale_discount) / 100;
                                     @endphp
                                     <div class="d-flex align-items-center">
                                         <h3 class="mr-2">
@@ -617,7 +615,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
     <script>
         /*==================================================================
-                                                                                                                                                                                                                                    [ Isotope ]*/
+                                                                                                                                                                                                                                        [ Isotope ]*/
         var $topeContainer = $('.isotope-grid');
         var $filter = $('.filter-tope-group');
 
@@ -688,38 +686,5 @@
             }
             return false
         }
-    </script>
-    <script>
-        $(document).ready(function() {
-            $('.countdown').each(function() {
-                var endTime = new Date($(this).data('endtime')).getTime();
-
-                var interval = setInterval(() => {
-                    var now = new Date().getTime();
-                    var timeLeft = endTime - now;
-
-                    // Menghitung waktu dalam hari, jam, menit dan detik
-                    var days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-                    var hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    var minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-                    var seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-
-                    // Tampilkan hasil di elemen
-                    $(this).find('.days').text(String(days).padStart(2, '0'));
-                    $(this).find('.hours').text(String(hours).padStart(2, '0'));
-                    $(this).find('.minutes').text(String(minutes).padStart(2, '0'));
-                    $(this).find('.seconds').text(String(seconds).padStart(2, '0'));
-
-                    // Jika waktu habis, stop countdown
-                    if (timeLeft < 0) {
-                        clearInterval(interval);
-                        $(this).find('.days').text('00');
-                        $(this).find('.hours').text('00');
-                        $(this).find('.minutes').text('00');
-                        $(this).find('.seconds').text('00');
-                    }
-                }, 1000);
-            });
-        });
     </script>
 @endpush

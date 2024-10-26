@@ -181,7 +181,31 @@
                                                     <img class="hover-img" src="{{ $photo[0] }}"
                                                         alt="{{ $photo[0] }}">
                                                     @if ($product->discount)
-                                                        <span class="price-dec">{{ $product->discount }} % Off</span>
+                                                        @php
+                                                            if (
+                                                                $product->flash_sale_start <= now() &&
+                                                                $product->flash_sale_end >= now()
+                                                            ) {
+                                                                $discount =
+                                                                    $product->discount + $product->flash_sale_discount;
+                                                            } else {
+                                                                $discount = $product->discount;
+                                                            }
+                                                        @endphp
+                                                        <span class="price-dec">{{ $discount }} % Off</span>
+                                                    @endif
+
+                                                    @if ($product->flash_sale_start <= now() && $product->flash_sale_end >= now())
+                                                        <div class="countdown-banner">
+                                                            <span class="countdown-text">Flash Sale Ends In: </span>
+                                                            <div class="countdown"
+                                                                data-endtime="{{ $product->flash_sale_end }}">
+                                                                <span class="days">00</span>{{ __('main.d') }} : <span
+                                                                    class="hours">00</span>{{ __('main.h') }} :
+                                                                <span class="minutes">00</span>m : <span
+                                                                    class="seconds">00</span>{{ __('main.s') }}
+                                                            </div>
+                                                        </div>
                                                     @endif
                                                 </a>
                                                 <div class="button-head">
@@ -198,9 +222,13 @@
                                                 @php
                                                     $after_discount =
                                                         $product->price - ($product->price * $product->discount) / 100;
+
+                                                    $after_discount_flash =
+                                                        $after_discount -
+                                                        ($after_discount * $product->flash_sale_discount) / 100;
                                                 @endphp
                                                 <span
-                                                    class="currency_convert">{{ number_format($after_discount, 2) }}</span>
+                                                    class="currency_convert">{{ number_format($after_discount_flash, 2) }}</span>
                                                 <del style="padding-left:4%;"
                                                     class="currency_convert">{{ number_format($product->price, 2) }}</del>
                                             </div>
@@ -310,6 +338,10 @@
                                         @php
                                             $after_discount =
                                                 $product->price - ($product->price * $product->discount) / 100;
+
+                                            $after_discount_flash =
+                                                $after_discount -
+                                                ($after_discount * $product->flash_sale_discount) / 100;
                                         @endphp
                                         <div class="d-flex align-items-center">
                                             <h3 class="mr-2">
@@ -319,7 +351,7 @@
                                                 </small>
                                             </h3>
                                             <h3 class="currency_convert">
-                                                ${{ number_format($after_discount, 2) }}
+                                                ${{ number_format($after_discount_flash, 2) }}
                                             </h3>
                                         </div>
 

@@ -379,6 +379,53 @@
         text-align: center;
     }
 
+    .countdown-banner {
+        background-color: #ff0000;
+        /* Warna merah mencolok */
+        color: #ffffff;
+        /* Warna teks putih */
+        text-align: center;
+        font-weight: bold;
+        padding: 10px 0;
+        font-size: 1.2em;
+        border-radius: 15px;
+        width: 100%;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+    }
+
+    .countdown-element {
+        background-color: #ff0000;
+        /* Warna merah mencolok */
+        color: #ffffff;
+        /* Warna teks putih */
+        text-align: center;
+        font-weight: bold;
+        padding: 10px 0;
+        font-size: 1.2em;
+        border-radius: 15px;
+        width: 100%;
+        {{--  position: absolute;  --}}
+        {{--  top: 0;
+        left: 0;  --}}
+    }
+
+    .countdown-banner .countdown,
+    .countdown-element .countdown {
+        display: inline-block;
+    }
+
+    .countdown-banner .countdown span,
+    .countdown-element .countdown span {
+        margin: 0 5px;
+    }
+
+    /* Styling pada countdown agar lebih proporsional */
+    .single-product .product-img {
+        position: relative;
+    }
+
     @media (min-width: 992px) {
         .footer-info {
             margin-left: -120px;

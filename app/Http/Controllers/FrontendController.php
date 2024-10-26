@@ -70,29 +70,26 @@ class FrontendController extends Controller
     public function productDetail($slug)
     {
         $product_detail = Product::getProductBySlug($slug);
-        // dd($product_detail);
-        return view('frontend.pages.product_detail')->with('product_detail', $product_detail);
+
+        return view('frontend.pages.product_detail', compact('product_detail'));
     }
+
 
     public function productGrids()
     {
         $products = Product::query();
 
-        // Menangani kategori
+        // Filter kategori, brand, harga, dan pengurutan (sesuai kode awal Anda)
         if (!empty($_GET['category'])) {
             $slug = explode(',', $_GET['category']);
             $cat_ids = Category::select('id')->whereIn('slug', $slug)->pluck('id')->toArray();
             $products->whereIn('cat_id', $cat_ids);
         }
-
-        // Menangani brand
         if (!empty($_GET['brand'])) {
             $slugs = explode(',', $_GET['brand']);
             $brand_ids = Brand::select('id')->whereIn('slug', $slugs)->pluck('id')->toArray();
             $products->whereIn('brand_id', $brand_ids);
         }
-
-        // Menangani sorting berdasarkan tombol
         if (!empty($_GET['sortBy'])) {
             switch ($_GET['sortBy']) {
                 case 'default':
@@ -114,25 +111,28 @@ class FrontendController extends Controller
                     break;
             }
         }
-
-        // Menangani rentang harga
         if (!empty($_GET['price'])) {
             $price = explode('-', $_GET['price']);
             $products->whereBetween('price', $price);
         }
 
-        // Mengambil produk terbaru
+        // Produk terbaru untuk sidebar
         $recent_products = Product::where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get();
 
+        // Flash sale condition and ordering
+        $products->orderByRaw("
+            CASE
+                WHEN flash_sale_start <= now() AND flash_sale_end >= now() THEN 1
+                ELSE 2
+            END
+        ")->orderBy('flash_sale_end', 'ASC');
+
         // Pagination
-        if (!empty($_GET['show'])) {
-            $products = $products->where('status', 'active')->paginate($_GET['show']);
-        } else {
-            $products = $products->where('status', 'active')->paginate(9);
-        }
+        $products = !empty($_GET['show']) ? $products->where('status', 'active')->paginate($_GET['show']) : $products->where('status', 'active')->paginate(9);
 
         return view('frontend.pages.product-grids')->with('products', $products)->with('recent_products', $recent_products);
     }
+
 
     public function productLists()
     {
