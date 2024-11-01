@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Brand;
 use App\Models\Product;
 use App\Models\Category;
-use App\Models\Brand;
-
 use Illuminate\Support\Str;
+
+use Illuminate\Http\Request;
+use App\Models\ProductVariant;
 
 class ProductController extends Controller
 {
@@ -48,15 +49,15 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        // return $request->all();
+        // Validasi input
         $this->validate($request, [
             'title' => 'string|required',
             'summary' => 'string|required',
             'description' => 'string|nullable',
             'photo' => 'string|required',
-            'size' => 'nullable',
-            'stock' => "required|numeric",
-            'cat_id' => 'required|exists:categories,id',
+            'size' => 'array|required', // 'size' sebagai array untuk beberapa ukuran
+            'quantity' => 'array|required', // 'quantity' untuk setiap ukuran
+            'stock' => 'nullable|numeric',
             'brand_id' => 'nullable|exists:brands,id',
             'child_cat_id' => 'nullable|exists:categories,id',
             'is_featured' => 'sometimes|in:1',
@@ -74,21 +75,22 @@ class ProductController extends Controller
         }
         $data['slug'] = $slug;
         $data['is_featured'] = $request->input('is_featured', 0);
-        $size = $request->input('size');
-        if ($size) {
-            $data['size'] = implode(',', $size);
-        } else {
-            $data['size'] = '';
+
+        // Simpan data utama produk
+        $product = Product::create($data);
+
+        // Simpan ukuran dan quantity
+        $sizes = $request->input('size', []);
+        $quantities = $request->input('quantity', []);
+        foreach ($sizes as $index => $size) {
+            ProductVariant::create([
+                'product_id' => $product->id,
+                'size' => $size,
+                'quantity' => $quantities[$index] ?? 0,
+            ]);
         }
-        // return $size;
-        // return $data;
-        $status = Product::create($data);
-        if ($status) {
-            request()->session()->flash('success', 'Product Successfully added');
-        } else {
-            request()->session()->flash('error', 'Please try again!!');
-        }
-        return redirect()->route('product.index');
+
+        return redirect()->route('product.index')->with('success', 'Product Successfully added with sizes and quantities');
     }
 
     /**
@@ -134,17 +136,19 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
         $product = Product::findOrFail($id);
+
+        // Validasi input
         $this->validate($request, [
             'title' => 'string|required',
             'summary' => 'string|required',
             'description' => 'string|nullable',
             'photo' => 'string|required',
-            'size' => 'nullable',
-            'stock' => "required|numeric",
-            'cat_id' => 'required|exists:categories,id',
+            'size' => 'array|required', // 'size' sebagai array
+            'quantity' => 'array|required', // 'quantity' untuk setiap ukuran
+            'stock' => 'nullable|numeric',
+            'brand_id' => 'nullable|exists:brands,id',
             'child_cat_id' => 'nullable|exists:categories,id',
             'is_featured' => 'sometimes|in:1',
-            'brand_id' => 'nullable|exists:brands,id',
             'status' => 'required|in:active,inactive',
             'condition' => 'required|in:default,new,hot',
             'price' => 'required|numeric',
@@ -153,21 +157,25 @@ class ProductController extends Controller
 
         $data = $request->all();
         $data['is_featured'] = $request->input('is_featured', 0);
-        $size = $request->input('size');
-        if ($size) {
-            $data['size'] = implode(',', $size);
-        } else {
-            $data['size'] = '';
+
+        // Update produk utama
+        $product->fill($data)->save();
+
+        // Hapus semua variant lama untuk produk ini, lalu simpan yang baru
+        ProductVariant::where('product_id', $id)->delete();
+        $sizes = $request->input('size', []);
+        $quantities = $request->input('quantity', []);
+        foreach ($sizes as $index => $size) {
+            ProductVariant::create([
+                'product_id' => $product->id,
+                'size' => $size,
+                'quantity' => $quantities[$index] ?? 0,
+            ]);
         }
-        // return $data;
-        $status = $product->fill($data)->save();
-        if ($status) {
-            request()->session()->flash('success', 'Product Successfully updated');
-        } else {
-            request()->session()->flash('error', 'Please try again!!');
-        }
-        return redirect()->route('product.index');
+
+        return redirect()->route('product.index')->with('success', 'Product successfully updated with sizes and quantities');
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -178,6 +186,11 @@ class ProductController extends Controller
     public function destroy($id)
     {
         $product = Product::findOrFail($id);
+
+        // Hapus semua variant terkait produk
+        ProductVariant::where('product_id', $product->id)->delete();
+
+        // Hapus produk utama
         $status = $product->delete();
 
         if ($status) {

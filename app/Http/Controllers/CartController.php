@@ -170,6 +170,7 @@ class CartController extends Controller
                         request()->session()->flash('error', 'Out of stock');
                         return back();
                     }
+
                     $cart->quantity = ($cart->product->stock > $quant) ? $quant  : $cart->product->stock;
                     // return $cart;
 

@@ -28,6 +28,11 @@ class Product extends Model
         'flash_sale_discount',
     ];
 
+    public function variants()
+    {
+        return $this->hasMany(ProductVariant::class);
+    }
+
     public function cat_info()
     {
         return $this->hasOne('App\Models\Category', 'id', 'cat_id');

@@ -180,7 +180,7 @@
                                         <form-group>
                                             {{-- <input name="payment_method"  type="radio" value="cod"> <label> Cash On Delivery</label><br> --}}
                                             {{-- <input name="payment_method"  type="radio" value="paypal"> <label> PayPal</label> --}}
-                                            <h6>{{ __('main.account_number') }}: 1028131937</h6>
+                                            <h6>{{ __('main.account_number') }}: BCA 1230775407 (AN OKTAVIAN BAGAS) </h6>
                                         </form-group>
                                     </div>
                                 </div>
