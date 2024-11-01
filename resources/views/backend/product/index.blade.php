@@ -58,45 +58,45 @@
                             </tr>
                         </tfoot>
                         <tbody>
-
                             @foreach ($products as $product)
                                 @php
                                     $sub_cat_info = DB::table('categories')
                                         ->select('title')
                                         ->where('id', $product->child_cat_id)
-                                        ->get();
-                                    // dd($sub_cat_info);
+                                        ->first(); // use first() instead of get() for a single record
                                     $brands = DB::table('brands')
                                         ->select('title')
                                         ->where('id', $product->brand_id)
-                                        ->get();
+                                        ->first(); // use first() instead of get() for a single record
+
+                                    // Get all variants for the product
+                                    $variants = $product->variants; // Assuming you've loaded this relationship
+$sizes = $variants->pluck('size')->join(', '); // Get all sizes as a comma-separated string
+$totalStock = $variants->sum('quantity'); // Sum the quantity for total stock
                                 @endphp
                                 <tr>
                                     <td>{{ $product->id }}</td>
                                     <td>{{ $product->title }}</td>
                                     <td>{{ $product->cat_info['title'] ?? '' }}
-                                        <sub>
-                                            {{ $product->sub_cat_info->title ?? '' }}
-                                        </sub>
+                                        <sub>{{ $sub_cat_info->title ?? '' }}</sub>
                                     </td>
                                     <td>{{ $product->is_featured == 1 ? 'Yes' : 'No' }}</td>
-                                    <td>Rs. {{ $product->price }} /-</td>
-                                    <td> {{ $product->discount }}% OFF</td>
-                                    <td>{{ $product->size }}</td>
+                                    <td>${{ $product->price }}</td>
+                                    <td>{{ $product->discount }}% OFF</td>
+                                    <td>{{ $sizes }}</td> <!-- Display sizes here -->
                                     <td>{{ $product->condition }}</td>
-                                    <td> {{ ucfirst($product->brand->title) }}</td>
+                                    <td>{{ ucfirst($brands->title ?? '') }}</td> <!-- Changed to use first() -->
                                     <td>
-                                        @if ($product->stock > 0)
-                                            <span class="badge badge-primary">{{ $product->stock }}</span>
+                                        @if ($totalStock > 0)
+                                            <span class="badge badge-primary">{{ $totalStock }}</span>
                                         @else
-                                            <span class="badge badge-danger">{{ $product->stock }}</span>
+                                            <span class="badge badge-danger">{{ $totalStock }}</span>
                                         @endif
                                     </td>
                                     <td>
                                         @if ($product->photo)
                                             @php
                                                 $photo = explode(',', $product->photo);
-                                                // dd($photo);
                                             @endphp
                                             <img src="{{ $photo[0] }}" class="img-fluid zoom" style="max-width:80px"
                                                 alt="{{ $product->photo }}">
