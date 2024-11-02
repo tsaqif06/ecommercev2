@@ -180,7 +180,7 @@
                                         <form-group>
                                             {{-- <input name="payment_method"  type="radio" value="cod"> <label> Cash On Delivery</label><br> --}}
                                             {{-- <input name="payment_method"  type="radio" value="paypal"> <label> PayPal</label> --}}
-                                            <h6>{{ __('main.account_number') }}: BCA 1230775407 (AN OKTAVIAN BAGAS) </h6>
+                                            <h6>{{ __('main.account_number') }}: {{ env('NO_REKENING') }} (BCA) </h6>
                                         </form-group>
                                     </div>
                                 </div>
@@ -189,7 +189,8 @@
                             <!-- Payment Method Widget -->
                             <div class="single-widget payement">
                                 <div class="content">
-                                    <img src="{{ 'backend/img/payment-method.png' }}" alt="#">
+                                    {{--  <img src="{{ 'backend/img/payment-method.png' }}" alt="#">  --}}
+                                    <img src="{{ 'backend/img/Bank_Central_Asia.svg' }}" alt="Logo BCA" width="80px">
                                 </div>
                             </div>
                             <!--/ End Payment Method Widget -->

@@ -180,8 +180,14 @@
                                                         <img class="hover-img" src="{{ $photo[0] }}"
                                                             alt="{{ $photo[0] }}">
                                                         <div class="d-flex justify-content-between">
-                                                            @if ($product->stock <= 0)
-                                                                <span class="out-of-stock">Sale out</span>
+                                                            @php
+                                                                $variants = $product->variants;
+                                                                $sizes = $variants->pluck('size')->join(', ');
+                                                                $totalStock = $variants->sum('quantity');
+                                                            @endphp
+
+                                                            @if ($variants->isEmpty() || $totalStock <= 0)
+                                                                <span class="out-of-stock">Out of Stock</span>
                                                             @elseif($product->condition == 'new')
                                                                 <span class="new">{{ __('main.new') }}</span>
                                                             @elseif($product->condition == 'hot')
@@ -189,7 +195,7 @@
                                                                 {{--  @elseif($product->discount != 0.00)  --}}
                                                             @endif
                                                             <span class="price-dec"
-                                                                style="top: 50px;">{{ $product->discount }}%
+                                                                @if ($product->condition != 'default') style="top: 50px;" @endif>{{ $product->discount }}%
                                                                 Off</span>
 
                                                         </div>
@@ -309,12 +315,17 @@
                                                 <a href="#"> ({{ $rate_count }} {{ __('main.cust_review') }})</a>
                                             </div>
                                             <div class="quickview-stock">
-                                                @if ($product->stock > 0)
-                                                    <span><i class="fa fa-check-circle-o"></i> {{ $product->stock }}
+                                                @php
+                                                    $variants = $product->variants;
+                                                    $sizes = $variants->pluck('size')->join(', ');
+                                                    $totalStock = $variants->sum('quantity');
+                                                @endphp
+                                                @if ($totalStock > 0)
+                                                    <span><i class="fa fa-check-circle-o"></i> {{ $totalStock }}
                                                         {{ __('main.in_stock') }}</span>
                                                 @else
                                                     <span><i class="fa fa-times-circle-o text-danger"></i>
-                                                        {{ $product->stock }} {{ __('main.out_stock') }}</span>
+                                                        {{ __('main.out_stock') }}</span>
                                                 @endif
                                             </div>
                                         </div>
@@ -336,26 +347,24 @@
                                         <div class="quickview-peragraph">
                                             <p>{!! html_entity_decode($product->summary) !!}</p>
                                         </div>
-                                        @if ($product->size)
+
+                                        <form action="{{ route('single-add-to-cart') }}" method="POST" class="mt-4">
+                                            @csrf
                                             <div class="size">
                                                 <div class="row">
                                                     <div class="col-lg-6 col-12">
                                                         <h5 class="title">{{ __('main.size') }}</h5>
-                                                        <select>
-                                                            @php
-                                                                $sizes = explode(',', $product->size);
-                                                                // dd($sizes);
-                                                            @endphp
-                                                            @foreach ($sizes as $size)
-                                                                <option>{{ $size }}</option>
+                                                        <select class="size-select" name="size"
+                                                            data-product-id="{{ $product->id }}">
+                                                            @foreach ($variants as $variant)
+                                                                <option value="{{ $variant->size }}">
+                                                                    {{ $variant->size }}, Stock : {{ $variant->quantity }}
+                                                                </option>
                                                             @endforeach
                                                         </select>
                                                     </div>
                                                 </div>
                                             </div>
-                                        @endif
-                                        <form action="{{ route('single-add-to-cart') }}" method="POST" class="mt-4">
-                                            @csrf
                                             <div class="quantity">
                                                 <!-- Input Order -->
                                                 <div class="input-group">
@@ -443,7 +452,12 @@
                                             <a href="#"> ({{ $rate_count }} {{ __('main.cust_review') }})</a>
                                         </div>
                                         <div class="quickview-stock">
-                                            @if ($product->stock > 0)
+                                            @php
+                                                $variants = $product->variants;
+                                                $sizes = $variants->pluck('size')->join(', ');
+                                                $totalStock = $variants->sum('quantity');
+                                            @endphp
+                                            @if ($totalStock > 0)
                                                 <span><i class="fa fa-check-circle-o"></i> {{ $product->stock }}
                                                     {{ __('main.in_stock') }}</span>
                                             @else
@@ -478,26 +492,23 @@
                                     <div class="quickview-peragraph">
                                         <p>{!! html_entity_decode($product->summary) !!}</p>
                                     </div>
-                                    @if ($product->size)
+                                    <form action="{{ route('single-add-to-cart') }}" method="POST" class="mt-4">
+                                        @csrf
                                         <div class="size">
                                             <div class="row">
                                                 <div class="col-lg-6 col-12">
                                                     <h5 class="title">{{ __('main.size') }}</h5>
-                                                    <select>
-                                                        @php
-                                                            $sizes = explode(',', $product->size);
-                                                            // dd($sizes);
-                                                        @endphp
-                                                        @foreach ($sizes as $size)
-                                                            <option>{{ $size }}</option>
+                                                    <select class="size-select" name="size"
+                                                        data-product-id="{{ $product->id }}">
+                                                        @foreach ($variants as $variant)
+                                                            <option value="{{ $variant->size }}">
+                                                                {{ $variant->size }}, Stock : {{ $variant->quantity }}
+                                                            </option>
                                                         @endforeach
                                                     </select>
                                                 </div>
                                             </div>
                                         </div>
-                                    @endif
-                                    <form action="{{ route('single-add-to-cart') }}" method="POST" class="mt-4">
-                                        @csrf
                                         <div class="quantity">
                                             <!-- Input Order -->
                                             <div class="input-group">
@@ -638,7 +649,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
     <script>
         /*==================================================================
-                                                                                                                                                                                                                                                                [ Isotope ]*/
+                                                                                                                                                                                                                                                                                            [ Isotope ]*/
         var $topeContainer = $('.isotope-grid');
         var $filter = $('.filter-tope-group');
 

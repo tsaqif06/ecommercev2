@@ -37,6 +37,9 @@
                             @csrf
                             @if (!Helper::getAllProductFromCart()->isEmpty())
                                 @foreach (Helper::getAllProductFromCart() as $key => $cart)
+                                    @php
+                                        $variant = $cart->product->variants->firstWhere('size', $cart->size);
+                                    @endphp
                                     <div class="cart-item">
                                         <div class="cart-item-body d-flex">
                                             <!-- Gambar Produk di Kiri -->
@@ -45,12 +48,13 @@
 
                                             <div class="product-info ml-3"> <!-- Tambahkan margin left -->
                                                 <!-- Badge Low Stock di Atas -->
-                                                @if ($cart->product['stock'] <= 3)
+                                                @if ($variant->quantity <= 3)
                                                     <span class="badge badge-danger mb-1">{{ __('main.low_stock') }}</span>
                                                 @endif
 
                                                 <!-- Judul Produk -->
-                                                <h5 class="product-name">{{ $cart->product['title'] }}</h5>
+                                                <h5 class="product-name">{{ $cart->product['title'] }} (
+                                                    {{ $cart->size }} )</h5>
                                                 <!-- Harga Produk -->
                                                 <h6 class="product-price currency_convert">
                                                     {{ number_format($cart['price'], 0) }}</h6>
@@ -84,11 +88,11 @@
                                         </div>
 
                                         <!-- Peringatan Stok Rendah di Bawah -->
-                                        @if ($cart->product['stock'] <= 3)
+                                        @if ($variant->quantity <= 3)
                                             <div class="low-stock-alert mt-2" style="border-radius: 5px; padding: 20px;">
                                                 <!-- Tambahkan margin top -->
                                                 <h6 style="text-align: left; font-weight: bold;">{{ __('main.only') }}
-                                                    {{ $cart->product['stock'] }} {{ __('main.stock_left') }}</h6>
+                                                    {{ $variant->quantity }} {{ __('main.stock_left') }}</h6>
                                             </div>
                                         @endif
                                     </div>

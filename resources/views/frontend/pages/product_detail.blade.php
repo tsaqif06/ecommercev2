@@ -118,39 +118,27 @@
                                     <p class="description" style="margin-top: -40px;">{!! $product_detail->summary !!}</p>
                                 </div>
                                 <!--/ End Description -->
-                                <!-- Color -->
-                                {{-- <div class="color">
-												<h4>Available Options <span>Color</span></h4>
-												<ul>
-													<li><a href="#" class="one"><i class="ti-check"></i></a></li>
-													<li><a href="#" class="two"><i class="ti-check"></i></a></li>
-													<li><a href="#" class="three"><i class="ti-check"></i></a></li>
-													<li><a href="#" class="four"><i class="ti-check"></i></a></li>
-												</ul>
-											</div> --}}
-                                <!--/ End Color -->
-                                <!-- Size -->
-                                @if ($product_detail->size)
-                                    <div class="size mt-4">
-                                        <h4>{{ __('main.size') }}</h4>
-                                        <ul>
-                                            @php
-                                                $sizes = explode(',', $product_detail->size);
-                                                // dd($sizes);
-                                            @endphp
-                                            @foreach ($sizes as $size)
-                                                <li><a href="#" class="one">{{ $size }}</a></li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
-                                @endif
-                                <!--/ End Size -->
                                 <!-- Product Buy -->
-                                <div class="product-buy">
-                                    <form action="{{ route('single-add-to-cart') }}" method="POST">
-                                        @csrf
+                                @php
+                                    $variants = $product_detail->variants;
+                                    $sizes = $variants->pluck('size')->join(', ');
+                                    $totalStock = $variants->sum('quantity');
+                                @endphp
+                                <form action="{{ route('single-add-to-cart') }}" method="POST" class="mt-4">
+                                    @csrf
+                                    <div class="size">
+                                        {{--  <h5 class="title">{{ __('main.size') }}</h5>  --}}
+                                        <select class="size-select" name="size"
+                                            data-product-id="{{ $product_detail->id }}">
+                                            @foreach ($variants as $variant)
+                                                <option value="{{ $variant->size }}">
+                                                    {{ $variant->size }}, Stock : {{ $variant->quantity }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="product-buy mt-2">
                                         <div class="quantity">
-                                            <h6>{{ __('main.quantity') }} :</h6>
                                             <!-- Input Order -->
                                             <div class="input-group">
                                                 <div class="button minus">
@@ -161,7 +149,7 @@
                                                 </div>
                                                 <input type="hidden" name="slug" value="{{ $product_detail->slug }}">
                                                 <input type="text" name="quant[1]" class="input-number" data-min="1"
-                                                    data-max="1000" value="1" id="quantity">
+                                                    data-max="1000" value="1">
                                                 <div class="button plus">
                                                     <button type="button" class="btn btn-primary btn-number"
                                                         data-type="plus" data-field="quant[1]">
@@ -171,216 +159,216 @@
                                             </div>
                                             <!--/ End Input Order -->
                                         </div>
-                                        <div class="add-to-cart mt-4">
+                                        <div class="add-to-cart">
                                             <button type="submit" class="btn">{{ __('main.add_to_cart') }}</button>
                                         </div>
-                                    </form>
+                                </form>
 
-                                    <p class="cat">{{ __('main.category') }} :<a
-                                            href="{{ route('product-cat', $product_detail->cat_info['slug']) }}">{{ $product_detail->cat_info['title'] }}</a>
+                                <p class="cat">{{ __('main.category') }} :<a
+                                        href="{{ route('product-cat', $product_detail->cat_info['slug']) }}">{{ $product_detail->cat_info['title'] }}</a>
+                                </p>
+                                @if ($product_detail->sub_cat_info)
+                                    <p class="cat mt-1">Sub {{ __('main.category') }} :<a
+                                            href="{{ route('product-sub-cat', [$product_detail->cat_info['slug'], $product_detail->sub_cat_info['slug']]) }}">{{ $product_detail->sub_cat_info['title'] }}</a>
                                     </p>
-                                    @if ($product_detail->sub_cat_info)
-                                        <p class="cat mt-1">Sub {{ __('main.category') }} :<a
-                                                href="{{ route('product-sub-cat', [$product_detail->cat_info['slug'], $product_detail->sub_cat_info['slug']]) }}">{{ $product_detail->sub_cat_info['title'] }}</a>
-                                        </p>
+                                @endif
+                                <p class="availability">{{ __('main.stock') }} : @if ($product_detail->stock > 0)
+                                        <span class="badge badge-success">{{ $product_detail->stock }}</span>
+                                    @else
+                                        <span class="badge badge-danger">{{ $product_detail->stock }}</span>
                                     @endif
-                                    <p class="availability">{{ __('main.stock') }} : @if ($product_detail->stock > 0)
-                                            <span class="badge badge-success">{{ $product_detail->stock }}</span>
-                                        @else
-                                            <span class="badge badge-danger">{{ $product_detail->stock }}</span>
-                                        @endif
-                                    </p>
-                                </div>
-                                <!--/ End Product Buy -->
+                                </p>
                             </div>
+                            <!--/ End Product Buy -->
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="product-info">
-                                <div class="nav-main">
-                                    <!-- Tab Nav -->
-                                    <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                        <li class="nav-item"><a class="nav-link active" data-toggle="tab"
-                                                href="#description" role="tab">{{ __('main.description') }}</a></li>
-                                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#reviews"
-                                                role="tab">{{ __('main.review') }}</a></li>
-                                    </ul>
-                                    <!--/ End Tab Nav -->
-                                </div>
-                                <div class="tab-content" id="myTabContent">
-                                    <!-- Description Tab -->
-                                    <div class="tab-pane fade show active" id="description" role="tabpanel">
-                                        <div class="tab-single">
-                                            <div class="row">
-                                                <div class="col-12">
-                                                    <div class="single-des">
-                                                        <p>{!! $product_detail->description !!}</p>
-                                                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="product-info">
+                            <div class="nav-main">
+                                <!-- Tab Nav -->
+                                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                    <li class="nav-item"><a class="nav-link active" data-toggle="tab"
+                                            href="#description" role="tab">{{ __('main.description') }}</a></li>
+                                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#reviews"
+                                            role="tab">{{ __('main.review') }}</a></li>
+                                </ul>
+                                <!--/ End Tab Nav -->
+                            </div>
+                            <div class="tab-content" id="myTabContent">
+                                <!-- Description Tab -->
+                                <div class="tab-pane fade show active" id="description" role="tabpanel">
+                                    <div class="tab-single">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="single-des">
+                                                    <p>{!! $product_detail->description !!}</p>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <!--/ End Description Tab -->
-                                    <!-- Reviews Tab -->
-                                    <div class="tab-pane fade" id="reviews" role="tabpanel">
-                                        <div class="tab-single review-panel">
-                                            <div class="row">
-                                                <div class="col-12">
+                                </div>
+                                <!--/ End Description Tab -->
+                                <!-- Reviews Tab -->
+                                <div class="tab-pane fade" id="reviews" role="tabpanel">
+                                    <div class="tab-single review-panel">
+                                        <div class="row">
+                                            <div class="col-12">
 
-                                                    <!-- Review -->
-                                                    <div class="comment-review">
-                                                        <div class="add-review">
-                                                            <h5>{{ __('main.add_review') }}</h5>
-                                                            <p>{{ __('main.your_email_will_not') }}</p>
-                                                        </div>
-                                                        <h4>{{ __('main.your_rating') }} <span
-                                                                class="text-danger">*</span></h4>
-                                                        <div class="review-inner">
-                                                            <!-- Form -->
-                                                            @auth
-                                                                <form class="form" method="post"
-                                                                    action="{{ route('review.store', $product_detail->slug) }}">
-                                                                    @csrf
-                                                                    <div class="row">
-                                                                        <div class="col-lg-12 col-12">
-                                                                            <div class="rating_box">
-                                                                                <div class="star-rating">
-                                                                                    <div class="star-rating__wrap">
-                                                                                        <input class="star-rating__input"
-                                                                                            id="star-rating-5" type="radio"
-                                                                                            name="rate" value="5">
-                                                                                        <label
-                                                                                            class="star-rating__ico fa fa-star-o"
-                                                                                            for="star-rating-5"
-                                                                                            title="5 out of 5 stars"></label>
-                                                                                        <input class="star-rating__input"
-                                                                                            id="star-rating-4" type="radio"
-                                                                                            name="rate" value="4">
-                                                                                        <label
-                                                                                            class="star-rating__ico fa fa-star-o"
-                                                                                            for="star-rating-4"
-                                                                                            title="4 out of 5 stars"></label>
-                                                                                        <input class="star-rating__input"
-                                                                                            id="star-rating-3" type="radio"
-                                                                                            name="rate" value="3">
-                                                                                        <label
-                                                                                            class="star-rating__ico fa fa-star-o"
-                                                                                            for="star-rating-3"
-                                                                                            title="3 out of 5 stars"></label>
-                                                                                        <input class="star-rating__input"
-                                                                                            id="star-rating-2" type="radio"
-                                                                                            name="rate" value="2">
-                                                                                        <label
-                                                                                            class="star-rating__ico fa fa-star-o"
-                                                                                            for="star-rating-2"
-                                                                                            title="2 out of 5 stars"></label>
-                                                                                        <input class="star-rating__input"
-                                                                                            id="star-rating-1" type="radio"
-                                                                                            name="rate" value="1">
-                                                                                        <label
-                                                                                            class="star-rating__ico fa fa-star-o"
-                                                                                            for="star-rating-1"
-                                                                                            title="1 out of 5 stars"></label>
-                                                                                        @error('rate')
-                                                                                            <span
-                                                                                                class="text-danger">{{ $message }}</span>
-                                                                                        @enderror
-                                                                                    </div>
+                                                <!-- Review -->
+                                                <div class="comment-review">
+                                                    <div class="add-review">
+                                                        <h5>{{ __('main.add_review') }}</h5>
+                                                        <p>{{ __('main.your_email_will_not') }}</p>
+                                                    </div>
+                                                    <h4>{{ __('main.your_rating') }} <span class="text-danger">*</span>
+                                                    </h4>
+                                                    <div class="review-inner">
+                                                        <!-- Form -->
+                                                        @auth
+                                                            <form class="form" method="post"
+                                                                action="{{ route('review.store', $product_detail->slug) }}">
+                                                                @csrf
+                                                                <div class="row">
+                                                                    <div class="col-lg-12 col-12">
+                                                                        <div class="rating_box">
+                                                                            <div class="star-rating">
+                                                                                <div class="star-rating__wrap">
+                                                                                    <input class="star-rating__input"
+                                                                                        id="star-rating-5" type="radio"
+                                                                                        name="rate" value="5">
+                                                                                    <label
+                                                                                        class="star-rating__ico fa fa-star-o"
+                                                                                        for="star-rating-5"
+                                                                                        title="5 out of 5 stars"></label>
+                                                                                    <input class="star-rating__input"
+                                                                                        id="star-rating-4" type="radio"
+                                                                                        name="rate" value="4">
+                                                                                    <label
+                                                                                        class="star-rating__ico fa fa-star-o"
+                                                                                        for="star-rating-4"
+                                                                                        title="4 out of 5 stars"></label>
+                                                                                    <input class="star-rating__input"
+                                                                                        id="star-rating-3" type="radio"
+                                                                                        name="rate" value="3">
+                                                                                    <label
+                                                                                        class="star-rating__ico fa fa-star-o"
+                                                                                        for="star-rating-3"
+                                                                                        title="3 out of 5 stars"></label>
+                                                                                    <input class="star-rating__input"
+                                                                                        id="star-rating-2" type="radio"
+                                                                                        name="rate" value="2">
+                                                                                    <label
+                                                                                        class="star-rating__ico fa fa-star-o"
+                                                                                        for="star-rating-2"
+                                                                                        title="2 out of 5 stars"></label>
+                                                                                    <input class="star-rating__input"
+                                                                                        id="star-rating-1" type="radio"
+                                                                                        name="rate" value="1">
+                                                                                    <label
+                                                                                        class="star-rating__ico fa fa-star-o"
+                                                                                        for="star-rating-1"
+                                                                                        title="1 out of 5 stars"></label>
+                                                                                    @error('rate')
+                                                                                        <span
+                                                                                            class="text-danger">{{ $message }}</span>
+                                                                                    @enderror
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-                                                                        <div class="col-lg-12 col-12">
-                                                                            <div class="form-group">
-                                                                                <label>{{ __('main.write_review') }}</label>
-                                                                                <textarea name="review" rows="6" placeholder=""></textarea>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-lg-12 col-12">
-                                                                            <div class="form-group button5">
-                                                                                <button type="submit"
-                                                                                    class="btn">{{ __('main.submit') }}</button>
-                                                                            </div>
+                                                                    </div>
+                                                                    <div class="col-lg-12 col-12">
+                                                                        <div class="form-group">
+                                                                            <label>{{ __('main.write_review') }}</label>
+                                                                            <textarea name="review" rows="6" placeholder=""></textarea>
                                                                         </div>
                                                                     </div>
-                                                                </form>
-                                                            @else
-                                                                <p class="text-center p-5">
-                                                                    {{ __('main.you_need_to') }} <a
-                                                                        href="{{ route('login.form') }}"
-                                                                        style="color:rgb(54, 54, 204)">Login</a>
-                                                                    {{ __('main.or') }} <a style="color:blue"
-                                                                        href="{{ route('register.form') }}">Register</a>
+                                                                    <div class="col-lg-12 col-12">
+                                                                        <div class="form-group button5">
+                                                                            <button type="submit"
+                                                                                class="btn">{{ __('main.submit') }}</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+                                                        @else
+                                                            <p class="text-center p-5">
+                                                                {{ __('main.you_need_to') }} <a
+                                                                    href="{{ route('login.form') }}"
+                                                                    style="color:rgb(54, 54, 204)">Login</a>
+                                                                {{ __('main.or') }} <a style="color:blue"
+                                                                    href="{{ route('register.form') }}">Register</a>
 
-                                                                </p>
-                                                                <!--/ End Form -->
-                                                            @endauth
-                                                        </div>
+                                                            </p>
+                                                            <!--/ End Form -->
+                                                        @endauth
                                                     </div>
+                                                </div>
 
-                                                    <div class="ratting-main">
-                                                        <div class="avg-ratting">
-                                                            {{-- @php
+                                                <div class="ratting-main">
+                                                    <div class="avg-ratting">
+                                                        {{-- @php
 																			$rate=0;
 																			foreach($product_detail->rate as $key=>$rate){
 																				$rate +=$rate
 																			}
 																		@endphp --}}
-                                                            <h4>{{ ceil($product_detail->getReview->avg('rate')) }}
-                                                                <span>(Overall)</span>
-                                                            </h4>
-                                                            <span>{{ __('main.based_on') }}
-                                                                {{ $product_detail->getReview->count() }}
-                                                                {{ __('main.comments') }}</span>
-                                                        </div>
-                                                        @foreach ($product_detail['getReview'] as $data)
-                                                            <!-- Single Rating -->
-                                                            <div class="single-rating">
-                                                                <div class="rating-author">
-                                                                    @if ($data->user_info['photo'])
-                                                                        <img src="{{ $data->user_info['photo'] }}"
-                                                                            alt="{{ $data->user_info['photo'] }}">
-                                                                    @else
-                                                                        <img src="{{ asset('backend/img/avatar.png') }}"
-                                                                            alt="Profile.jpg">
-                                                                    @endif
-                                                                </div>
-                                                                <div class="rating-des">
-                                                                    <h6>{{ $data->user_info['name'] }}</h6>
-                                                                    <div class="ratings">
-
-                                                                        <ul class="rating">
-                                                                            @for ($i = 1; $i <= 5; $i++)
-                                                                                @if ($data->rate >= $i)
-                                                                                    <li><i class="fa fa-star"></i></li>
-                                                                                @else
-                                                                                    <li><i class="fa fa-star-o"></i></li>
-                                                                                @endif
-                                                                            @endfor
-                                                                        </ul>
-                                                                        <div class="rate-count">
-                                                                            (<span>{{ $data->rate }}</span>)</div>
-                                                                    </div>
-                                                                    <p>{{ $data->review }}</p>
-                                                                </div>
-                                                            </div>
-                                                            <!--/ End Single Rating -->
-                                                        @endforeach
+                                                        <h4>{{ ceil($product_detail->getReview->avg('rate')) }}
+                                                            <span>(Overall)</span>
+                                                        </h4>
+                                                        <span>{{ __('main.based_on') }}
+                                                            {{ $product_detail->getReview->count() }}
+                                                            {{ __('main.comments') }}</span>
                                                     </div>
+                                                    @foreach ($product_detail['getReview'] as $data)
+                                                        <!-- Single Rating -->
+                                                        <div class="single-rating">
+                                                            <div class="rating-author">
+                                                                @if ($data->user_info['photo'])
+                                                                    <img src="{{ $data->user_info['photo'] }}"
+                                                                        alt="{{ $data->user_info['photo'] }}">
+                                                                @else
+                                                                    <img src="{{ asset('backend/img/avatar.png') }}"
+                                                                        alt="Profile.jpg">
+                                                                @endif
+                                                            </div>
+                                                            <div class="rating-des">
+                                                                <h6>{{ $data->user_info['name'] }}</h6>
+                                                                <div class="ratings">
 
-                                                    <!--/ End Review -->
-
+                                                                    <ul class="rating">
+                                                                        @for ($i = 1; $i <= 5; $i++)
+                                                                            @if ($data->rate >= $i)
+                                                                                <li><i class="fa fa-star"></i></li>
+                                                                            @else
+                                                                                <li><i class="fa fa-star-o"></i></li>
+                                                                            @endif
+                                                                        @endfor
+                                                                    </ul>
+                                                                    <div class="rate-count">
+                                                                        (<span>{{ $data->rate }}</span>)</div>
+                                                                </div>
+                                                                <p>{{ $data->review }}</p>
+                                                            </div>
+                                                        </div>
+                                                        <!--/ End Single Rating -->
+                                                    @endforeach
                                                 </div>
+
+                                                <!--/ End Review -->
+
                                             </div>
                                         </div>
                                     </div>
-                                    <!--/ End Reviews Tab -->
                                 </div>
+                                <!--/ End Reviews Tab -->
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     </section>
     <!--/ End Shop Single -->

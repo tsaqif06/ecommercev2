@@ -30,7 +30,8 @@ class PaymentController extends Controller
             return [
                 'name' => $name,
                 'price' => $item['price'],
-                'desc' => 'Thank you for using PayPal',
+                'size' => $item['size'],
+                // 'desc' => 'Thank you for using PayPal',
                 'qty' => $item['quantity']
             ];
         }, $cart);

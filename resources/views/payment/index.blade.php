@@ -15,7 +15,7 @@
                             @foreach ($items as $item)
                                 <li class="list-group-item d-flex justify-content-between lh-condensed">
                                     <div>
-                                        <h6 class="my-0">{{ $item['name'] }}</h6>
+                                        <h6 class="my-0">{{ $item['name'] }} ( {{ $item['size'] }} )</h6>
                                         <small class="text-muted">Qty: {{ $item['qty'] }}</small>
                                     </div>
                                     <span class="text-muted currency_convert">{{ $item['price'] }}</span>
@@ -40,7 +40,7 @@
                             </li>
                             <li class="list-group-item d-flex justify-content-between">
                                 <span>{{ __('main.account_number') }}</span>
-                                <strong>{{ $no_rekening }}</strong>
+                                <strong>{{ $no_rekening }} (BCA)</strong>
                             </li>
                         </ul>
                         <form id="payment-form" action="{{ route('payment.success') }}" method="POST"

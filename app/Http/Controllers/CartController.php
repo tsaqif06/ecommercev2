@@ -20,48 +20,65 @@ class CartController extends Controller
 
     public function addToCart(Request $request)
     {
-        // dd($request->all());
-        if (empty($request->slug)) {
+        if (empty($request->slug) || empty($request->size)) {
             request()->session()->flash('error', 'Invalid Products');
             return back();
         }
-        $product = Product::where('slug', $request->slug)->first();
-        // return $product;
+
+        // Mengambil produk beserta variannya
+        $product = Product::with('variants')->where('slug', $request->slug)->first();
+
         if (empty($product)) {
             request()->session()->flash('error', 'Invalid Products');
             return back();
         }
 
-        $already_cart = Cart::where('user_id', auth()->user()->id)->where('order_id', null)->where('product_id', $product->id)->first();
-        // return $already_cart;
+        // Mencari item di cart dengan produk dan ukuran yang sama
+        $already_cart = Cart::where('user_id', auth()->user()->id)
+            ->where('order_id', null)
+            ->where('product_id', $product->id)
+            ->where('size', $request->size) // Menambahkan pengecekan ukuran
+            ->first();
+
         if ($already_cart) {
-            // dd($already_cart);
-            $already_cart->quantity = $already_cart->quantity + 1;
-            $already_cart->amount = $already_cart->price + $already_cart->amount;
-            // return $already_cart->quantity;
-            if ($already_cart->product->stock < $already_cart->quantity || $already_cart->product->stock <= 0) return back()->with('error', 'Stock not sufficient!.');
+            $already_cart->quantity += 1; // Menambah kuantitas
+            $already_cart->amount += $already_cart->price; // Mengupdate total amount
+
+            // Memeriksa ketersediaan stok berdasarkan varian
+            $variantQuantity = $product->variants()->where('size', $request->size)->first()->quantity;
+
+            if ($variantQuantity < $already_cart->quantity || $variantQuantity <= 0) {
+                return back()->with('error', 'Stock not sufficient!');
+            }
+
             $already_cart->save();
         } else {
-
             $cart = new Cart;
             $cart->user_id = auth()->user()->id;
             $cart->product_id = $product->id;
-            $price = ($product->price - ($product->price * $product->discount) / 100);
 
+            // Menghitung harga setelah diskon
+            $price = ($product->price - ($product->price * $product->discount) / 100);
             $discount_flash = 0;
-            if (
-                $product->flash_sale_start <= now() &&
-                $product->flash_sale_end >= now()
-            ) {
+
+            if ($product->flash_sale_start <= now() && $product->flash_sale_end >= now()) {
                 $discount_flash = $product->flash_sale_discount;
             }
+
+            $cart->size = $request->size;
             $cart->price = ($price - ($price * ($discount_flash ?? 0)) / 100);
-            $cart->quantity = 1;
+            $cart->quantity = 1; // Awalnya 1
             $cart->amount = $cart->price * $cart->quantity;
-            if ($cart->product->stock < $cart->quantity || $cart->product->stock <= 0) return back()->with('error', 'Stock not sufficient!.');
+
+            // Memeriksa ketersediaan stok berdasarkan varian
+            $variantQuantity = $product->variants()->where('size', $request->size)->first()->quantity;
+            if ($variantQuantity < $cart->quantity || $variantQuantity <= 0) {
+                return back()->with('error', 'Stock not sufficient!');
+            }
+
             $cart->save();
-            $wishlist = Wishlist::where('user_id', auth()->user()->id)->where('cart_id', null)->update(['cart_id' => $cart->id]);
         }
+
         request()->session()->flash('success', 'Product successfully added to cart');
         return back();
     }
@@ -69,57 +86,80 @@ class CartController extends Controller
     public function singleAddToCart(Request $request)
     {
         $request->validate([
-            'slug'      =>  'required',
-            'quant'      =>  'required',
+            'slug' => 'required',
+            'quant' => 'required',
+            'size' => 'required',
         ]);
-        // dd($request->quant[1]);
 
+        // Mengambil produk beserta variannya
+        $product = Product::with('variants')->where('slug', $request->slug)->first();
 
-        $product = Product::where('slug', $request->slug)->first();
-        if ($product->stock < $request->quant[1]) {
-            return back()->with('error', 'Out of stock, You can add other products.');
-        }
-        if (($request->quant[1] < 1) || empty($product)) {
+        if (empty($product)) {
             request()->session()->flash('error', 'Invalid Products');
             return back();
         }
 
-        $already_cart = Cart::where('user_id', auth()->user()->id)->where('order_id', null)->where('product_id', $product->id)->first();
+        // Memeriksa apakah kuantitas melebihi stok
+        if ($product->variants->sum('quantity') < $request->quant[1]) {
+            return back()->with('error', 'Out of stock, You can add other products.');
+        }
 
-        // return $already_cart;
+        if ($request->quant[1] < 1) {
+            request()->session()->flash('error', 'Invalid quantity');
+            return back();
+        }
+
+        // Mencari item di cart dengan produk dan ukuran yang sama
+        $already_cart = Cart::where('user_id', auth()->user()->id)
+            ->where('order_id', null)
+            ->where('product_id', $product->id)
+            ->where('size', $request->size) // Menambahkan pengecekan ukuran
+            ->first();
 
         if ($already_cart) {
-            $already_cart->quantity = $already_cart->quantity + $request->quant[1];
-            // $already_cart->price = ($product->price * $request->quant[1]) + $already_cart->price ;
-            $already_cart->amount = ($already_cart->price * $request->quant[1]) + $already_cart->amount;
+            $already_cart->quantity += $request->quant[1]; // Tambah kuantitas yang diminta
+            $already_cart->amount += ($already_cart->price * $request->quant[1]); // Update total amount
 
-            if ($already_cart->product->stock < $already_cart->quantity || $already_cart->product->stock <= 0) return back()->with('error', 'Stock not sufficient!.');
+            // Memeriksa ketersediaan stok berdasarkan varian
+            $variantQuantity = $product->variants()->where('size', $request->size)->first()->quantity;
+
+            if ($variantQuantity < $already_cart->quantity || $variantQuantity <= 0) {
+                return back()->with('error', 'Stock not sufficient!');
+            }
 
             $already_cart->save();
         } else {
-
             $cart = new Cart;
             $cart->user_id = auth()->user()->id;
             $cart->product_id = $product->id;
-            $price = ($product->price - ($product->price * $product->discount) / 100);
 
+            // Menghitung harga setelah diskon
+            $price = ($product->price - ($product->price * $product->discount) / 100);
             $discount_flash = 0;
-            if (
-                $product->flash_sale_start <= now() &&
-                $product->flash_sale_end >= now()
-            ) {
+
+            if ($product->flash_sale_start <= now() && $product->flash_sale_end >= now()) {
                 $discount_flash = $product->flash_sale_discount;
             }
+
+            $cart->size = $request->size;
             $cart->price = ($price - ($price * ($discount_flash ?? 0)) / 100);
-            $cart->quantity = $request->quant[1];
+            $cart->quantity = $request->quant[1]; // Menggunakan kuantitas dari request
             $cart->amount = ($cart->price * $request->quant[1]);
-            if ($cart->product->stock < $cart->quantity || $cart->product->stock <= 0) return back()->with('error', 'Stock not sufficient!.');
-            // return $cart;
+
+            // Memeriksa ketersediaan stok berdasarkan varian
+            $variantQuantity = $product->variants()->where('size', $request->size)->first()->quantity;
+            if ($variantQuantity < $cart->quantity || $variantQuantity <= 0) {
+                return back()->with('error', 'Stock not sufficient!');
+            }
+
             $cart->save();
         }
+
         request()->session()->flash('success', 'Product successfully added to cart.');
         return back();
     }
+
+
 
     public function cartDelete(Request $request)
     {
@@ -152,48 +192,48 @@ class CartController extends Controller
 
     public function cartUpdate(Request $request)
     {
-        // dd($request->all());
         if ($request->quant) {
             $error = array();
             $success = '';
-            // return $request->quant;
-            foreach ($request->quant as $k => $quant) {
-                // return $k;
-                $id = $request->qty_id[$k];
-                // return $id;
-                $cart = Cart::find($id);
-                // return $cart;
-                if ($quant > 0 && $cart) {
-                    // return $quant;
 
-                    if ($cart->product->stock < $quant) {
+            foreach ($request->quant as $k => $quant) {
+                $id = $request->qty_id[$k];
+                $cart = Cart::find($id);
+
+                if ($quant > 0 && $cart) {
+                    // Menemukan varian berdasarkan ukuran pada keranjang
+                    $variant = $cart->product->variants()->where('size', $cart->size)->first();
+
+                    if (!$variant || $variant->quantity < $quant) {
                         request()->session()->flash('error', 'Out of stock');
                         return back();
                     }
 
-                    $cart->quantity = ($cart->product->stock > $quant) ? $quant  : $cart->product->stock;
-                    // return $cart;
+                    $cart->quantity = ($variant->quantity > $quant) ? $quant : $variant->quantity;
 
-                    if ($cart->product->stock <= 0) continue;
+                    if ($variant->quantity <= 0) continue;
+
+                    // Menghitung harga setelah diskon
                     $price = ($cart->product->price - ($cart->product->price * $cart->product->discount) / 100);
-
                     $discount_flash = 0;
+
                     if (
                         $cart->product->flash_sale_start <= now() &&
                         $cart->product->flash_sale_end >= now()
                     ) {
                         $discount_flash = $cart->product->flash_sale_discount;
                     }
+
                     $after_price = ($price - ($price * ($discount_flash ?? 0)) / 100);
-                    // dd($after_price);
                     $cart->amount = $after_price * $quant;
-                    // return $cart->price;
                     $cart->save();
+
                     $success = 'Cart successfully updated!';
                 } else {
                     $error[] = 'Cart Invalid!';
                 }
             }
+
             return back()->with($error)->with('success', $success);
         } else {
             return back()->with('Cart Invalid!');
