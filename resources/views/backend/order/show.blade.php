@@ -61,7 +61,7 @@
                                 <div class="order-info">
                                     <h4 class="text-center pb-4">ORDER INFORMATION</h4>
                                     <table class="table">
-                                        <tr class="">
+                                        <tr>
                                             <td>Order Number</td>
                                             <td> : {{ $order->order_number }}</td>
                                         </tr>
@@ -80,20 +80,42 @@
                                         </tr>
                                         <tr>
                                             <td>Shipping Charge</td>
-                                            <td> : $ {{ $order->shipping->price }}</td>
+                                            <td> : $ {{ number_format($order->shipping->price, 2) }}</td>
                                         </tr>
                                         <tr>
                                             <td>Coupon</td>
                                             <td> : $ {{ number_format($order->coupon, 2) }}</td>
                                         </tr>
+                                    </table>
+
+                                    <!-- Tambahkan detail produk di sini setelah coupon -->
+                                    <h5 class="mt-4 ml-3">Product Details</h5>
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Size</th>
+                                                <th>Price</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($order->cart as $product)
+                                                <!-- Pastikan 'cart' adalah relasi yang tepat -->
+                                                <tr>
+                                                    <td>{{ $product->size }}</td>
+                                                    <td>$ {{ number_format($product->price, 2) }}</td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+
+                                    <table class="table">
                                         <tr>
                                             <td>Total Amount</td>
                                             <td> : $ {{ number_format($order->total_amount, 2) }}</td>
                                         </tr>
                                         <tr>
                                             <td>Payment Method</td>
-                                            <td> : {{ $order->payment_method }}
-                                            </td>
+                                            <td> : {{ $order->payment_method }}</td>
                                         </tr>
                                         <tr>
                                             <td>Payment Status</td>

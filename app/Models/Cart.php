@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\ProductVariant;
 use Illuminate\Database\Eloquent\Model;
 
 class Cart extends Model
@@ -21,4 +22,11 @@ class Cart extends Model
     public function order(){
         return $this->belongsTo(Order::class,'order_id');
     }
+
+    public function variant()
+    {
+        return $this->hasOne(ProductVariant::class, 'product_id', 'product_id')
+                    ->where('size', $this->size);
+    }
+
 }

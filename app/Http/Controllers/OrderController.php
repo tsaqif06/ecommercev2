@@ -11,6 +11,7 @@ use App\Models\Order;
 use App\Models\Shipping;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\ProductVariant;
 use App\Notifications\StatusNotification;
 // use App\Models\Notification as Notification;
 
@@ -187,7 +188,7 @@ class OrderController extends Controller
     public function edit($id)
     {
         if (auth()->user()->role == 'admin') {
-            $order = Order::find($id);
+            $order = Order::with('cart.product.variants')->find($id);
             return view('backend.order.edit')->with('order', $order);
         } else {
             return redirect()->route('admin')->with('error', 'You do not have permission to access this page.');
@@ -202,6 +203,39 @@ class OrderController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
+    {
+        $order = Order::find($id);
+        $this->validate($request, [
+            'status' => 'required|in:unconfirmed,confirmed'
+        ]);
+
+        // Mengupdate status order
+        $data = ['status' => $request->status];
+        $status = $order->fill($data)->save();
+
+        // Jika statusnya 'confirmed', kurangi stock dari product_variants
+        if ($request->status == 'confirmed') {
+            foreach ($request->variants as $variantData) {
+                // Mencari varian berdasarkan ID
+                $variant = ProductVariant::find($variantData['id']);
+                if ($variant) {
+                    $variant->quantity -= $variantData['quantity'];
+                    $variant->save();
+                }
+            }
+        }
+
+        if ($status) {
+            request()->session()->flash('success', 'Successfully updated order');
+        } else {
+            request()->session()->flash('error', 'Error while updating order');
+        }
+
+        return redirect()->route('order.index');
+    }
+
+
+    public function updateOld(Request $request, $id)
     {
         $order = Order::find($id);
         $this->validate($request, [
