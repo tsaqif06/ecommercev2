@@ -458,7 +458,7 @@
                                                 $totalStock = $variants->sum('quantity');
                                             @endphp
                                             @if ($totalStock > 0)
-                                                <span><i class="fa fa-check-circle-o"></i> {{ $product->stock }}
+                                                <span><i class="fa fa-check-circle-o"></i> {{ $totalStock }}
                                                     {{ __('main.in_stock') }}</span>
                                             @else
                                                 <span><i class="fa fa-times-circle-o text-danger"></i>
