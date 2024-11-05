@@ -413,15 +413,15 @@ class FrontendController extends Controller
         $this->validate($request, [
             'name' => 'string|required|min:2',
             'email' => 'string|required|unique:users,email',
-            'password' => 'required|min:6|confirmed',
+            'password' => 'required',
         ]);
         $data = $request->all();
         // dd($data);
         $check = $this->create($data);
         Session::put('user', $data['email']);
         if ($check) {
-            request()->session()->flash('success', 'Successfully registered');
-            return redirect()->route('home');
+            request()->session()->flash('success', 'Successfully registered, please login with your new account!');
+            return back();
         } else {
             request()->session()->flash('error', 'Please try again!');
             return back();
